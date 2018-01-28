@@ -1,0 +1,9 @@
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\bin\Debug\我在干什么.exe
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\bin\Debug\我在干什么.pdb
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.Form1.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.Properties.Resources.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.csproj.GenerateResource.Cache
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.csproj.CoreCompileInputs.cache
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.exe
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.pdb
+D:\aserfend\workSpace\repos\projects\我在干什么\我在干什么\obj\Debug\我在干什么.csprojResolveAssemblyReference.cache
