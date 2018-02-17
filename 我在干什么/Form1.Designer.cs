@@ -32,8 +32,8 @@
 			this.LstProcessRecorder = new System.Windows.Forms.ListView();
 			this.ProcessName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.SumUsedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastLostFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.SumUsedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.SuspendLayout();
 			// 
 			// BtnOutPutToExcel
@@ -73,15 +73,15 @@
 			this.LastFocus.Text = "上次焦点";
 			this.LastFocus.Width = 88;
 			// 
-			// SumUsedTime
-			// 
-			this.SumUsedTime.Text = "累积时间";
-			this.SumUsedTime.Width = 123;
-			// 
 			// LastLostFocus
 			// 
 			this.LastLostFocus.Text = "上次失去焦点";
 			this.LastLostFocus.Width = 87;
+			// 
+			// SumUsedTime
+			// 
+			this.SumUsedTime.Text = "累积时间";
+			this.SumUsedTime.Width = 123;
 			// 
 			// Form1
 			// 
@@ -91,6 +91,7 @@
 			this.Controls.Add(this.LstProcessRecorder);
 			this.Controls.Add(this.BtnOutPutToExcel);
 			this.Name = "Form1";
+			this.Text = "我在干什么";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 

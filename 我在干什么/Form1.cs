@@ -33,13 +33,13 @@ namespace 我在干什么
 			
 			foreach (var p in _process.Process)
 			{
-				var item = LstProcessRecorder.Items[p.Name];
+				var item = LstProcessRecorder.Items[p.Id.ToString()];
 
 				string[] ProcessInfo = p.GetItem();
 				
 				if (item == null)//否则新增一个项
 				{
-					var newItem = new ListViewItem(ProcessInfo) { Name = p.Name };
+					var newItem = new ListViewItem(ProcessInfo) { Name = p.Id.ToString() };
 					item = LstProcessRecorder.Items.Add(newItem);
 				}
 				else //如果原列表中已经有了这个项则直接修改
@@ -56,14 +56,14 @@ namespace 我在干什么
 			do
 			{
 				System.Threading.Thread.Sleep(500+ (int)(new Random().NextDouble() * 500));
-				Process now = SpyerProcess.GetCurrentProcessFocus();
-				if (_process.Last.Name == now.ProcessName) continue;
-				var p= _process.SetBegin(now.ProcessName);
+				var now =new ProcessRecord( SpyerProcess.GetCurrentProcessFocus());
+				
+				if (_process.Last.Id == now.Id) continue;
+				var p= _process.SetBegin(now);
 				_bckProcessRecord.ReportProgress(0);
 			} while (!_bckProcessRecord.CancellationPending);
 
 		}
-
 		private void BtnOutPutToExcel_Click(object sender, EventArgs e)
 		{
 			using (var xls = new ExcelBase())
@@ -73,17 +73,17 @@ namespace 我在干什么
 				int nowRowIndex = 0;
 				foreach(var p in  _process)
 				{
-					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "进程:"+ p.Name;
+					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "进程:"+ p.ProcessName +":" + p.MainWindowTitle;
 
-					xls.ExlWorkSheet.Cells[nowRowIndex, 2] = "用户总用时:" + p.SumUsedTime() +"ms";
+					xls.ExlWorkSheet.Cells[nowRowIndex, 2] = "用户总用时:" + GetMillToString(p.SumUsedTime());// +"ms";
 					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "焦点时间";
 					xls.ExlWorkSheet.Cells[nowRowIndex, 2] = "失去焦点时间";
 					xls.ExlWorkSheet.Cells[nowRowIndex, 3] = "间隔时间";
 					foreach (var r in p)
 					{
-						xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = r.Begin;
-						xls.ExlWorkSheet.Cells[nowRowIndex, 2] = r.End;
-						xls.ExlWorkSheet.Cells[nowRowIndex, 3] = r.AliveLength;
+						xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = GetMillToString(r.Begin);// r.Begin;
+						xls.ExlWorkSheet.Cells[nowRowIndex, 2] = GetMillToString( r.End);
+						xls.ExlWorkSheet.Cells[nowRowIndex, 3] = GetMillToString(r.AliveLength);
 					}
 					nowRowIndex++;
 				}
@@ -93,6 +93,11 @@ namespace 我在干什么
 
 			
 
+		}
+		private static string GetMillToString(long time)
+		{
+			time *= 10000;
+			return new TimeSpan(time).ToString("d'天'hh'小时'mm'分钟'ss'秒'");
 		}
 	}
 }

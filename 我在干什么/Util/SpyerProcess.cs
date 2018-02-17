@@ -1,0 +1,253 @@
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text;
+using System.Collections;
+
+namespace 我在干什么
+{
+	public static class SpyerProcess
+	{
+		[DllImport("User32.dll")]
+		private static extern IntPtr GetForegroundWindow();     //获取活动窗口句柄  
+		[DllImport("User32.dll", CharSet = CharSet.Auto)]
+		private static extern int GetWindowThreadProcessId(IntPtr hwnd, out int ID);   //获取线程ID  
+		public static Process GetCurrentProcessFocus()
+		{
+			IntPtr hWnd = GetForegroundWindow();    //获取活动窗口句柄   
+			int CalcThreadID = 0;    //线程ID  
+			CalcThreadID = GetWindowThreadProcessId(hWnd, out int CalcID);
+			return Process.GetProcessById(CalcID);
+		}
+
+	}
+	/// <summary>
+	/// 管理所有进程情况
+	/// </summary>
+	public class ProcessGroup
+	{
+		/// <summary>
+		/// 初始化
+		/// </summary>
+		public ProcessGroup()
+		{
+			_last = new ProcessRecord();
+			Process = new List<ProcessRecord>();
+		}
+		public ProcessRecord Last
+		{
+			get
+			{
+				return _last ;
+			}
+		}
+
+		public List<ProcessRecord> Process { get => process; set => process = value; }
+
+		/// <summary>
+		/// 记录所有进程
+		/// </summary>
+		private List<ProcessRecord> process;
+		/// <summary>
+		/// 通过进程名称获取进程
+		/// </summary>
+		/// <param name="ProcessName">进程名称</param>
+		/// <returns></returns>
+		public ProcessRecord GetProcess(ProcessRecord process)
+		{
+			if (process == null) return new ProcessRecord();
+			foreach(var p in Process)//在记录中寻找进程
+			{
+				if (p.Id == process.Id)
+				{
+					return p;
+				}
+			}
+			Process.Add(process);
+			return process;//不存在则创建新的进程
+		}
+
+		private ProcessRecord _last;
+		/// <summary>
+		/// 设置进程焦点时间
+		/// </summary>
+		/// <param name="ProcessName">进程名称</param>
+		public ProcessRecord SetBegin(ProcessRecord process)
+		{
+			if (_last.Id == process.Id) return _last;
+			var p = GetProcess(process);
+			_last.End();
+			_last = p;
+			_last.Begin();
+			return p;
+		}
+		/// <summary>
+		/// 设置进程焦点结束时间
+		/// </summary>
+		/// <param name="ProcessName"></param>
+		public ProcessRecord SetEnd(ProcessRecord process)
+		{
+			var p = GetProcess(process);
+			p.End();
+			return p;
+		}
+
+		/// <summary>
+		/// 以 进程名:进程时间输出
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			StringBuilder s = new StringBuilder();
+			foreach(var p in Process)
+			{
+				s.Append(p.ProcessName).Append(":").Append(p.SumUsedTime()).Append("\n");
+			}
+			return s.ToString();
+		}
+
+
+		public IEnumerator<ProcessRecord> GetEnumerator()
+		{
+			return ((IEnumerable< ProcessRecord>)Process).GetEnumerator();
+		}
+
+	}
+	/// <summary>
+	/// 进程记录器
+	/// </summary>
+	public class ProcessRecord 
+	{
+		/// <summary>
+		/// 用于标识进程的ID
+		/// </summary>
+		private int id;
+
+		public string ProcessName { get; private set; }
+		public DateTime StartTime { get; private set; }
+		public string ModuleName { get; private set; }
+		public string MainWindowTitle { get; private set; }
+
+		/// <summary>
+		/// 用于记录进程的使用历史情况
+		/// </summary>
+		private List<RecordTime> record;
+		/// <summary>
+		/// 用于记录进程当前情况
+		/// </summary>
+		private RecordTime nowFocus;
+		private int lastFocus, lastLostFocus;
+		public ProcessRecord()
+		{
+
+		}
+		public ProcessRecord(Process parent)
+		{
+			this.Id = parent.Id;
+			this.ProcessName = parent.ProcessName;
+			//this.StartTime = parent.StartTime;
+			//this.ModuleName = parent.MainModule.ModuleName;
+			this.MainWindowTitle = parent.MainWindowTitle;
+			record = new List<RecordTime>();
+		}
+
+		public  int Id { get => id; set => id=value; }
+
+		/// <summary>
+		/// 设置进程的获取焦点的时间
+		/// </summary>
+		public void Begin()
+		{
+			nowFocus = new RecordTime() { Begin = System.Environment.TickCount };
+			lastFocus = nowFocus.Begin;
+			record.Add(nowFocus);
+		}
+
+		/// <summary>
+		/// 设置进程的失去焦点的时间
+		/// </summary>
+		public void End()
+		{
+			if (nowFocus == null) return;
+			nowFocus.End = System.Environment.TickCount;
+			lastLostFocus = nowFocus.End;
+			sumUsedTime = SumUsedTime(true);
+		}
+
+		private int sumUsedTime;
+		/// <summary>
+		/// 计算此进程的累积时间
+		/// </summary>
+		/// <returns>时间累积</returns>
+		public int SumUsedTime(bool reCaculate=false)
+		{
+			if (!reCaculate) return sumUsedTime;
+			int result=0;
+			foreach(var r in record)
+			{
+				result += r.AliveLength;
+			}
+			return result;
+		}
+
+		public string[] GetItem()
+		{
+			return new string[] {this.ProcessName + ":" + this.MainWindowTitle, lastFocus.ToString(), lastLostFocus.ToString(), SumUsedTime().ToString() };
+		}
+		public IEnumerator<RecordTime> GetEnumerator()
+		{
+			return record.GetEnumerator();
+		}
+		public override string ToString()
+		{
+			StringBuilder s = new StringBuilder(32);
+			foreach(var r in record)
+			{
+				s.Append(r.ToString()).Append("\n");
+			}
+			return s.ToString();
+		}
+
+	}
+	/// <summary>
+	/// 进程时间对
+	/// </summary>
+	public class RecordTime
+	{
+		private int begin;
+		private int end;
+		public RecordTime()
+		{
+
+		}
+		public RecordTime(int begin, int end)
+		{
+			this.begin = begin;
+			this.end = end;
+		}
+
+		public int Begin { get => begin; set => begin = value; }
+		public int End { get => end; set => end = value; }
+
+		/// <summary>
+		/// 获取进程存活时间
+		/// </summary>
+		public int AliveLength
+		{
+			get
+			{
+				if (End == 0 || Begin == 0) return 0;
+				return End - Begin;
+			}
+		}
+		public override string ToString()
+		{
+			StringBuilder s = new StringBuilder(8);
+			return s.Append(Begin).Append("-").Append(End).ToString();
+		}
+	}
+}
