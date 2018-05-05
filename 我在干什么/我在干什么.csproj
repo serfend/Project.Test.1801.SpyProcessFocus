@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1EF77BC5-9576-4829-AA24-34006087C9A4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>我在干什么</RootNamespace>
-    <AssemblyName>我在干什么</AssemblyName>
+    <RootNamespace>Time时间记录器</RootNamespace>
+    <AssemblyName>Time时间记录器</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Util\ApplicationInfomations.cs" />
     <Compile Include="Util\ExcelHelper.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -56,8 +57,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Input\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Util\reg.cs" />
     <Compile Include="Util\SpyerProcess.cs" />
+    <Compile Include="Util\UI.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -69,7 +74,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Util\Input\InputBox.resx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

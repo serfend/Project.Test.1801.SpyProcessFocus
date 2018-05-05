@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using Time时间记录器.Util;
+using DotNet4.Utilities.UtilReg;
 
-namespace 我在干什么
+namespace Time时间记录器
 {
 	public static class SpyerProcess
 	{
@@ -23,13 +25,28 @@ namespace 我在干什么
 			CalcThreadID = GetWindowThreadProcessId(hWnd, out int CalcID);
 			return Process.GetProcessById(CalcID);
 		}
-
+		public static string GetMillToString(long time)
+		{
+			time *= 10000;
+			return new TimeSpan(time).ToString("d'天'hh'小时'mm'分钟'ss'秒'");
+		}
 	}
 	/// <summary>
 	/// 管理所有进程情况
 	/// </summary>
 	public class ProcessGroup
 	{
+		public ProcessRecord this[int id]
+		{
+			get
+			{
+				foreach(var p in Process)
+				{
+					if (p.Id == id) return p;
+				}
+				return null;
+			}
+		}
 		/// <summary>
 		/// 初始化
 		/// </summary>
@@ -46,8 +63,35 @@ namespace 我在干什么
 			}
 		}
 
-		public List<ProcessRecord> Process { get => process; set => process = value; }
+	
+		private bool nowRunningStatus = true;
+		public bool ModifiesRunningStatus()
+		{
+			NowRunningStatus = !NowRunningStatus;
+			return NowRunningStatus;
+		}
 
+		
+		public bool NowRunningStatus { get => nowRunningStatus; set{
+				if (value != nowRunningStatus)
+				{
+					nowRunningStatus = value;
+					this.RefreshTimeRecorder();
+					
+				}
+			} }
+		private void RefreshTimeRecorder()
+		{
+			if (NowRunningStatus) {//开始运行时更新所有开始时间
+				this.Last.Begin();//重新开始计时
+			}
+			else
+			{
+				this.Last.End();//停止
+			}
+		}
+		
+		public List<ProcessRecord> Process { get => process; set => process = value; }
 		/// <summary>
 		/// 记录所有进程
 		/// </summary>
@@ -79,6 +123,8 @@ namespace 我在干什么
 		public ProcessRecord SetBegin(ProcessRecord process)
 		{
 			if (_last.Id == process.Id) return _last;
+			if (!nowRunningStatus) return _last;
+			Console.WriteLine("233");
 			var p = GetProcess(process);
 			_last.End();
 			_last = p;
@@ -126,7 +172,8 @@ namespace 我在干什么
 		/// 用于标识进程的ID
 		/// </summary>
 		private int id;
-
+		private Reg ProcessSetting;//进程的存储数据
+		private ApplicationInfomations appInfo;
 		public string ProcessName { get; private set; }
 		public DateTime StartTime { get; private set; }
 		public string ModuleName { get; private set; }
@@ -153,17 +200,35 @@ namespace 我在干什么
 			//this.ModuleName = parent.MainModule.ModuleName;
 			this.MainWindowTitle = parent.MainWindowTitle;
 			record = new List<RecordTime>();
+			AppInfo = new ApplicationInfomations(parent);
+			ProcessSetting = new Reg().In("Main").In("Data").In(ProcessName);
 		}
 
 		public  int Id { get => id; set => id=value; }
-
+		public int LastLostFocus { get => lastLostFocus; set => lastLostFocus = value; }
+		public int LastFocus { get => lastFocus; set => lastFocus = value; }
+		public ApplicationInfomations AppInfo { get => appInfo; set => appInfo = value; }
+		private string remarkName;
+		/// <summary>
+		/// 进程的用户备注
+		/// </summary>
+		public string RemarkName {
+			get {
+				return remarkName?? (remarkName=ProcessSetting.GetInfo("RemarkName"));
+			}
+			set
+			{
+				ProcessSetting.SetInfo("RemarkName", value);
+				remarkName = value;
+			}
+		}
 		/// <summary>
 		/// 设置进程的获取焦点的时间
 		/// </summary>
 		public void Begin()
 		{
 			nowFocus = new RecordTime() { Begin = System.Environment.TickCount };
-			lastFocus = nowFocus.Begin;
+			LastFocus = nowFocus.Begin;
 			record.Add(nowFocus);
 		}
 
@@ -174,7 +239,7 @@ namespace 我在干什么
 		{
 			if (nowFocus == null) return;
 			nowFocus.End = System.Environment.TickCount;
-			lastLostFocus = nowFocus.End;
+			LastLostFocus = nowFocus.End;
 			sumUsedTime = SumUsedTime(true);
 		}
 
@@ -193,10 +258,10 @@ namespace 我在干什么
 			}
 			return result;
 		}
-
+		
 		public string[] GetItem()
 		{
-			return new string[] {this.ProcessName + ":" + this.MainWindowTitle, lastFocus.ToString(), lastLostFocus.ToString(), SumUsedTime().ToString() };
+			return new string[] {this.ProcessName + ":" + this.MainWindowTitle,this.RemarkName, SpyerProcess.GetMillToString(LastFocus), SpyerProcess.GetMillToString(LastLostFocus), SpyerProcess.GetMillToString(SumUsedTime()) };
 		}
 		public IEnumerator<RecordTime> GetEnumerator()
 		{

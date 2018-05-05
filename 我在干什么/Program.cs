@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace 我在干什么
+namespace Time时间记录器
 {
 	static class Program
 	{

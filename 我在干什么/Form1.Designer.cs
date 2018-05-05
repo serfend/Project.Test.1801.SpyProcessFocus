@@ -1,4 +1,4 @@
-﻿namespace 我在干什么
+﻿namespace Time时间记录器
 {
 	partial class Form1
 	{
@@ -31,14 +31,17 @@
 			this.BtnOutPutToExcel = new System.Windows.Forms.Button();
 			this.LstProcessRecorder = new System.Windows.Forms.ListView();
 			this.ProcessName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.RemarkName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastLostFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.SumUsedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.BtnRunningCommand = new System.Windows.Forms.Button();
+			this.BtnShowStatus = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// BtnOutPutToExcel
 			// 
-			this.BtnOutPutToExcel.Location = new System.Drawing.Point(423, 491);
+			this.BtnOutPutToExcel.Location = new System.Drawing.Point(771, 691);
 			this.BtnOutPutToExcel.Name = "BtnOutPutToExcel";
 			this.BtnOutPutToExcel.Size = new System.Drawing.Size(113, 30);
 			this.BtnOutPutToExcel.TabIndex = 0;
@@ -48,50 +51,80 @@
 			// 
 			// LstProcessRecorder
 			// 
-			this.LstProcessRecorder.AllowColumnReorder = true;
 			this.LstProcessRecorder.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ProcessName,
+            this.RemarkName,
             this.LastFocus,
             this.LastLostFocus,
             this.SumUsedTime});
 			this.LstProcessRecorder.FullRowSelect = true;
 			this.LstProcessRecorder.LabelWrap = false;
-			this.LstProcessRecorder.Location = new System.Drawing.Point(12, 12);
+			this.LstProcessRecorder.Location = new System.Drawing.Point(30, 232);
 			this.LstProcessRecorder.Name = "LstProcessRecorder";
-			this.LstProcessRecorder.Size = new System.Drawing.Size(524, 473);
+			this.LstProcessRecorder.Size = new System.Drawing.Size(854, 453);
 			this.LstProcessRecorder.TabIndex = 1;
 			this.LstProcessRecorder.UseCompatibleStateImageBehavior = false;
 			this.LstProcessRecorder.View = System.Windows.Forms.View.Details;
+			this.LstProcessRecorder.SelectedIndexChanged += new System.EventHandler(this.LstProcessRecorder_SelectedIndexChanged);
 			// 
 			// ProcessName
 			// 
 			this.ProcessName.Text = "名称";
-			this.ProcessName.Width = 220;
+			this.ProcessName.Width = 240;
+			// 
+			// RemarkName
+			// 
+			this.RemarkName.Text = "备注";
+			this.RemarkName.Width = 120;
 			// 
 			// LastFocus
 			// 
-			this.LastFocus.Text = "上次焦点";
-			this.LastFocus.Width = 88;
+			this.LastFocus.Text = "开始时间";
+			this.LastFocus.Width = 160;
 			// 
 			// LastLostFocus
 			// 
-			this.LastLostFocus.Text = "上次失去焦点";
-			this.LastLostFocus.Width = 87;
+			this.LastLostFocus.Text = "结束时间";
+			this.LastLostFocus.Width = 160;
 			// 
 			// SumUsedTime
 			// 
 			this.SumUsedTime.Text = "累积时间";
-			this.SumUsedTime.Width = 123;
+			this.SumUsedTime.Width = 160;
+			// 
+			// BtnRunningCommand
+			// 
+			this.BtnRunningCommand.Location = new System.Drawing.Point(652, 691);
+			this.BtnRunningCommand.Name = "BtnRunningCommand";
+			this.BtnRunningCommand.Size = new System.Drawing.Size(113, 30);
+			this.BtnRunningCommand.TabIndex = 2;
+			this.BtnRunningCommand.Text = "暂停";
+			this.BtnRunningCommand.UseVisualStyleBackColor = true;
+			this.BtnRunningCommand.Click += new System.EventHandler(this.BtnRunningCommand_Click);
+			// 
+			// BtnShowStatus
+			// 
+			this.BtnShowStatus.Location = new System.Drawing.Point(533, 691);
+			this.BtnShowStatus.Name = "BtnShowStatus";
+			this.BtnShowStatus.Size = new System.Drawing.Size(113, 30);
+			this.BtnShowStatus.TabIndex = 3;
+			this.BtnShowStatus.Text = "饼图";
+			this.BtnShowStatus.UseVisualStyleBackColor = true;
+			this.BtnShowStatus.Click += new System.EventHandler(this.BtnShowStatus_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(543, 521);
+			this.BackColor = System.Drawing.Color.White;
+			this.ClientSize = new System.Drawing.Size(896, 733);
+			this.Controls.Add(this.BtnShowStatus);
+			this.Controls.Add(this.BtnRunningCommand);
 			this.Controls.Add(this.LstProcessRecorder);
 			this.Controls.Add(this.BtnOutPutToExcel);
+			this.DoubleBuffered = true;
 			this.Name = "Form1";
-			this.Text = "我在干什么";
+			this.Text = "Time时间记录器";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 
@@ -105,6 +138,9 @@
 		private System.Windows.Forms.ColumnHeader LastFocus;
 		private System.Windows.Forms.ColumnHeader LastLostFocus;
 		private System.Windows.Forms.ColumnHeader SumUsedTime;
+		private System.Windows.Forms.Button BtnRunningCommand;
+		private System.Windows.Forms.ColumnHeader RemarkName;
+		private System.Windows.Forms.Button BtnShowStatus;
 	}
 }
 
