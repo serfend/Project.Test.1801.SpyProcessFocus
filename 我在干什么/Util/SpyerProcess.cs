@@ -106,7 +106,7 @@ namespace Time时间记录器
 			if (process == null) return new ProcessRecord();
 			foreach(var p in Process)//在记录中寻找进程
 			{
-				if (p.Id == process.Id)
+				if (p.RemarkName == process.RemarkName)
 				{
 					return p;
 				}
@@ -124,7 +124,6 @@ namespace Time时间记录器
 		{
 			if (_last.Id == process.Id) return _last;
 			if (!nowRunningStatus) return _last;
-			Console.WriteLine("233");
 			var p = GetProcess(process);
 			_last.End();
 			_last = p;
@@ -178,6 +177,7 @@ namespace Time时间记录器
 		public DateTime StartTime { get; private set; }
 		public string ModuleName { get; private set; }
 		public string MainWindowTitle { get; private set; }
+		public List<ProcessRecord> InteractApp;
 
 		/// <summary>
 		/// 用于记录进程的使用历史情况
@@ -214,7 +214,7 @@ namespace Time时间记录器
 		/// </summary>
 		public string RemarkName {
 			get {
-				return remarkName?? (remarkName=ProcessSetting.GetInfo("RemarkName"));
+				return remarkName?? (remarkName=ProcessSetting.GetInfo("RemarkName",this.ProcessName));
 			}
 			set
 			{

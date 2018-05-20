@@ -47,6 +47,79 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\App.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppComponent\File.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppComponent\Label.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppComponent\Logo.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppComponent\TimeLine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppComponent\Title.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\AppList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnAvatar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnCmd.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnExit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnHide.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnNormal.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnTitle.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Control.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\CenterLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\Layout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\LeftLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\MenuPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\TitleLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\BarLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\TopLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Layout\UpLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\UI.cs" />
+    <Compile Include="UI\时间分布饼图.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Util\ApplicationInfomations.cs" />
     <Compile Include="Util\ExcelHelper.cs" />
     <Compile Include="Form1.cs">
@@ -62,7 +135,6 @@
     </Compile>
     <Compile Include="Util\reg.cs" />
     <Compile Include="Util\SpyerProcess.cs" />
-    <Compile Include="Util\UI.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +158,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Img\图表.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Img\隐藏.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Img\暂停.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Img\defaultUserAvatar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

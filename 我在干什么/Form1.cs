@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using DotNet4.Utilities.UtilExcel;
 using Time时间记录器.Util;
+using System.Threading;
+
 
 namespace Time时间记录器
 {
@@ -16,13 +18,35 @@ namespace Time时间记录器
 	{
 		private BackgroundWorker _bckProcessRecord;
 		private ProcessGroup _process;
+		public UI.UI ui;
 		public Form1()
 		{
 			InitializeComponent();
 			_process = new ProcessGroup();
 			LstProcessRecorder.SmallImageList = imageListLargeIcon;
 			LstProcessRecorder.DoubleClick += LstProcessRecorder_ModifyAppInfos;
-			ui = new UI(this.CreateGraphics());
+			ui = new UI.UI(this);
+
+
+			this.DoubleClick += Form1_DoubleClick;
+			InfoShow.DoubleClick += (x, xx) =>
+			{
+				this.ShowInTaskbar = true;
+				this.Show();
+				this.Activate();
+				this.InfoShow.Visible = false;
+				Program.Running = true;
+			};
+			InfoShow.Icon = this.Icon;
+			Program.Running = true;
+		}
+
+		public void Form1_DoubleClick(object sender, EventArgs e)
+		{
+			this.ShowInTaskbar = false;
+			this.Hide();
+			this.InfoShow.Visible = true;
+			Program.Running = false;
 		}
 
 		private void LstProcessRecorder_ModifyAppInfos(object sender, EventArgs e)
@@ -35,16 +59,16 @@ namespace Time时间记录器
 				nowSelect.SubItems[1].Text = newName;
 			});
 		}
-
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			_bckProcessRecord = new BackgroundWorker() { WorkerReportsProgress=true,WorkerSupportsCancellation=true};
 			_bckProcessRecord.DoWork += _bckProcessRecord_DoWork;
 			_bckProcessRecord.ProgressChanged += _bckProcessRecord_ProgressChanged;
 			_bckProcessRecord.RunWorkerAsync();
+			this.OnResize(new EventArgs());
 		}
+
 		private ImageList imageListLargeIcon=new ImageList();
-		private UI ui;
 		private void _bckProcessRecord_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			
@@ -75,7 +99,6 @@ namespace Time时间记录器
 				}
 			}
 			ui.RefreshData(_process);
-			Console.WriteLine(_process);
 		}
 
 		private void _bckProcessRecord_DoWork(object sender, DoWorkEventArgs e)
@@ -91,7 +114,7 @@ namespace Time时间记录器
 			} while (!_bckProcessRecord.CancellationPending);
 
 		}
-		private void BtnOutPutToExcel_Click(object sender, EventArgs e)
+		public void BtnOutPutToExcel_Click()
 		{
 			using (var xls = new ExcelBase())
 			{
@@ -117,15 +140,11 @@ namespace Time时间记录器
 				
 				xls.SaveAs(Application.StartupPath +string.Format( @"\Time时间记录器-{0:D}.xls",DateTime.Today));
 			}
-
-			
-
 		}
 		
-		private void BtnRunningCommand_Click(object sender, EventArgs e)
+		public void BtnRunningCommand_Click()
 		{
 			var nowStatus = _process.ModifiesRunningStatus();
-			BtnRunningCommand.Text = nowStatus ? "暂停" : "开始";
 		}
 
 		private void LstProcessRecorder_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,11 +152,26 @@ namespace Time时间记录器
 
 		}
 
-		private bool nowUiShow = true;
-		private void BtnShowStatus_Click(object sender, EventArgs e)
+
+		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			nowUiShow= !nowUiShow;
-			if (nowUiShow) ui.Show(); else ui.Hide();
+			InfoShow.Dispose();
+		}
+
+		private const int WM_NCHITTEST = 0x84;
+		private const int HTCLIENT = 0x1;
+		private const int HTCAPTION = 0x2;
+		protected override void WndProc(ref Message m)
+		{
+			switch (m.Msg)
+			{
+				case WM_NCHITTEST:
+					base.WndProc(ref m);
+					if ((int)m.Result == HTCLIENT)
+						m.Result = (IntPtr)HTCAPTION;
+					return;
+			}
+			base.WndProc(ref m);
 		}
 	}
 }

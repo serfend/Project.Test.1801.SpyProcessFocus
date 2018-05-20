@@ -28,26 +28,15 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.BtnOutPutToExcel = new System.Windows.Forms.Button();
+			this.components = new System.ComponentModel.Container();
 			this.LstProcessRecorder = new System.Windows.Forms.ListView();
 			this.ProcessName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.RemarkName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.LastLostFocus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.SumUsedTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.BtnRunningCommand = new System.Windows.Forms.Button();
-			this.BtnShowStatus = new System.Windows.Forms.Button();
+			this.InfoShow = new System.Windows.Forms.NotifyIcon(this.components);
 			this.SuspendLayout();
-			// 
-			// BtnOutPutToExcel
-			// 
-			this.BtnOutPutToExcel.Location = new System.Drawing.Point(771, 691);
-			this.BtnOutPutToExcel.Name = "BtnOutPutToExcel";
-			this.BtnOutPutToExcel.Size = new System.Drawing.Size(113, 30);
-			this.BtnOutPutToExcel.TabIndex = 0;
-			this.BtnOutPutToExcel.Text = "输出到Excel";
-			this.BtnOutPutToExcel.UseVisualStyleBackColor = true;
-			this.BtnOutPutToExcel.Click += new System.EventHandler(this.BtnOutPutToExcel_Click);
 			// 
 			// LstProcessRecorder
 			// 
@@ -59,9 +48,9 @@
             this.SumUsedTime});
 			this.LstProcessRecorder.FullRowSelect = true;
 			this.LstProcessRecorder.LabelWrap = false;
-			this.LstProcessRecorder.Location = new System.Drawing.Point(30, 232);
+			this.LstProcessRecorder.Location = new System.Drawing.Point(635, 362);
 			this.LstProcessRecorder.Name = "LstProcessRecorder";
-			this.LstProcessRecorder.Size = new System.Drawing.Size(854, 453);
+			this.LstProcessRecorder.Size = new System.Drawing.Size(172, 238);
 			this.LstProcessRecorder.TabIndex = 1;
 			this.LstProcessRecorder.UseCompatibleStateImageBehavior = false;
 			this.LstProcessRecorder.View = System.Windows.Forms.View.Details;
@@ -92,55 +81,38 @@
 			this.SumUsedTime.Text = "累积时间";
 			this.SumUsedTime.Width = 160;
 			// 
-			// BtnRunningCommand
+			// InfoShow
 			// 
-			this.BtnRunningCommand.Location = new System.Drawing.Point(652, 691);
-			this.BtnRunningCommand.Name = "BtnRunningCommand";
-			this.BtnRunningCommand.Size = new System.Drawing.Size(113, 30);
-			this.BtnRunningCommand.TabIndex = 2;
-			this.BtnRunningCommand.Text = "暂停";
-			this.BtnRunningCommand.UseVisualStyleBackColor = true;
-			this.BtnRunningCommand.Click += new System.EventHandler(this.BtnRunningCommand_Click);
-			// 
-			// BtnShowStatus
-			// 
-			this.BtnShowStatus.Location = new System.Drawing.Point(533, 691);
-			this.BtnShowStatus.Name = "BtnShowStatus";
-			this.BtnShowStatus.Size = new System.Drawing.Size(113, 30);
-			this.BtnShowStatus.TabIndex = 3;
-			this.BtnShowStatus.Text = "饼图";
-			this.BtnShowStatus.UseVisualStyleBackColor = true;
-			this.BtnShowStatus.Click += new System.EventHandler(this.BtnShowStatus_Click);
+			this.InfoShow.Text = "serfendInfoShow";
+			this.InfoShow.Visible = true;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(896, 733);
-			this.Controls.Add(this.BtnShowStatus);
-			this.Controls.Add(this.BtnRunningCommand);
+			this.ClientSize = new System.Drawing.Size(1305, 765);
 			this.Controls.Add(this.LstProcessRecorder);
-			this.Controls.Add(this.BtnOutPutToExcel);
 			this.DoubleBuffered = true;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "Form1";
 			this.Text = "Time时间记录器";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button BtnOutPutToExcel;
 		private System.Windows.Forms.ListView LstProcessRecorder;
 		private System.Windows.Forms.ColumnHeader ProcessName;
 		private System.Windows.Forms.ColumnHeader LastFocus;
 		private System.Windows.Forms.ColumnHeader LastLostFocus;
 		private System.Windows.Forms.ColumnHeader SumUsedTime;
-		private System.Windows.Forms.Button BtnRunningCommand;
 		private System.Windows.Forms.ColumnHeader RemarkName;
-		private System.Windows.Forms.Button BtnShowStatus;
+
+		private System.Windows.Forms.NotifyIcon InfoShow;
+
 	}
 }
 
