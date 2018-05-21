@@ -9,10 +9,11 @@ namespace Time时间记录器.UI.Bar
 {
 	public class BtnHide:Control
 	{
+		private Color deactiveColor=Color.FromArgb(255,100,100,100), activeColor=Color.FromArgb(255,200,200,200);
 		public BtnHide(Action<Control> CallBack =null):base(CallBack)
 		{
 			MovingSpeed = 0.05f;
-			ForeColor = Color.LightGray;
+			ForeColor = Color.Gray;
 		}
 		public override bool RefreshLayout()
 		{
@@ -20,7 +21,9 @@ namespace Time时间记录器.UI.Bar
 			nowSize = nowSize * (1 - MovingSpeed) + targetSize * MovingSpeed;
 			if (Math.Abs(lastSize - nowSize) > 0.001)
 			{
-				this.Invalidate();
+				if (!Program.UsedFlash) nowSize = targetSize;
+				BackColor = Color.FromArgb(255, (int)(deactiveColor.R * nowSize + activeColor.R * (1 - nowSize)), (int)(deactiveColor.G * nowSize + activeColor.G * (1 - nowSize)), (int)(deactiveColor.B * nowSize + activeColor.B * (1 - nowSize)));
+					this.Invalidate();
 				return true;
 			}
 			return false;
@@ -34,10 +37,9 @@ namespace Time时间记录器.UI.Bar
 			targetSize = 1;
 		}
 
-
 		protected override void OnForeColorChanged(EventArgs e)
 		{
-			brush = new SolidBrush(ForeColor);
+			this.brush = new SolidBrush(ForeColor);
 			base.OnForeColorChanged(e);
 		}
 		private Brush brush;
@@ -45,8 +47,9 @@ namespace Time时间记录器.UI.Bar
 		float targetSize = 1;
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (brush == null) return;
-			e.Graphics.FillRectangle(brush,Width-nowSize*Width,0,Width*nowSize,Height);
+			var strSize = e.Graphics.MeasureString(Text, Font);
+			e.Graphics.DrawString(Text, Font, brush, (int)((Width - strSize.Width) * 0.5), (int)((Height - strSize.Height) * 0.5));
+			base.OnPaint(e);
 		}
 		
 	}

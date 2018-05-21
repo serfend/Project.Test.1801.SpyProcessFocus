@@ -19,8 +19,10 @@ namespace Time时间记录器.UI.Bar
 		{
 			float lastSize = nowAngle;
 			nowAngle = nowAngle * (1 - MovingSpeed) + targetAngle * MovingSpeed;
+			
 			if (Math.Abs(lastSize - nowAngle) > 0.01)
 			{
+				if (!Program.UsedFlash) nowAngle = targetAngle;
 				this.Invalidate();
 				return true;
 			}
@@ -38,7 +40,7 @@ namespace Time时间记录器.UI.Bar
 
 		protected override void OnForeColorChanged(EventArgs e)
 		{
-			foreBrush = new Pen(ForeColor,5);
+			foreBrush = new Pen(ForeColor,2);
 			base.OnForeColorChanged(e);
 		}
 		protected override void OnBackColorChanged(EventArgs e)

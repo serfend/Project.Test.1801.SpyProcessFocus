@@ -163,6 +163,7 @@ namespace Time时间记录器.UI
 				Math.Abs(nowOffset.Height - targetOffset.Height);
 			if (offsetMoving > 0.1)
 			{
+				if (!Program.UsedFlash) nowOffset = targetOffset;
 				nowOffset.X = nowOffset.X * (1 - MovingSpeed) + targetOffset.X * MovingSpeed;
 				nowOffset.Y = nowOffset.Y * (1 - MovingSpeed) + targetOffset.Y * MovingSpeed;
 				nowOffset.Width = nowOffset.Width * (1 - MovingSpeed) + targetOffset.Width * MovingSpeed;

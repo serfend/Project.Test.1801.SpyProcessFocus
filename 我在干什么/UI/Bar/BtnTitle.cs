@@ -22,7 +22,8 @@ namespace Time时间记录器.UI.Bar
 			nowSize = nowSize * (1 - MovingSpeed) + targetSize * MovingSpeed;
 			if (Math.Abs(lastSize - nowSize) > 0.001)
 			{
-				this.Invalidate();
+				if (!Program.UsedFlash) nowSize = targetSize;
+					this.Invalidate();
 				return true;
 			}
 			return false;

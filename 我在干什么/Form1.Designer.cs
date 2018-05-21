@@ -48,9 +48,9 @@
             this.SumUsedTime});
 			this.LstProcessRecorder.FullRowSelect = true;
 			this.LstProcessRecorder.LabelWrap = false;
-			this.LstProcessRecorder.Location = new System.Drawing.Point(635, 362);
+			this.LstProcessRecorder.Location = new System.Drawing.Point(566, 314);
 			this.LstProcessRecorder.Name = "LstProcessRecorder";
-			this.LstProcessRecorder.Size = new System.Drawing.Size(172, 238);
+			this.LstProcessRecorder.Size = new System.Drawing.Size(304, 238);
 			this.LstProcessRecorder.TabIndex = 1;
 			this.LstProcessRecorder.UseCompatibleStateImageBehavior = false;
 			this.LstProcessRecorder.View = System.Windows.Forms.View.Details;
@@ -59,7 +59,7 @@
 			// ProcessName
 			// 
 			this.ProcessName.Text = "名称";
-			this.ProcessName.Width = 240;
+			this.ProcessName.Width = 158;
 			// 
 			// RemarkName
 			// 
@@ -91,7 +91,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.ClientSize = new System.Drawing.Size(1305, 765);
+			this.ClientSize = new System.Drawing.Size(901, 564);
 			this.Controls.Add(this.LstProcessRecorder);
 			this.DoubleBuffered = true;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -111,7 +111,7 @@
 		private System.Windows.Forms.ColumnHeader SumUsedTime;
 		private System.Windows.Forms.ColumnHeader RemarkName;
 
-		private System.Windows.Forms.NotifyIcon InfoShow;
+		public System.Windows.Forms.NotifyIcon InfoShow;
 
 	}
 }

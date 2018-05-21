@@ -46,6 +46,8 @@ namespace Time时间记录器
 			this.ShowInTaskbar = false;
 			this.Hide();
 			this.InfoShow.Visible = true;
+			var info=Program.Title + "已隐藏并持续在后台运行";
+			InfoShow.ShowBalloonTip(5000, info,info+",您可以在托盘中双击重新显示",ToolTipIcon.Info);
 			Program.Running = false;
 		}
 
@@ -72,8 +74,9 @@ namespace Time时间记录器
 		private void _bckProcessRecord_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			
-			foreach (var p in _process.Process)
+			for (int i=0;i< _process.Process.Count;i++)
 			{
+				var p = _process.Process[i];
 				var item = LstProcessRecorder.Items[p.Id.ToString()];
 
 				string[] ProcessInfo = p.GetItem();
@@ -94,8 +97,8 @@ namespace Time时间记录器
 				}
 				else //如果原列表中已经有了这个项则直接修改
 				{
-					for(int i=0;i<ProcessInfo.Length;i++)
-						item.SubItems[i].Text = ProcessInfo[i];
+					for(int j=0;j<ProcessInfo.Length;j++)
+						item.SubItems[j].Text = ProcessInfo[j];
 				}
 			}
 			ui.RefreshData(_process);

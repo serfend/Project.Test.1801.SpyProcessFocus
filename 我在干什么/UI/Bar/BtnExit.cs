@@ -20,7 +20,12 @@ namespace Time时间记录器.UI.Bar
 			nowAngle = nowAngle * (1- MovingSpeed) + (active ? ActiveAngle : deActiveAngle) * MovingSpeed;
 			nowLen = nowLen * (1- MovingSpeed) + (active ? ActiveLen : deActiveLen) * MovingSpeed;
 			if (Math.Abs(lastAngle - nowAngle) > 0.1) {
-				this.Invalidate();
+				if (!Program.UsedFlash)
+				{
+					nowAngle = active ? ActiveAngle : deActiveAngle;
+					nowLen = active ? ActiveLen : deActiveLen;
+				}
+					this.Invalidate();
 				return true;
 			}
 			return false;

@@ -188,6 +188,7 @@ namespace Time时间记录器
 		/// </summary>
 		private RecordTime nowFocus;
 		private int lastFocus, lastLostFocus;
+		private Process parent;
 		public ProcessRecord()
 		{
 
@@ -200,14 +201,14 @@ namespace Time时间记录器
 			//this.ModuleName = parent.MainModule.ModuleName;
 			this.MainWindowTitle = parent.MainWindowTitle;
 			record = new List<RecordTime>();
-			AppInfo = new ApplicationInfomations(parent);
-			ProcessSetting = new Reg().In("Main").In("Data").In(ProcessName);
+			this.parent = parent;
+			ProcessSetting = Program.AppSetting.In("Main").In("Data").In(ProcessName);
 		}
 
 		public  int Id { get => id; set => id=value; }
 		public int LastLostFocus { get => lastLostFocus; set => lastLostFocus = value; }
 		public int LastFocus { get => lastFocus; set => lastFocus = value; }
-		public ApplicationInfomations AppInfo { get => appInfo; set => appInfo = value; }
+		public ApplicationInfomations AppInfo { get => appInfo==null?appInfo= new ApplicationInfomations(parent):appInfo; set => appInfo = value; }
 		private string remarkName;
 		/// <summary>
 		/// 进程的用户备注

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,8 +13,18 @@ namespace Time时间记录器.Util
 	{
 		private Process handleApp;
 		private Icon icon;
+		private Color iconMainColor;
+		public Icon Icon { get => icon; set {
+				icon = value;
+				if (icon != null) {
+					var colors = Time时间记录器.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(),3);
+					iconMainColor = Color.FromArgb(255, Color.FromArgb(colors[0].Color));
+				}
+				else IconMainColor = Color.Gray;
+			} }
+		public Color IconMainColor { get => iconMainColor; set => iconMainColor = value; }
 
-		public Icon Icon { get => icon; set => icon = value; }
+
 
 		public ApplicationInfomations()
 		{
@@ -25,7 +36,7 @@ namespace Time时间记录器.Util
 			this.handleApp = handleApp;
 			try
 			{
-				this.Icon = ApplicationInfomations.GetIcon(handleApp.MainModule.FileName, false);
+				this.Icon = ApplicationInfomations.GetIcon(handleApp.MainModule.FileName, true);
 			}
 			catch (Exception)
 			{

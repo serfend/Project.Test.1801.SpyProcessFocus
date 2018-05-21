@@ -29,7 +29,8 @@ namespace Time时间记录器.UI.Bar
 			nowAngle = nowAngle * (1 - MovingSpeed) + targetAngle * MovingSpeed;
 			if (Math.Abs(lastSize - nowAngle) > 0.005)
 			{
-				BackColor = Color.FromArgb(
+				if (!Program.UsedFlash) nowAngle = targetAngle;
+					BackColor = Color.FromArgb(
 					(int)(deactiveColor.R * (1 - nowAngle) + activeColor.R * nowAngle),
 					(int)(deactiveColor.G * (1 - nowAngle) + activeColor.G * nowAngle),
 					(int)(deactiveColor.B * (1 - nowAngle) + activeColor.B * nowAngle));

@@ -40,7 +40,7 @@ namespace Time时间记录器.UI.Bar
 					{
 						using (TextureBrush br = new TextureBrush(value, System.Drawing.Drawing2D.WrapMode.Clamp))
 						{
-							//g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+							g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 							g.FillEllipse(br, new Rectangle(0, 0, size, size));
 						}
 					}
@@ -57,7 +57,8 @@ namespace Time时间记录器.UI.Bar
 		/// <param name="e"></param>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			var size = Parent.Controls[3].Width;
+
+			var size = Width;
 			var top = (int)((Height - size) * 0.5);
 			//e.Graphics.DrawImage(avatar, new RectangleF(0, top, size, size));//以menu为界限
 			if (avatarCutting == null)

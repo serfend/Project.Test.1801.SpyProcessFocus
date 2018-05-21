@@ -16,7 +16,6 @@ namespace Time时间记录器.UI.Layout
 			return (x) => {
 				expandMenu = !expandMenu;
 				Program.frmMain.ui.ExpandMenu(expandMenu);
-				//TODO 展开菜单栏
 			};
 		}
 

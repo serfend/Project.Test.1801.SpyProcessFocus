@@ -45,7 +45,8 @@ namespace Time时间记录器.UI.Bar
 			nowAngle = nowAngle * (1 - MovingSpeed) + targetAngle * MovingSpeed;
 			if (Math.Abs(lastSize - nowAngle) > 0.005)
 			{
-				BackColor = Color.FromArgb(
+				if (!Program.UsedFlash) nowAngle = targetAngle;
+					BackColor = Color.FromArgb(
 					(int)(deactiveColor.R * (1 - nowAngle) + activeColor.R * nowAngle),
 					(int)(deactiveColor.G * (1 - nowAngle) + activeColor.G * nowAngle),
 					(int)(deactiveColor.B * (1 - nowAngle) + activeColor.B * nowAngle));
@@ -82,7 +83,7 @@ namespace Time时间记录器.UI.Bar
 			if (Image == null) return;//防止遇到智障
 
 			//TODO 不应用固定数值 ，此处需要优化
-			var size = Parent.Controls[7].Width;
+			var size = Parent.Controls[4].Width;
 
 			var top = (int)((Height - size) * 0.5);
 			e.Graphics.DrawImage(Image,new RectangleF(0,top,size,size));//以menu为界限
@@ -91,7 +92,7 @@ namespace Time时间记录器.UI.Bar
 			if (expand) {
 				e.Graphics.DrawString(showText, Font, foreBrush, size * 1.2f+ nowAngle*Width*0.2f, strTop);
 			}
-			//base.OnPaint(e);
+			base.OnPaint(e);
 		}
 	}
 }

@@ -211,6 +211,10 @@ namespace DotNet4.Utilities
 				if(tmp.Contains('\0'))tmp=tmp.Substring(0, tmp.ToString().IndexOf('\0'));
 				return tmp;
 			}
+			public virtual string[] EnumAllKey()
+			{
+				return InnerKey.GetValueNames();
+			}
 			#endregion
 			#region 受保护方法
 			protected RegistryKey GetRegDomain(RegDomain regDomain)
