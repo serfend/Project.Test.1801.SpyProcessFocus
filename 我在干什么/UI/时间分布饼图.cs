@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Time时间记录器.Util;
 
 namespace Time时间记录器.UI
 {

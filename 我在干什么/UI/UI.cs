@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Time时间记录器.UI.Layout;
+using Time时间记录器.Util;
+
 namespace Time时间记录器.UI
 {
 	public class UI

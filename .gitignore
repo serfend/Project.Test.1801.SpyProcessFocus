@@ -5,3 +5,5 @@
 *.pdb
 *.ide-shm
 我在干什么/bin/Debug/Time时间记录器.exe
+*.exe
+*.pdb

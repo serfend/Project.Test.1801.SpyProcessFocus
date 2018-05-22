@@ -135,7 +135,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Util\reg.cs" />
-    <Compile Include="Util\SpyerProcess.cs" />
+    <Compile Include="Util\SpyerProcess\RecordTime.cs" />
+    <Compile Include="Util\SpyerProcess\ProcessRecord.cs" />
+    <Compile Include="Util\SpyerProcess\ProcessGroup.cs" />
+    <Compile Include="Util\SpyerProcess\SpyerProcess.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

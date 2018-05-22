@@ -26,7 +26,14 @@ namespace Time时间记录器.UI
 				SoftAvgTime = 0,
 			};
 			frequency = new UseFrequency() { };
-			title = new Bar.BtnNormal((x) => { })
+			title = new Bar.BtnNormal((x) => {
+				var p = Program.frmMain._process[name];
+				DotNet4.Utilities.UtilInput.InputBox.ShowInputBox("修改备注", "修改进程备注名称",p.RemarkName, (newName) =>
+				{
+					p.RemarkName = newName;
+
+				});
+			})
 			{
 
 			};
@@ -56,8 +63,8 @@ namespace Time时间记录器.UI
 		private bool mouseIsDown = false;
 
 		public string ProcessName { get => name; set {
-				//title.Text = value;
 				name = value;
+				title.Text = Program.frmMain._process[name].RemarkName;
 			} }
 		internal Logo Logo { get => logo; set => logo = value; }
 		internal TimeLine TimeLine { get => timeLine; set => timeLine = value; }
