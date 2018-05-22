@@ -51,18 +51,13 @@
     <Compile Include="UI\App.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\AppComponent\Label.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="UI\AppComponent\Logo.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\AppComponent\TimeLine.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\AppComponent\Title.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="UI\AppComponent\UseFrequency.cs" />
     <Compile Include="UI\AppList.cs">
       <SubType>Component</SubType>
     </Compile>

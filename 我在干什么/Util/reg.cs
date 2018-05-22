@@ -204,7 +204,8 @@ namespace DotNet4.Utilities
 				key.Close();
 				if (rel == null || rel.ToString().Length==0)
 				{
-					this.SetInfo(name, defaultInfo);
+					if (defaultInfo != null)
+						this.SetInfo(name, defaultInfo);
 					return defaultInfo;
 				}
 				string tmp = rel.ToString();

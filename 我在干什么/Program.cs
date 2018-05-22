@@ -55,7 +55,7 @@ namespace Time时间记录器
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Console.WriteLine("ExitProgram()"+ex.Message);
 				
 			}
 		}

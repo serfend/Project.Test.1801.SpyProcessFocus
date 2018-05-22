@@ -88,7 +88,7 @@ namespace Time时间记录器.UI
 		private RectangleF nowOffset = new RectangleF();
 		public void Offset(float x, float y, float w, float h)
 		{
-			targetOffset = new RectangleF(x, y, w, h);
+			TargetOffset = new RectangleF(x, y, w, h);
 		}
 
 			
@@ -157,17 +157,17 @@ namespace Time时间记录器.UI
 		}
 		public virtual bool RefreshLayout()
 		{
-			float offsetMoving = Math.Abs(nowOffset.X - targetOffset.X) +
-				Math.Abs(nowOffset.Y - targetOffset.Y) +
-				Math.Abs(nowOffset.Width - targetOffset.Width) +
-				Math.Abs(nowOffset.Height - targetOffset.Height);
+			float offsetMoving = Math.Abs(nowOffset.X - TargetOffset.X) +
+				Math.Abs(nowOffset.Y - TargetOffset.Y) +
+				Math.Abs(nowOffset.Width - TargetOffset.Width) +
+				Math.Abs(nowOffset.Height - TargetOffset.Height);
 			if (offsetMoving > 0.1)
 			{
-				if (!Program.UsedFlash) nowOffset = targetOffset;
-				nowOffset.X = nowOffset.X * (1 - MovingSpeed) + targetOffset.X * MovingSpeed;
-				nowOffset.Y = nowOffset.Y * (1 - MovingSpeed) + targetOffset.Y * MovingSpeed;
-				nowOffset.Width = nowOffset.Width * (1 - MovingSpeed) + targetOffset.Width * MovingSpeed;
-				nowOffset.Height = nowOffset.Height * (1 - MovingSpeed) + targetOffset.Height * MovingSpeed;
+				if (!Program.UsedFlash) nowOffset = TargetOffset;
+				nowOffset.X = nowOffset.X * (1 - MovingSpeed) + TargetOffset.X * MovingSpeed;
+				nowOffset.Y = nowOffset.Y * (1 - MovingSpeed) + TargetOffset.Y * MovingSpeed;
+				nowOffset.Width = nowOffset.Width * (1 - MovingSpeed) + TargetOffset.Width * MovingSpeed;
+				nowOffset.Height = nowOffset.Height * (1 - MovingSpeed) + TargetOffset.Height * MovingSpeed;
 				更新();
 			}
 
@@ -190,6 +190,8 @@ namespace Time时间记录器.UI
 				bckColor = value;
 				this.OnBackColorChanged(EventArgs.Empty);
 			} }
+
+		public RectangleF TargetOffset { get => targetOffset; set => targetOffset = value; }
 		#endregion
 	}
 }

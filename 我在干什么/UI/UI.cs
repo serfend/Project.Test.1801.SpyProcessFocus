@@ -19,13 +19,14 @@ namespace Time时间记录器.UI
 		public Form frm;
 		public void ExpandMenu(bool expand)
 		{
-			float x = expand ? 0.2f*frm.Width : 0;
+			Program.frmMain.ui.menuPanel.menu.expandMenu = expand;
+			float x = expand ? 0.1f*frm.Width : 0;
 			float y = expand ? 0.1f*frm.Height : 0;
 			//title.Offset(x, 0, 0, 0);
 			//top.Offset(x, 0, 0, 0);
 			banner.Offset(x, 0, 0, 0);
-			up.Offset(x, 0, 0, 0);
-			center.Offset(x, 0, 0, 0);
+			up.Offset(x, 0, 0, up.TargetOffset.Height);
+			center.Offset(x, center.TargetOffset.Y, 0, center.TargetOffset.Height);
 			menuPanel.Offset(0, 0, x, 0);
 			foreach(var ctl in menuPanel.Controls)
 			{
@@ -40,16 +41,6 @@ namespace Time时间记录器.UI
 		{
 			this.frm = frm;
 			bar.Parent = frm;
-			//top.Parent = frm;
-			//var font = new Font("微软雅黑", 10);
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "今日", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "本周", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "上周", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "本月", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "上月", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "本季度", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "上季度", Font = font });
-			//top.Add(new Bar.BtnNormal(Program.ShowDataAnalysis()) { Text = "年度", Font = font });
 			banner.Parent = frm;
 			up.Parent = frm;
 			center.Parent = frm;
@@ -60,6 +51,8 @@ namespace Time时间记录器.UI
 
 		private void Frm_Resize(object sender, EventArgs e)
 		{
+			menuPanel.更新饼图();
+			ExpandMenu(Program.frmMain.ui.menuPanel.menu.expandMenu);
 			bar.SetLayoutPos(0.85f, 0, 0.15f, 0.03f);
 			//top.SetLayoutPos(0.46f, 0.03f, 0.54f, 0.02f);
 			banner.SetLayoutPos(0.05f, 0.05f, 0.93f, 0.2f);
@@ -72,6 +65,7 @@ namespace Time时间记录器.UI
 		internal void RefreshData(ProcessGroup process)
 		{
 			up.饼图.RefreshData(process);
+			center.apps.RefreshData(process);
 		}
 	}
 }

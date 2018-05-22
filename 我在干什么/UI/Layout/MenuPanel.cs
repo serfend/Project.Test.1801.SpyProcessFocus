@@ -13,11 +13,26 @@ namespace Time时间记录器.UI.Layout
 	{
 		public LeftLayout menu = new LeftLayout();
 
-		private Bar.BtnCmd cmdHider;
+		public Bar.BtnCmd cmdHider;
 		private Bar.BtnCmd cmdPauser;
 		private Bar.BtnCmd cmdGraphic;
 		private Bar.BtnCmd cmdFlashEnable;
-
+		public void 更新饼图()
+		{
+			if (cmdHider.StateIsON)
+			{
+				Program.frmMain.ui.up.饼图.隐藏();
+				var top = (float)(Program.frmMain.Height * 0.3);
+				Program.frmMain.ui.up.Offset(0, 0, 0, -top);
+				Program.frmMain.ui.center.Offset(0, -top, 0, top);
+			}
+			else
+			{
+				Program.frmMain.ui.up.饼图.显示();
+				Program.frmMain.ui.up.Offset(0, 0, 0, 0);
+				Program.frmMain.ui.center.Offset(0, 0, 0, 0);
+			}
+		}
 		public MenuPanel()
 		{
 			this.BackColor = System.Drawing.Color.FromArgb(255, 50, 50, 50);
@@ -35,8 +50,10 @@ namespace Time时间记录器.UI.Layout
 			//	};
 			//}
 			cmdHider = new Bar.BtnCmd((x) => {
-				if(cmdHider.StateIsON) Program.frmMain.ui.up.饼图.隐藏();else Program.frmMain.ui.up.饼图.显示();
-			})
+				Program.frmMain.ui.ExpandMenu(false);
+				更新饼图();
+
+		})
 			{
 				Text = "显示图表|隐藏图表",
 				Image = Resources.隐藏,

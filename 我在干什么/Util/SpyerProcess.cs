@@ -83,7 +83,7 @@ namespace Time时间记录器
 		private void RefreshTimeRecorder()
 		{
 			if (NowRunningStatus) {//开始运行时更新所有开始时间
-				this.Last.Begin();//重新开始计时
+				this.Last.Begin("SystemPause");//重新开始计时
 			}
 			else
 			{
@@ -126,8 +126,7 @@ namespace Time时间记录器
 			if (!nowRunningStatus) return _last;
 			var p = GetProcess(process);
 			_last.End();
-			_last = p;
-			_last.Begin();
+			p.Begin(_last.ProcessName);
 			return p;
 		}
 		/// <summary>
@@ -223,16 +222,20 @@ namespace Time时间记录器
 				remarkName = value;
 			}
 		}
+
 		/// <summary>
 		/// 设置进程的获取焦点的时间
 		/// </summary>
-		public void Begin()
+		public void Begin(string switchFrom)
 		{
-			nowFocus = new RecordTime() { Begin = System.Environment.TickCount };
+			nowFocus = new RecordTime() { Begin = System.Environment.TickCount,SwitchFrom= switchFrom };
 			LastFocus = nowFocus.Begin;
 			record.Add(nowFocus);
 		}
-
+		private void UpdateRecord(RecordTime record)
+		{
+			
+		}
 		/// <summary>
 		/// 设置进程的失去焦点的时间
 		/// </summary>
@@ -242,6 +245,7 @@ namespace Time时间记录器
 			nowFocus.End = System.Environment.TickCount;
 			LastLostFocus = nowFocus.End;
 			sumUsedTime = SumUsedTime(true);
+
 		}
 
 		private int sumUsedTime;
@@ -286,6 +290,7 @@ namespace Time时间记录器
 	{
 		private int begin;
 		private int end;
+		private string switchFrom;
 		public RecordTime()
 		{
 
@@ -310,6 +315,9 @@ namespace Time时间记录器
 				return End - Begin;
 			}
 		}
+
+		public string SwitchFrom { get => switchFrom; set => switchFrom = value; }
+
 		public override string ToString()
 		{
 			StringBuilder s = new StringBuilder(8);

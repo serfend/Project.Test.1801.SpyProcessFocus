@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Time时间记录器.UI.Bar
 {
-	class BtnCmd:Control
+	public  class BtnCmd:Control
 	{
 		private Color deactiveColor= Color.FromArgb(255, 189, 215, 238);
 		private Color activeColor = Color.FromArgb(255, 89, 255, 138);

@@ -20,11 +20,6 @@ namespace Time时间记录器.UI.Layout
 			饼图.Font = new System.Drawing.Font("微软雅黑", 10);
 
 		}
-		
-		protected override void OnPaint(PaintEventArgs e)
-		{
-			base.OnPaint(e);
-		}
 
 		protected override void OnResize(EventArgs e)
 		{

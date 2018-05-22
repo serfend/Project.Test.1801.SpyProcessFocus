@@ -16,6 +16,10 @@ namespace Time时间记录器.UI
 		{
 			
 		}
+		protected override void OnMouseClick(MouseEventArgs e)
+		{
+			//TODO 程序列表定位到相应位置
+		}
 		private bool layoutUpdate = false;
 		public override bool RefreshLayout()
 		{
@@ -67,6 +71,7 @@ namespace Time时间记录器.UI
 					Parent.BackColor = Color.FromArgb(255, (int)nowColor, (int)nowColor, (int)nowColor);
 					this.BackColor = Parent.BackColor;
 					this.Invalidate();
+
 					Thread.Sleep(50);
 				}
 				nowMaxAngle = targetAngle;
