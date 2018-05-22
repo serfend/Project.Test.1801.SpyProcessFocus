@@ -77,9 +77,9 @@ namespace Time时间记录器
 			{
 				System.Threading.Thread.Sleep(500+ (int)(new Random().NextDouble() * 500));
 				var process = SpyerProcess.GetCurrentProcessFocus();
-				var now =new ProcessRecord( process);
+				var now =new ProcessRecord( process.ProcessName, process.MainWindowTitle, process);
 				
-				if (_process.Last.Id == now.Id) continue;
+				if (_process.Last.RemarkName == now.RemarkName) continue;
 				var p= _process.SetBegin(now);
 				_bckProcessRecord.ReportProgress(0);
 			} while (!_bckProcessRecord.CancellationPending);

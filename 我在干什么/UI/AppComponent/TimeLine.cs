@@ -11,36 +11,36 @@ namespace Time时间记录器.UI.AppComponent
 		//本软件今日用时/本软件日平均用时/所有软件日平均最高用时 
 		private int todayTime, avgTime;
 		private int softAvgTime;
-		private Bar.BtnNormal today, avg;
 		public TimeLine()
 		{
-			today = new Bar.BtnNormal((x) => { })
-			{
-				Parent = this,
-			};
-			avg = new Bar.BtnNormal((x) => { })
-			{
-				Parent = this,
-			};
+			BackColor = System.Drawing.Color.LightGray;
 		}
+
 		public override bool RefreshLayout()
 		{
+			bool changed = anyChange;
 			if (SoftAvgTime > 0)
 			{
-				today.Width = Width * TodayTime / SoftAvgTime;
-				avg.Width = Width * AvgTime / SoftAvgTime;
-
+				if (anyChange)
+				{
+					todayPercent = (float)todayTime / (float)softAvgTime;
+					anyChange = false;
+					this.Invalidate();
+				}
 			}
 
-			return base.RefreshLayout();
+			return base.RefreshLayout()||changed;
 		}
-		public int TodayTime { get => todayTime; set => todayTime = value; }
-		public int AvgTime { get => avgTime; set => avgTime = value; }
-		public int SoftAvgTime { get => softAvgTime; set => softAvgTime = value; }
-
+		public int TodayTime { get => todayTime; set { todayTime = value; anyChange = true; } }
+		public int AvgTime { get => avgTime; set { avgTime = value; anyChange = true; } }
+		public int SoftAvgTime { get => softAvgTime; set { softAvgTime = value; anyChange = true; } }
+		private bool anyChange = false;
+		private float todayPercent,avgPercent;
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
+			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGreen, 0, 0, todayPercent * Width, Height);//今日
+
 			int time = TodayTime;
 			int h = time / 86400;
 			time -= h * 3600;

@@ -26,7 +26,7 @@ namespace Time时间记录器.UI
 			float y = expand ? 0.1f*frm.Height : 0;
 			//title.Offset(x, 0, 0, 0);
 			//top.Offset(x, 0, 0, 0);
-			banner.Offset(x, 0, 0, 0);
+			banner.Offset(x, center.TargetOffset.Y, 0, 0);
 			up.Offset(x, 0, 0, up.TargetOffset.Height);
 			center.Offset(x, center.TargetOffset.Y, 0, center.TargetOffset.Height);
 			menuPanel.Offset(0, 0, x, 0);

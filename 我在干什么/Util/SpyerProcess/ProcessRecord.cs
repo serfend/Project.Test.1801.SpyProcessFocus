@@ -9,34 +9,30 @@ namespace Time时间记录器.Util
 {
 	public class ProcessRecord
 	{
-		private int id;
+
 		private Reg ProcessSetting;//进程的存储数据
 		private ApplicationInfomations appInfo;
-		public string ProcessName { get; private set; }
-		public DateTime StartTime { get; private set; }
-		public string ModuleName { get; private set; }
-		public string MainWindowTitle { get; private set; }
+		public string ProcessName { get;  set; }
+		public DateTime StartTime { get;  set; }
+		public string ModuleName { get;  set; }
+		public string MainWindowTitle { get;  set; }
 		public List<ProcessRecord> InteractApp;
 		private List<RecordTime> record;
 		private RecordTime nowFocus;
 		private int lastFocus, lastLostFocus;
-		private Process parent;
-		public ProcessRecord()
-		{
+		public Process parent;
 
-		}
-		public ProcessRecord(Process parent)
+		public ProcessRecord(string ProcessName, string MainWindowTitle,Process parent)
 		{
-			this.Id = parent.Id;
-			this.MainWindowTitle = parent.MainWindowTitle;
-			this.ProcessName = parent.ProcessName == "ApplicationFrameHost"?MainWindowTitle:parent.ProcessName;
+			this.parent = parent;
+			this.MainWindowTitle = MainWindowTitle;
+			this.ProcessName = ProcessName == "ApplicationFrameHost" ? MainWindowTitle : ProcessName;
 
 			record = new List<RecordTime>();
-			this.parent = parent;
 			ProcessSetting = Program.AppSetting.In("Main").In("Data").In(ProcessName);
 		}
 
-		public int Id { get => id; set => id = value; }
+
 		public int LastLostFocus { get => lastLostFocus; set => lastLostFocus = value; }
 		public int LastFocus { get => lastFocus; set => lastFocus = value; }
 		public ApplicationInfomations AppInfo { get => appInfo == null ? appInfo = new ApplicationInfomations(parent) : appInfo; set => appInfo = value; }
@@ -53,11 +49,16 @@ namespace Time时间记录器.Util
 				remarkName = value;
 			}
 		}
+		public bool AnyDataRefresh;
 		public void Begin(string switchFrom)
 		{
+			switchFrom = switchFrom ?? "#null#";
 			nowFocus = new RecordTime() { Begin = System.Environment.TickCount, SwitchFrom = switchFrom };
 			LastFocus = nowFocus.Begin;
 			record.Add(nowFocus);
+			Program.ProcessData.AppRunning(this.ProcessName);
+			Program.ProcessData.AppAttachRelate(this.ProcessName, switchFrom);
+			AnyDataRefresh = true;
 		}
 		public void End()
 		{
@@ -65,7 +66,8 @@ namespace Time时间记录器.Util
 			nowFocus.End = System.Environment.TickCount;
 			LastLostFocus = nowFocus.End;
 			sumUsedTime = SumUsedTime(true);
-
+			Program.ProcessData.AppWasteTimeAttach(this.ProcessName, nowFocus.End - nowFocus.Begin);
+			AnyDataRefresh = true;
 		}
 
 		private int sumUsedTime;

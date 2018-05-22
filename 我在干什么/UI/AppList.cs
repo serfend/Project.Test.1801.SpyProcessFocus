@@ -9,7 +9,7 @@ namespace Time时间记录器.UI
 {
 	public class AppList:Control
 	{
-		private SortedList<string, App> list=new SortedList<string, App>();
+		private List<App> list=new List<App>();
 		public AppList()
 		{
 			onResize = new OnResizeDelegate(OnResizeRaise);
@@ -18,21 +18,8 @@ namespace Time时间记录器.UI
 		{
 			app.layoutParent = this;
 			app.Parent = this;
-			list.Add(app.ProcessName, app);
-		}
-		public bool Remove(string name)
-		{
-			foreach(var appC in this.Controls)
-			{
-				var app = (App)appC;
-				if (app.Name == name)
-				{
-					Controls.Remove(app);
-					list.Remove(app.Name);
-					return true;
-				}
-			}
-			return false;
+			app.Index = list.Count;
+			list.Add( app);
 		}
 		public override bool RefreshLayout()
 		{
@@ -45,8 +32,8 @@ namespace Time时间记录器.UI
 					if(Controls.Count > 0)
 					{
 
-						var lastAppBottom = Controls[Controls.Count - 1].Bottom;
-						if (lastAppBottom < Height)
+						var lastAppBottom = Controls[lastAppIndex].Bottom;
+						if (lastAppBottom < Bottom)
 						{
 							var firstAppTop = Controls[0].Top;
 							if(firstAppTop < 0)
@@ -82,10 +69,14 @@ namespace Time时间记录器.UI
 			if (MouseIsDown)
 			{
 				TargetY += (e.Location.Y - lastY)*5;
-				lastY = e.Location.Y;
 				this.OnResize(EventArgs.Empty);
 			}
 			base.OnMouseMove(e);
+		}
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			TargetY -= e.Delta;
+			base.OnMouseWheel(e);
 		}
 		private bool mouseIsDown = false;
 		private float nowY=0,targetY=0;
@@ -99,40 +90,88 @@ namespace Time时间记录器.UI
 		}
 		protected override void OnResize(EventArgs e)
 		{
-			int height = 100;
+			int height = 200;
 			int lastY =(int)nowY;
 			for (int i = 0; i < Controls.Count; i++)
 			{
 				if (Controls[i] is App app)
 				{
-					app.DBounds=new System.Drawing.Rectangle(0,lastY ,Width, height);
-					lastY += (int)(height*1.05);
+					app.DBounds=new System.Drawing.Rectangle(0,lastY+(int)(height*1.05*app.Index) ,Width, height);
+					//lastY += (int)(height*1.05);
 				}
 			}
 		}
 		public void RefreshData(ProcessGroup process)
 		{
+			int maxValue=0;
 			for(int i=0;i< process.Process.Count; i++)
 			{
 				var p = process.Process[i];
-				if (list.ContainsKey(p.RemarkName))
-				{
-
+				if (!p.AnyDataRefresh) continue;
+				p.AnyDataRefresh = false;
+				var app = list.Find((x) => x.ProcessName == p.ProcessName);
+				if (app!=null) { 
+					var data=Program.ProcessData[p.ProcessName];
+					app.TimeLine.TodayTime = data.TodayWasteTime/1000;
+					if (data.TodayWasteTime > maxValue) maxValue = data.TodayWasteTime;
 				}
 				else
 				{
-					App app = new App() {
-						ProcessName = p.RemarkName,
-					};
-					app.TimeLine.TodayTime = 0;
-					app.TimeLine.AvgTime = 0;
-					app.TimeLine.SoftAvgTime = 0;
+					App newApp = new App() {
+						ProcessName = p.ProcessName,
+						Font = this.Font,
 
-					Add(app);
+					};
+					newApp.Logo.Icon = p.AppInfo.Icon;
+					newApp.Logo.BackColor = p.AppInfo.IconMainColor;
+					newApp.TimeLine.TodayTime = 0;
+					newApp.TimeLine.AvgTime = 50;
+					newApp.TimeLine.SoftAvgTime = 100;
+
+					Add(newApp);
 					//app.Frequency
 				}
 			}
-			
+			SortControls(maxValue);
+		}
+		private int lastAppIndex;
+		private void SortControls(int maxValue)
+		{
+			int maxIndex = 0;
+			bool anyRefresh = false;
+			for(int i=0; i < list.Count; i++)
+			{
+				var app = ((App)(Controls[i]));
+				for (int j = 0; j < list.Count; j++)
+				{
+					var app2 = ((App)Controls[j]);
+					if (i != j)
+					{
+						if (AppValue(i) > AppValue(j) && AppRank(i) > AppRank(j)) {
+							app.Index ^= app2.Index;
+							app2.Index ^= app.Index;
+							app.Index ^= app2.Index;
+							anyRefresh = true;
+						}
+					}
+				}
+				app.TimeLine.SoftAvgTime = maxValue/1000;
+				if(maxIndex< app.Index)
+				{
+					maxIndex = app.Index;
+					lastAppIndex = i;
+				}
+			}
+			if (anyRefresh) this.OnResizeRaise();
+		}
+
+		private int AppValue(int index)
+		{
+			return ((App)Controls[index]).TimeLine.TodayTime;
+		}
+		private int AppRank(int index)
+		{
+			return ((App)Controls[index]).Index;
 		}
 
 	}

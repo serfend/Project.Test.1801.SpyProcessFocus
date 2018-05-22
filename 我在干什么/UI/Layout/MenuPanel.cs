@@ -22,15 +22,17 @@ namespace Time时间记录器.UI.Layout
 			if (cmdHider.StateIsON)
 			{
 				Program.frmMain.ui.up.饼图.隐藏();
-				var top = (float)(Program.frmMain.Height * 0.3);
+				var top = (float)(Program.frmMain.Height * 0.5);
 				Program.frmMain.ui.up.Offset(0, 0, 0, -top);
 				Program.frmMain.ui.center.Offset(0, -top, 0, top);
+				Program.frmMain.ui.banner.Offset(0, -top, 0, 0);
 			}
 			else
 			{
 				Program.frmMain.ui.up.饼图.显示();
 				Program.frmMain.ui.up.Offset(0, 0, 0, 0);
 				Program.frmMain.ui.center.Offset(0, 0, 0, 0);
+				Program.frmMain.ui.banner.Offset(0, 0, 0, 0);
 			}
 		}
 		public MenuPanel()

@@ -17,10 +17,7 @@ namespace Time时间记录器.UI
 		{
 			
 		}
-		protected override void OnMouseClick(MouseEventArgs e)
-		{
-			//TODO 程序列表定位到相应位置
-		}
+
 		private bool layoutUpdate = false;
 		public override bool RefreshLayout()
 		{
@@ -126,7 +123,7 @@ namespace Time时间记录器.UI
 						target = new ProcessData() { ColorIndex = brushs.Count - 1, Rank = nowNum++ };
 						Data.Add(p.RemarkName, target);
 					}
-					target.time = p.SumUsedTime();
+					target.time = Program.ProcessData[p.ProcessName].TodayWasteTime;
 					sumTime += target.time;
 				}
 				if (sumTime == 0) sumTime = 10;

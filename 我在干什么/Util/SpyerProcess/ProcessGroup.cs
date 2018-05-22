@@ -23,7 +23,7 @@ namespace Time时间记录器.Util
 		}
 		public ProcessGroup()
 		{
-			_last = new ProcessRecord();
+			_last = new ProcessRecord("#null#", "#null#",null);
 			Process = new List<ProcessRecord>();
 		}
 		public ProcessRecord Last
@@ -59,7 +59,7 @@ namespace Time时间记录器.Util
 		{
 			if (NowRunningStatus)
 			{//开始运行时更新所有开始时间
-				this.Last.Begin("SystemPause");//重新开始计时
+				this.Last.Begin("#SystemPause#");//重新开始计时
 			}
 			else
 			{
@@ -79,7 +79,7 @@ namespace Time时间记录器.Util
 		/// <returns></returns>
 		public ProcessRecord GetProcess(ProcessRecord process)
 		{
-			if (process == null) return new ProcessRecord();
+			if (process == null) return new ProcessRecord("#null#", "#null#",null);
 			foreach (var p in Process)//在记录中寻找进程
 			{
 				if (p.RemarkName == process.RemarkName)
@@ -94,11 +94,12 @@ namespace Time时间记录器.Util
 		private ProcessRecord _last;
 		public ProcessRecord SetBegin(ProcessRecord process)
 		{
-			if (_last.Id == process.Id) return _last;
+			if (_last.RemarkName == process.RemarkName) return _last;
 			if (!nowRunningStatus) return _last;
 			var p = GetProcess(process);
 			_last.End();
 			p.Begin(_last.ProcessName);
+			_last = p;
 			return p;
 		}
 		public ProcessRecord SetEnd(ProcessRecord process)

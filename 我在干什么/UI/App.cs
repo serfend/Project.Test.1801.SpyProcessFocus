@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Time时间记录器.UI.AppComponent;
+using Time时间记录器.Util;
 
 namespace Time时间记录器.UI
 {
@@ -16,27 +17,42 @@ namespace Time时间记录器.UI
 		private Bar.BtnNormal title;
 		private AppComponent.UseFrequency frequency;
 		public AppList layoutParent;
+		public int Index;
 		public App()
 		{
-			BackColor = Color.BlueViolet;
+			BackColor = Color.White;
+			ForeColor = Color.Black;
+			Font = new Font("微软雅黑", 10);
+			logo = new Logo((x) => { })
+			{
+				Parent = this
+			};
+			title = new Bar.BtnNormal((x) => {
+				var p = Program.frmMain._process[name];
+				DotNet4.Utilities.UtilInput.InputBox.ShowInputBox("修改备注", "修改进程备注名称", p.RemarkName, (newName) =>
+				{
+					p.RemarkName = newName;
+				});
+			})
+			{
+				Parent = this,
+				deactiveColor = Color.FromArgb(200, 91, 155, 213)
+			};
 			TimeLine = new TimeLine()
 			{
 				TodayTime = 0,
 				AvgTime = 0,
 				SoftAvgTime = 0,
+				Parent = this
 			};
-			frequency = new UseFrequency() { };
-			title = new Bar.BtnNormal((x) => {
-				var p = Program.frmMain._process[name];
-				DotNet4.Utilities.UtilInput.InputBox.ShowInputBox("修改备注", "修改进程备注名称",p.RemarkName, (newName) =>
-				{
-					p.RemarkName = newName;
-
-				});
-			})
-			{
-
-			};
+			frequency = new UseFrequency() {  Parent=this};
+		}
+		protected override void OnResize(EventArgs e)
+		{
+			logo.DBounds = new Rectangle(10, 35, 90, 90);
+			title.DBounds = new Rectangle(10, 5, 90, 30);
+			TimeLine.DBounds = new Rectangle(100, 5, Width - 110, 30);
+			base.OnResize(e);
 		}
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
@@ -60,7 +76,6 @@ namespace Time时间记录器.UI
 			}
 			base.OnMouseMove(e);
 		}
-		private bool mouseIsDown = false;
 
 		public string ProcessName { get => name; set {
 				name = value;

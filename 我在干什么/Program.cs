@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Time时间记录器.Util;
 
 namespace Time时间记录器
 {
@@ -67,5 +68,6 @@ namespace Time时间记录器
 		public static string Title = "时间统计";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
+		public static DataCore ProcessData=new DataCore();
 	}
 }
