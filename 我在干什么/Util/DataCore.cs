@@ -11,9 +11,7 @@ namespace Time时间记录器.Util
 	/// </summary>
 	public static class DataCore
 	{
-		public static List<AppRecord> GetRecords(string appName) {
-			return null; 
-		}
+		
 
 	}
 	public class AppRecord
@@ -23,22 +21,52 @@ namespace Time时间记录器.Util
 		private int sumActiveTime;//启动总次数
 		private int sumWasteTime;//软件总耗时
 		private int[] daySumRunTime =new int[24];//每小时打开次数累积
-		private Reg AppSetting;
-		private Reg Relate;
+		private Reg RegAppSetting;
+		private Reg RegRelate;
 		public AppRecord(string name)
 		{
-			this.name = name;
-			AppSetting = Program.AppSetting.In("AppData").In(name);
-			Relate = AppSetting.In("Relate");
-			int relateAppNum = Convert.ToInt32(Relate.GetInfo("Count"));
+			this.Name = name;
+			RegAppSetting = Program.AppSetting.In("AppData").In(name);
+			RegRelate = RegAppSetting.In("Relate");
+			int relateAppNum = Convert.ToInt32(RegRelate.GetInfo("Count"));
 			for(int i = 0; i < relateAppNum; i++)
 			{
-				relate.Add(new Relate(Relate, i));
+				Relate.Add(new Relate(RegRelate, i));
+			}
+			sumActiveTime = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime"));
+			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime"));
+		}
+
+		public int SumActiveTime { get => sumActiveTime; set {
+				sumActiveTime = value;
+				RegAppSetting.SetInfo("SumActiveTime",value);
+			} }
+		public int SumWasteTime { get => sumWasteTime; set
+			{
+				sumActiveTime = value;
+				RegAppSetting.SetInfo("SumWasteTime", value);
 			}
 		}
+
+		public List<Relate> Relate { get => relate; set => relate = value; }
+		public string Name { get => name; set => name = value; }
+
+		public string Setting(string name,string newValue = null)
+		{
+			if (newValue == null)
+			{
+				return RegAppSetting.GetInfo(name);
+			}
+			else
+			{
+				RegAppSetting.SetInfo(name, newValue);
+				return newValue;
+			}
+		}
+
 		public DayRecord GetDayRecord(int day)
 		{
-			return new DayRecord(name,day);
+			return new DayRecord(Name,day);
 		}
 	}
 	public class DayRecord
