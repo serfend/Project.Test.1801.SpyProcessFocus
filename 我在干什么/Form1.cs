@@ -17,14 +17,12 @@ namespace Time时间记录器
 	public partial class Form1 : Form
 	{
 		private BackgroundWorker _bckProcessRecord;
-		private ProcessGroup _process;
+		public ProcessGroup _process;
 		public UI.UI ui;
 		public Form1()
 		{
 			InitializeComponent();
 			_process = new ProcessGroup();
-			LstProcessRecorder.SmallImageList = imageListLargeIcon;
-			LstProcessRecorder.DoubleClick += LstProcessRecorder_ModifyAppInfos;
 			ui = new UI.UI(this);
 
 
@@ -55,11 +53,7 @@ namespace Time时间记录器
 		{
 			var it = sender as ListView;
 			var nowSelect = it.SelectedItems[0];
-			DotNet4.Utilities.UtilInput.InputBox.ShowInputBox("修改备注", "修改进程备注名称", nowSelect.SubItems[1].Text, (newName) =>
-			{
-				_process[Convert.ToInt32(nowSelect.Name)].RemarkName = newName;
-				nowSelect.SubItems[1].Text = newName;
-			});
+			
 		}
 		private void Form1_Load(object sender, EventArgs e)
 		{
@@ -74,33 +68,6 @@ namespace Time时间记录器
 		private void _bckProcessRecord_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			
-			for (int i=0;i< _process.Process.Count;i++)
-			{
-				var p = _process.Process[i];
-				var item = LstProcessRecorder.Items[p.Id.ToString()];
-
-				string[] ProcessInfo = p.GetItem();
-				
-				if (item == null)//否则新增一个项
-				{
-					var newItem = new ListViewItem(ProcessInfo) { Name = p.Id.ToString() };
-					item = LstProcessRecorder.Items.Add(newItem);
-					if (p.AppInfo.Icon != null)
-					{
-						var imageIndex= imageListLargeIcon.Images.Count ;
-						imageListLargeIcon.Images.Add(newItem.Name, p.AppInfo.Icon);
-						item.ImageIndex = imageIndex;
-						
-					}
-					
-					
-				}
-				else //如果原列表中已经有了这个项则直接修改
-				{
-					for(int j=0;j<ProcessInfo.Length;j++)
-						item.SubItems[j].Text = ProcessInfo[j];
-				}
-			}
 			ui.RefreshData(_process);
 		}
 
@@ -109,7 +76,8 @@ namespace Time时间记录器
 			do
 			{
 				System.Threading.Thread.Sleep(500+ (int)(new Random().NextDouble() * 500));
-				var now =new ProcessRecord( SpyerProcess.GetCurrentProcessFocus());
+				var process = SpyerProcess.GetCurrentProcessFocus();
+				var now =new ProcessRecord( process);
 				
 				if (_process.Last.Id == now.Id) continue;
 				var p= _process.SetBegin(now);
