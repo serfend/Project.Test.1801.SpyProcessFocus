@@ -173,6 +173,7 @@ namespace DotNet4.Utilities
 			public virtual bool SetInfo(string name, object content) { return SetInfo(name, content, RegValueKind.String); }
 			public virtual bool SetInfo(string name, object content, RegValueKind regValueKind)
 			{
+				
 				if (name == string.Empty || name == null) { return false; }
 				RegistryKey key = InnerKey;
 				bool result = false;

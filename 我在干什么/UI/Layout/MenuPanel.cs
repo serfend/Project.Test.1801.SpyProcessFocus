@@ -1,4 +1,5 @@
-﻿using DotNet4.Utilities.UtilReg;
+﻿using DotNet4.Utilities.UtilInput;
+using DotNet4.Utilities.UtilReg;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using 时间管理大师.Properties;
+using 时间管理大师.Util;
 
 namespace 时间管理大师.UI.Layout
 {
@@ -60,6 +62,7 @@ namespace 时间管理大师.UI.Layout
 				Text = "显示图表|隐藏图表",
 				Image = Resources.隐藏,
 				Font = this.Font,
+				//ForeColor=Color.White,
 				Parent = this
 			};
 			cmdPauser = new Bar.BtnCmd((x) => {
@@ -69,6 +72,7 @@ namespace 时间管理大师.UI.Layout
 				Text = "继续统计|暂停统计",
 				Image = Resources.暂停,
 				Font = this.Font,
+				//ForeColor = Color.White,
 				Parent = this
 			};
 			cmdGraphic = new Bar.BtnCmd((x) => { })
@@ -76,20 +80,44 @@ namespace 时间管理大师.UI.Layout
 				Text = "隐藏分析|分析交集",
 				Image = Resources.图表,
 				Font=this.Font,
+				//ForeColor = Color.White,
 				Parent = this
 			};
+
 			cmdFlashEnable = new Bar.BtnCmd((x) => {
 				Program.UsedFlash = !cmdFlashEnable.StateIsON;
 			})
 			{
 				Text = "启用动画|关闭动画",
-				Image = Resources.图表,
+				//Image = Resources.图表,
 				Font = this.Font,
+				//ForeColor = Color.White,
 				Parent = this,
 				StateIsON=!Program.UsedFlash
 			};
+
+			AppAboutLabel = new Bar.BtnCmd((x) => { })
+			{
+				Parent = this,
+				Font = this.Font,
+				Text = "开发团队\n李培培教员\nxx队xxx\nxx队xxx\nxx队xxx|时间掌控大师\nTimeMaster\n版本:1.0",
+				AliasTextPos=false
+			};
+
+			SelectQueryDay = new Bar.BtnCmd[4];
+			SelectQueryDay[0] = new Bar.BtnCmd((x) => { Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString(); }) {Parent=this,Font=this.Font,Text="今天" };
+			SelectQueryDay[1] = new Bar.BtnCmd((x) => { Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString(); }) { Parent = this, Font = this.Font, Text = "昨天" };
+			SelectQueryDay[2] = new Bar.BtnCmd((x) => {
+				var date = InputBox.ShowInputBox("", "请按照格式输入日期", DateTime.Now.Date.ToShortDateString());
+				Program.QueryingDay = DataCore.DayStamp(Convert.ToDateTime(date)).ToString();
+			}) { Parent = this, Font = this.Font, Text = "其他.." };
+			SelectQueryDay[3] = new Bar.BtnCmd((x) => { Program.QueryingDay = "SumDay"; }) { Parent = this, Font = this.Font, Text = "总计" };
+			//菜单下方的控件将不显示左侧栏目
 			menu.Parent = this;
+			
 		}
+		public Bar.BtnCmd AppAboutLabel;
+		public Bar.BtnCmd[] SelectQueryDay;
 		protected override void OnResize(EventArgs e)
 		{
 			menu.DBounds = new System.Drawing.Rectangle(0,0,(int)(Parent.Width * 0.03),(int)(Parent.Height));
@@ -97,6 +125,13 @@ namespace 时间管理大师.UI.Layout
 			cmdPauser.SetLayoutPos(0, 0.251f, 1, 0.05f);
 			cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
 			cmdFlashEnable.SetLayoutPos(0, 0.353f, 1, 0.05f);
+			AppAboutLabel.SetLayoutPos(0, 0.07f, 1, 0.05f);
+			
+			for(int i=0;i<4;i++)
+			{
+				if (SelectQueryDay[i] != null)
+					SelectQueryDay[i].SetLayoutPos(0, 0.45f + 0.051f * i, 1, 0.05f);
+			}
 			//avatarNowSize = avatarNowSize * 0.8f + (menu.expandMenu ? 0.1f : 0.2f);
 
 			//if (menu.expandMenu )

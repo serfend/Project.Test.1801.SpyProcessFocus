@@ -38,6 +38,7 @@ namespace 时间管理大师.UI
 					cmd.Offset(0, y, 0, 0);
 				}
 			}
+			menuPanel.AppAboutLabel.Offset(0, 0, 0, 1.5f*y);
 		}
 		public UI( Form frm)
 		{

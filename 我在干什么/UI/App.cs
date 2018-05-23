@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DotNet4.Utilities.UtilInput;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -16,16 +17,22 @@ namespace 时间管理大师.UI
 		private AppComponent.Logo logo;
 		private AppComponent.TimeLine timeLine;
 		private Bar.BtnNormal title;
+
 		private Bar.BtnNormal sumUsedTime;
 		private AppComponent.TimeLine sumUsedTimeLine;
 		private Bar.BtnNormal sumUsedCount;
 		private Bar.BtnNormal sumUsedCountLine;
+
+		private Bar.BtnNormal relateAppLabel;
+		public AppComponent.AppRelate RelateApp;
+
 		public AppComponent.UseFrequency frequency;
 		public AppList layoutParent;
 		public int RawIndex;
 		public int Index;
-		public App()
+		public App(string name)
 		{
+			
 			BackColor = Color.White;
 			ForeColor = Color.Black;
 			Font = new Font("微软雅黑", 10);
@@ -44,6 +51,7 @@ namespace 时间管理大师.UI
 				Parent = this,
 				deactiveColor = Color.FromArgb(200, 91, 155, 213)
 			};
+			ProcessName = name;
 			TimeLine = new TimeLine()
 			{
 				TodayTime = 0,
@@ -56,6 +64,19 @@ namespace 时间管理大师.UI
 			SumUsedTimeLine = new TimeLine() { Parent=this};
 			SumUsedCountLine = new Bar.BtnNormal((x)=> { }) { Parent=this};
 			frequency = new UseFrequency() {  Parent=this};
+
+			relateAppLabel = new BtnNormal((x) =>
+			{
+				InputBox.ShowInputBox("修改", "修改显示相关应用的数量", RelateApp.ShowIconNum.ToString(), (ans) =>
+				{
+					RelateApp.ShowIconNum = Convert.ToInt32(ans);
+				});
+			})
+			{ Parent = this, Text = "相关应用" };
+			RelateApp = new AppRelate((x)=> { },name) {
+				Parent=this,
+				
+			};
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -65,6 +86,8 @@ namespace 时间管理大师.UI
 			sumUsedTime.DBounds = new Rectangle(101, 37, 50, 30);
 			SumUsedTimeLine.DBounds = new Rectangle(151, 37,Width-661, 30);
 			sumUsedCount.DBounds = new Rectangle(101, 69, 50, 30);
+			relateAppLabel.DBounds = new Rectangle(101,101,50,24);
+			RelateApp.DBounds = new Rectangle(151, 101,Width-661, 24);
 			SumUsedCountLine.DBounds = new Rectangle(151, 69, 60, 30);
 			TimeLine.DBounds = new Rectangle(100, 5, Width - 110, 30);
 			frequency.DBounds = new Rectangle(Width - 500, 40, 490, 160);
@@ -106,7 +129,7 @@ namespace 时间管理大师.UI
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			//TODO 软件实例
+			//软件实例
 			//程序logo  使用时间条
 			//程序名称                                                  
 			//展开后展示最近使用（略）        频率图表                展开/收回 按钮

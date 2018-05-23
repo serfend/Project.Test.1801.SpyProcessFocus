@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace 时间管理大师.UI.Bar
 {
-	class BtnImage:Control
+	public class BtnImage:Control
 	{
 		public Image Image;
 		public BtnImage(Action<Control> CallBack) : base(CallBack)

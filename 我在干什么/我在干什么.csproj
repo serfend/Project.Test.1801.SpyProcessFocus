@@ -60,6 +60,9 @@
     <Compile Include="UI\App.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\AppComponent\AppRelate.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\AppComponent\Logo.cs">
       <SubType>Component</SubType>
     </Compile>

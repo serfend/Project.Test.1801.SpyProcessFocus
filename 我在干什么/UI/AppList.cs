@@ -90,7 +90,6 @@ namespace 时间管理大师.UI
 		{
 			OnResize(EventArgs.Empty);
 		}
-		private int focusIndex = 0;
 		protected override void OnResize(EventArgs e)
 		{
 			int height = 200;
@@ -108,6 +107,7 @@ namespace 时间管理大师.UI
 		public void RefreshData(ProcessGroup process)
 		{
 			int maxValue=0;
+			bool anyRefresh = false;
 			for(int i=0;i< process.Process.Count; i++)
 			{
 				var p = process.Process[i];
@@ -119,6 +119,8 @@ namespace 时间管理大师.UI
 					app.TimeLine.TodayTime = data.TodayWasteTime/1000;
 					app.SumUsedTimeLine.TodayTime = data.SumWasteTime/1000;
 					app.SumUsedTimeLine.SoftAvgTime = 1000;
+					app.SumUsedCountLine.Text = data.SumActiveTime.ToString();
+					app.RelateApp.RefreshData();
 					for (int h = 0; h < 24; h++)
 					{
 						int count = data.GetDayRunTime(Program.QueryingDay, h);
@@ -128,10 +130,8 @@ namespace 时间管理大师.UI
 				}
 				else
 				{
-					App newApp = new App() {
-						ProcessName = p.ProcessName,
+					App newApp = new App(p.ProcessName) {
 						Font = this.Font,
-
 					};
 					newApp.Logo.Icon = p.AppInfo.Icon;
 					newApp.Logo.BackColor = p.AppInfo.IconMainColor;
@@ -140,10 +140,12 @@ namespace 时间管理大师.UI
 					newApp.TimeLine.SoftAvgTime = 100;
 
 					Add(newApp);
+					anyRefresh = true;
 					//app.Frequency
 				}
 			}
 			SortControls(maxValue);
+			if (anyRefresh) this.OnResizeRaise();
 		}
 		private int lastAppIndex;
 		private void SortControls(int maxValue)
@@ -167,6 +169,7 @@ namespace 时间管理大师.UI
 					}
 				}
 				app.TimeLine.SoftAvgTime = maxValue/1000;
+				
 				if(maxIndex< app.Index)
 				{
 					maxIndex = app.Index;

@@ -17,6 +17,7 @@ namespace 时间管理大师
 		[STAThread]
 		static void Main()
 		{
+
 			System.Threading.Mutex newMutex = new System.Threading.Mutex(true, "仅一次", out bool Exist);
 			if (Exist)
 				{
@@ -28,7 +29,7 @@ namespace 时间管理大师
 					return;
 				}
 
-			QueryingDay = DataCore.DayStamp(DateTime.Now);
+			QueryingDay = "SumDay";
 			Program.UsedFlash = Program.AppSetting.In("Setting").GetInfo("UsedFlash", "1") == "1";
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
@@ -65,7 +66,7 @@ namespace 时间管理大师
 		public static string Title = "时间管理大师";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
-		public static int QueryingDay { get;  set; }
+		public static string QueryingDay { get;  set; }
 
 		public static DataCore ProcessData=new DataCore();
 	}

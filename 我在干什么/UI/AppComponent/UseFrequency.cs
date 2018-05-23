@@ -9,7 +9,7 @@ namespace 时间管理大师.UI.AppComponent
 {
 	public class UseFrequency:Control
 	{
-		//TODO 在此处绘制软件一日使用频率表
+		//在此处绘制软件一日使用频率表
 		//每4小时一个大点，1小时一个小点
 		//以平滑曲线连接
 		private int[] Count = new int[24];
@@ -29,8 +29,8 @@ namespace 时间管理大师.UI.AppComponent
 		public UseFrequency()
 		{
 			BackColor = Color.AliceBlue;
-			PointColor = Color.FromArgb(75, 145, 209);
-			LineColor = Color.FromArgb(75, 145, 209);
+			PointColor =  Color.FromArgb(75, 145, 209);
+			LineColor = Color.FromArgb(200, 200, 209);
 			//var rnd = new Random();
 			//for (int i = 0; i < 24; i++) SetCount(i, rnd.Next(0, 50));
 		}
@@ -40,7 +40,7 @@ namespace 时间管理大师.UI.AppComponent
 			} }
 		public Color LineColor { get => lineColor; set {
 				lineColor = value;
-				LineBrush = new Pen(lineColor, 2);
+				LineBrush = new Pen(lineColor,2);
 			} }
 		private SolidBrush PointBrush;
 		private Pen LineBrush;
@@ -49,16 +49,18 @@ namespace 时间管理大师.UI.AppComponent
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+			e.Graphics.DrawCurve(LineBrush, points);
 			int l = (int)(minCount * 0.9),h=(int)(maxCount*1.1);
 			float w = (float)Width / 25f;
 			for (int i = 0; i < 24; i++)
 			{
 				points[i] = new Point(15 + (int)(w * i), ConvertValueToTop(Count[i], l, h));
 				e.Graphics.FillEllipse(PointBrush,points[i].X-2,points[i].Y-2,5,5);
+				if (Count[i] > (int)(maxCount * 0.5))e.Graphics.DrawString(Count[i].ToString(),Font,Brushes.Black, points[i].X, points[i].Y-10) ;
 				if (i % 4 == 0) e.Graphics.DrawString(i.ToString(), Font, Brushes.Gray, (float)points[i].X, (float)(Height-15));
 			}
 			
-			e.Graphics.DrawCurve(LineBrush, points);
+			
 			base.OnPaint(e);
 		}
 		private int ConvertValueToTop(int value,int minCount,int maxCount)
