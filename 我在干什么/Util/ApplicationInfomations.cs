@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Time时间记录器.Util
+namespace 时间管理大师.Util
 {
 	public class ApplicationInfomations
 	{
@@ -17,7 +17,7 @@ namespace Time时间记录器.Util
 		public Icon Icon { get => icon; set {
 				icon = value;
 				if (icon != null) {
-					var colors = Time时间记录器.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(),3);
+					var colors = 时间管理大师.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(),3);
 					iconMainColor = Color.FromArgb(255, Color.FromArgb(colors[0].Color));
 				}
 				else IconMainColor = Color.Gray;

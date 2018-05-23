@@ -8,11 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using DotNet4.Utilities.UtilExcel;
-using Time时间记录器.Util;
+using 时间管理大师.Util;
 using System.Threading;
 
 
-namespace Time时间记录器
+namespace 时间管理大师
 {
 	public partial class Form1 : Form
 	{
@@ -109,7 +109,7 @@ namespace Time时间记录器
 					nowRowIndex++;
 				}
 				
-				xls.SaveAs(Application.StartupPath +string.Format( @"\Time时间记录器-{0:D}.xls",DateTime.Today));
+				xls.SaveAs(Application.StartupPath +string.Format( @"\时间管理大师-{0:D}.xls",DateTime.Today));
 			}
 		}
 		

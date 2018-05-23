@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Time时间记录器.UI.AppComponent
+namespace 时间管理大师.UI.AppComponent
 {
 	class Logo : Control
 	{

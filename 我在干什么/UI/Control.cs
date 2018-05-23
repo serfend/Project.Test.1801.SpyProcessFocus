@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Layout;
 
-namespace Time时间记录器.UI
+namespace 时间管理大师.UI
 {
 	public class Control : System.Windows.Forms.Control
 	{
@@ -39,10 +39,18 @@ namespace Time时间记录器.UI
 		}
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
+			if(callbackWaitting)
 			if (e.X > 0 && e.X < Width && e.Y > 0 && e.Y < Height)
 			{
 				this.OnCallBacking();
 			}
+			callbackWaitting = false;
+		}
+		private bool callbackWaitting = false;
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			if (e.X > 0 && e.X < Width && e.Y > 0 && e.Y < Height) callbackWaitting=true;
+				base.OnMouseDown(e);
 		}
 		protected virtual void OnCallBacking()
 		{

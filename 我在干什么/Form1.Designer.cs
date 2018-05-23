@@ -1,4 +1,4 @@
-﻿namespace Time时间记录器
+﻿namespace 时间管理大师
 {
 	partial class Form1
 	{
@@ -46,7 +46,7 @@
 			this.DoubleBuffered = true;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "Form1";
-			this.Text = "Time时间记录器";
+			this.Text = "时间管理大师";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);

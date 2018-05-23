@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
-using Time时间记录器.Util;
+using 时间管理大师.Util;
 using DotNet4.Utilities.UtilReg;
 
-namespace Time时间记录器
+namespace 时间管理大师
 {
 	public static class SpyerProcess
 	{

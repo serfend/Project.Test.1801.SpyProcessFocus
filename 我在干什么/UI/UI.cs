@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Time时间记录器.UI.Layout;
-using Time时间记录器.Util;
+using 时间管理大师.UI.Layout;
+using 时间管理大师.Util;
 
-namespace Time时间记录器.UI
+namespace 时间管理大师.UI
 {
 	public class UI
 	{

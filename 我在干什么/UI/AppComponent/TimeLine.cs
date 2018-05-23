@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Time时间记录器.UI.AppComponent
+namespace 时间管理大师.UI.AppComponent
 {
-	class TimeLine : Control
+	public class TimeLine : Control
 	{
 		//本软件今日用时/本软件日平均用时/所有软件日平均最高用时 
 		private int todayTime, avgTime;

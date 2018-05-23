@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Time时间记录器.Util;
+using 时间管理大师.Util;
 
-namespace Time时间记录器.UI
+namespace 时间管理大师.UI
 {
 	public class AppList:Control
 	{
@@ -117,6 +117,8 @@ namespace Time时间记录器.UI
 				if (app!=null) { 
 					var data=Program.ProcessData[p.ProcessName];
 					app.TimeLine.TodayTime = data.TodayWasteTime/1000;
+					app.SumUsedTimeLine.TodayTime = data.SumWasteTime/1000;
+					app.SumUsedTimeLine.SoftAvgTime = 1000;
 					for (int h = 0; h < 24; h++)
 					{
 						int count = data.GetDayRunTime(Program.QueryingDay, h);

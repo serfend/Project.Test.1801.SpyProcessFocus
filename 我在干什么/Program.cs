@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Time时间记录器.Util;
+using 时间管理大师.Util;
 
-namespace Time时间记录器
+namespace 时间管理大师
 {
 	static class Program
 	{
 		public static Form1 frmMain;
-		public static Reg AppSetting = new Reg().In("TimeCounter");
+		public static Reg AppSetting = new Reg().In("TimeMasterForyy");
 		/// <summary>
 		/// 应用程序的主入口点。
 		/// </summary>
@@ -62,7 +62,7 @@ namespace Time时间记录器
 			frmMain.InfoShow.ShowBalloonTip(time,title,info,icon);
 		}
 
-		public static string Title = "时间统计";
+		public static string Title = "时间管理大师";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
 		public static int QueryingDay { get;  set; }

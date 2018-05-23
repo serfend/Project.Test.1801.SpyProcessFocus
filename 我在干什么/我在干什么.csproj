@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1EF77BC5-9576-4829-AA24-34006087C9A4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Time时间记录器</RootNamespace>
-    <AssemblyName>Time时间记录器</AssemblyName>
+    <RootNamespace>时间管理大师</RootNamespace>
+    <AssemblyName>时间管理大师</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,15 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
@@ -57,7 +66,9 @@
     <Compile Include="UI\AppComponent\TimeLine.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\AppComponent\UseFrequency.cs" />
+    <Compile Include="UI\AppComponent\UseFrequency.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\AppList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -153,6 +164,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Util\Input\InputBox.resx" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

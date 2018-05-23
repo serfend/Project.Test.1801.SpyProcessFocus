@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Time时间记录器.Util
+namespace 时间管理大师.Util
 {
 
 	public class DataCore : SortedList<string,AppRecord>
@@ -76,7 +76,7 @@ namespace Time时间记录器.Util
 			RegTodayAppSetting = InitDaySetting(DataCore.DayStamp(DateTime.Now).ToString());
 			RegTodayAppSetting.SetInfo("Main", "1");
 			RegSumAppHourRuntime = RegAppSetting.In("Data").In("SumDay");
-			for (int i = 0; i < DateTime.Now.Hour; i++)
+			for (int i = 0; i < 24; i++)
 			{
 				daySumRunCount[i] = GetDayRunTime(RegTodayAppSetting, i);
 				sumAppHourRunTime[i] = GetDayRunTime(RegSumAppHourRuntime, i);

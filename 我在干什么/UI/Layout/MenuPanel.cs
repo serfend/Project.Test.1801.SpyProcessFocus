@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Time时间记录器.Properties;
+using 时间管理大师.Properties;
 
-namespace Time时间记录器.UI.Layout
+namespace 时间管理大师.UI.Layout
 {
 	public class MenuPanel:Layout
 	{

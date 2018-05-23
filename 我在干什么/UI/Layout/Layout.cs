@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Time时间记录器.UI.Layout
+namespace 时间管理大师.UI.Layout
 {
 	public class Layout: Control
 	{

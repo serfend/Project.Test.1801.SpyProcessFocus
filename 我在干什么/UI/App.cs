@@ -4,10 +4,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Time时间记录器.UI.AppComponent;
-using Time时间记录器.Util;
+using 时间管理大师.UI.AppComponent;
+using 时间管理大师.UI.Bar;
+using 时间管理大师.Util;
 
-namespace Time时间记录器.UI
+namespace 时间管理大师.UI
 {
 	public class App:Control
 	{
@@ -15,6 +16,10 @@ namespace Time时间记录器.UI
 		private AppComponent.Logo logo;
 		private AppComponent.TimeLine timeLine;
 		private Bar.BtnNormal title;
+		private Bar.BtnNormal sumUsedTime;
+		private AppComponent.TimeLine sumUsedTimeLine;
+		private Bar.BtnNormal sumUsedCount;
+		private Bar.BtnNormal sumUsedCountLine;
 		public AppComponent.UseFrequency frequency;
 		public AppList layoutParent;
 		public int RawIndex;
@@ -46,6 +51,10 @@ namespace Time时间记录器.UI
 				SoftAvgTime = 0,
 				Parent = this
 			};
+			sumUsedTime = new Bar.BtnNormal((x) => { }) {Parent=this,Text="总耗时" };
+			sumUsedCount = new Bar.BtnNormal((x) => { }) { Parent = this,Text="总激活" };
+			SumUsedTimeLine = new TimeLine() { Parent=this};
+			SumUsedCountLine = new Bar.BtnNormal((x)=> { }) { Parent=this};
 			frequency = new UseFrequency() {  Parent=this};
 		}
 
@@ -53,6 +62,10 @@ namespace Time时间记录器.UI
 		{
 			logo.DBounds = new Rectangle(10, 35, 90, 90);
 			title.DBounds = new Rectangle(10, 5, 90, 30);
+			sumUsedTime.DBounds = new Rectangle(101, 37, 50, 30);
+			SumUsedTimeLine.DBounds = new Rectangle(151, 37,Width-661, 30);
+			sumUsedCount.DBounds = new Rectangle(101, 69, 50, 30);
+			SumUsedCountLine.DBounds = new Rectangle(151, 69, 60, 30);
 			TimeLine.DBounds = new Rectangle(100, 5, Width - 110, 30);
 			frequency.DBounds = new Rectangle(Width - 500, 40, 490, 160);
 			base.OnResize(e);
@@ -88,6 +101,8 @@ namespace Time时间记录器.UI
 		internal Logo Logo { get => logo; set => logo = value; }
 		internal TimeLine TimeLine { get => timeLine; set => timeLine = value; }
 		public UseFrequency Frequency { get => frequency; set => frequency = value; }
+		public TimeLine SumUsedTimeLine { get => sumUsedTimeLine; set => sumUsedTimeLine = value; }
+		public BtnNormal SumUsedCountLine { get => sumUsedCountLine; set => sumUsedCountLine = value; }
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
