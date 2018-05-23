@@ -15,8 +15,9 @@ namespace Time时间记录器.UI
 		private AppComponent.Logo logo;
 		private AppComponent.TimeLine timeLine;
 		private Bar.BtnNormal title;
-		private AppComponent.UseFrequency frequency;
+		public AppComponent.UseFrequency frequency;
 		public AppList layoutParent;
+		public int RawIndex;
 		public int Index;
 		public App()
 		{
@@ -47,11 +48,13 @@ namespace Time时间记录器.UI
 			};
 			frequency = new UseFrequency() {  Parent=this};
 		}
+
 		protected override void OnResize(EventArgs e)
 		{
 			logo.DBounds = new Rectangle(10, 35, 90, 90);
 			title.DBounds = new Rectangle(10, 5, 90, 30);
 			TimeLine.DBounds = new Rectangle(100, 5, Width - 110, 30);
+			frequency.DBounds = new Rectangle(Width - 500, 40, 490, 160);
 			base.OnResize(e);
 		}
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -60,6 +63,7 @@ namespace Time时间记录器.UI
 			lastY = e.Location.Y;
 			base.OnMouseDown(e);
 		}
+
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			layoutParent.MouseIsDown = false;

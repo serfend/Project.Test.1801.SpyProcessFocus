@@ -17,21 +17,18 @@ namespace Time时间记录器
 		[STAThread]
 		static void Main()
 		{
-
-				bool Exist;//定义一个bool变量，用来表示是否已经运行
-						   //创建Mutex互斥对象
-				System.Threading.Mutex newMutex = new System.Threading.Mutex(true, "仅一次", out Exist);
-				if (Exist)//如果没有运行
+			System.Threading.Mutex newMutex = new System.Threading.Mutex(true, "仅一次", out bool Exist);
+			if (Exist)
 				{
-					newMutex.ReleaseMutex();//运行新窗体
+					newMutex.ReleaseMutex();
 				}
 				else
 				{
-					MessageBox.Show("？？？", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);//弹出提示信息
-					return;//关闭当前窗体
+				MessageBox.Show("？？？", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					return;
 				}
 
-
+			QueryingDay = DataCore.DayStamp(DateTime.Now);
 			Program.UsedFlash = Program.AppSetting.In("Setting").GetInfo("UsedFlash", "1") == "1";
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
@@ -68,6 +65,8 @@ namespace Time时间记录器
 		public static string Title = "时间统计";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
+		public static int QueryingDay { get;  set; }
+
 		public static DataCore ProcessData=new DataCore();
 	}
 }

@@ -18,7 +18,7 @@ namespace Time时间记录器.UI
 		{
 			app.layoutParent = this;
 			app.Parent = this;
-			app.Index = list.Count;
+			app.Index=app.RawIndex = list.Count;
 			list.Add( app);
 		}
 		public override bool RefreshLayout()
@@ -75,7 +75,7 @@ namespace Time时间记录器.UI
 		}
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			TargetY -= e.Delta;
+			TargetY += e.Delta;
 			base.OnMouseWheel(e);
 		}
 		private bool mouseIsDown = false;
@@ -84,10 +84,13 @@ namespace Time时间记录器.UI
 		public bool MouseIsDown { get => mouseIsDown; set => mouseIsDown = value; }
 		public float NowY { get => nowY; set => nowY = value; }
 		public float TargetY { get => targetY; set => targetY = value; }
+
+		public int lastHdlFocusRawIndex;
 		private void OnResizeRaise()
 		{
 			OnResize(EventArgs.Empty);
 		}
+		private int focusIndex = 0;
 		protected override void OnResize(EventArgs e)
 		{
 			int height = 200;
@@ -96,7 +99,8 @@ namespace Time时间记录器.UI
 			{
 				if (Controls[i] is App app)
 				{
-					app.DBounds=new System.Drawing.Rectangle(0,lastY+(int)(height*1.05*app.Index) ,Width, height);
+					app.DBounds=new System.Drawing.Rectangle(0,
+					lastY+(int)(height*1.05*app.Index) ,Width, height);
 					//lastY += (int)(height*1.05);
 				}
 			}
@@ -113,6 +117,11 @@ namespace Time时间记录器.UI
 				if (app!=null) { 
 					var data=Program.ProcessData[p.ProcessName];
 					app.TimeLine.TodayTime = data.TodayWasteTime/1000;
+					for (int h = 0; h < 24; h++)
+					{
+						int count = data.GetDayRunTime(Program.QueryingDay, h);
+						app.frequency.SetCount(h,count);
+					}
 					if (data.TodayWasteTime > maxValue) maxValue = data.TodayWasteTime;
 				}
 				else

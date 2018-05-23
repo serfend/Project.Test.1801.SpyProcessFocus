@@ -172,8 +172,9 @@ namespace Time时间记录器.UI
 			}
 
 			bool anyRefresh = false;
-			foreach(var ctl in this.Controls)
+			for(int i=0;i< Controls.Count;i++)
 			{
+				var ctl = Controls[i];
 				if (ctl is Control nCtl)
 				{
 					anyRefresh |= nCtl.RefreshLayout();

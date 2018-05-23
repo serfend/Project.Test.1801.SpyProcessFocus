@@ -48,58 +48,66 @@ namespace Time时间记录器.Util
 	public class AppRecord
 	{
 		private string name;
-		private SortedList<string,Relate> relate;//打开相关软件
+		private SortedList<string, Relate> relate;//打开相关软件
 		private int sumActiveCount;//启动总次数
 		private int sumWasteTime;//软件总耗时
 		private int todayWasteTime;//今日耗时
-		private int[] daySumRunCount =new int[24];//每小时打开次数累积
+		private int[] daySumRunCount = new int[24];//每小时打开次数累积
 		private Reg RegAppSetting;
 		private Reg RegRelate;
 		private Reg RegTodayAppSetting;
 		private Reg RegSumAppHourRuntime;
-		private int[] sumAppHourRunTime=new int[24];//全局 每小时打开次数累积
+		private int[] sumAppHourRunTime = new int[24];//全局 每小时打开次数累积
 		public AppRecord(string name)
 		{
 			Relate = new SortedList<string, Relate>();
 			this.Name = name;
 			RegAppSetting = Program.AppSetting.In("AppData").In(name);
 			RegRelateTo = RegAppSetting.In("Relate");
-			int relateAppNum = Convert.ToInt32(RegRelateTo.GetInfo("Count","0"));
-			for(int i = 0; i < relateAppNum; i++)
+			int relateAppNum = Convert.ToInt32(RegRelateTo.GetInfo("Count", "0"));
+			for (int i = 0; i < relateAppNum; i++)
 			{
 				var r = new Relate(RegRelateTo, i);
-				Relate.Add(r.Name,r);
+				Relate.Add(r.Name, r);
 			}
-			sumActiveCount = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime","0"));
-			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime","0"));
+			sumActiveCount = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime", "0"));
+			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime", "0"));
 
 			RegTodayAppSetting = InitDaySetting(DataCore.DayStamp(DateTime.Now).ToString());
 			RegTodayAppSetting.SetInfo("Main", "1");
+			RegSumAppHourRuntime = RegAppSetting.In("Data").In("SumDay");
 			for (int i = 0; i < DateTime.Now.Hour; i++)
 			{
 				daySumRunCount[i] = GetDayRunTime(RegTodayAppSetting, i);
+				sumAppHourRunTime[i] = GetDayRunTime(RegSumAppHourRuntime, i);
 			}
-			todayWasteTime= Convert.ToInt32( RegTodayAppSetting.GetInfo("WasteTime", "0"));
-			RegSumAppHourRuntime = RegAppSetting.In("Data").In("SumDay");
+			todayWasteTime = Convert.ToInt32(RegTodayAppSetting.GetInfo("WasteTime", "0"));
+
 		}
-		public Reg InitDaySetting(string day="SumDay")
+		public Reg InitDaySetting(string day = "SumDay")
 		{
-			if (day == "SumDay") return RegSumAppHourRuntime;
-			return RegAppSetting.In("Data").In(day);
+
+			if (!dayRuntimeSettingBase.ContainsKey(day))
+				dayRuntimeSettingBase.Add(day.ToString(), RegAppSetting.In("Data").In(day));
+			return dayRuntimeSettingBase[day];
 		}
-		public int GetDayRunTime(Reg day,int h)
+		public int GetDayRunTime(Reg day, int h)
 		{
-			return Convert.ToInt32(day.GetInfo(h.ToString(),"0"));
+			return Convert.ToInt32(day.GetInfo(h.ToString(), "0"));
 		}
+		private SortedList<string, Reg> dayRuntimeSettingBase = new SortedList<string, Reg>();
+		public int GetDayRunTime(int day, int h) => GetDayRunTime(day.ToString(), h);
+		public int GetDayRunTime(string day,int h)=> GetDayRunTime(InitDaySetting(day), h);
 		public bool CheckDayData(Reg day)
 		{
 			return day.GetInfo("Main") != "";
 		}
 		public int SumActiveTime { get => sumActiveCount; set {
-				var delta = sumActiveCount - value;
+				var delta =   value- sumActiveCount;
 				daySumRunCount[DateTime.Now.Hour] += delta;
+				sumAppHourRunTime[DateTime.Now.Hour] += delta;
 				RegTodayAppSetting.SetInfo(DateTime.Now.Hour.ToString(), daySumRunCount[DateTime.Now.Hour]);
-
+				RegSumAppHourRuntime.SetInfo(DateTime.Now.Hour.ToString(), sumAppHourRunTime[DateTime.Now.Hour]);
 				sumActiveCount = value;
 				RegAppSetting.SetInfo("SumActiveTime",value);
 			} }
