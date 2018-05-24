@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.Win32;
 
 namespace DotNet4.Utilities
@@ -291,6 +292,22 @@ namespace DotNet4.Utilities
 
 		public static class RegUtil
 		{
+			public static bool SetRunCurrentVersion(bool run=true,bool getValue=false)
+			{
+				string path = Application.ExecutablePath;
+				var reg = new Reg("Software") { Domain = RegDomain.LocalMachine };
+				var runVersion = reg.In("Microsoft").In("Windows").In("CurrentVersion").In("Run");
+				if (getValue) return runVersion.GetInfo(Application.ProductName)!="";
+				if (run)
+				{
+					runVersion.SetInfo(Application.ProductName, path);
+				}
+				else
+				{
+					runVersion.Delete(Application.ProductName);
+				}
+				return run;
+			}
 			public static void SetFormPos(System.Windows.Forms.Form frm)
 			{
 				if (frm.WindowState != System.Windows.Forms.FormWindowState.Normal) return;

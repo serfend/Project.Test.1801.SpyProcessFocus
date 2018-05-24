@@ -70,11 +70,12 @@ namespace 时间管理大师.Util
 				var r = new Relate(RegRelateTo, i);
 				Relate.Add(r.Name, r);
 			}
-			sumActiveCount = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime", "0"));
-			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime", "0"));
+
 
 			RegTodayAppSetting = InitDaySetting(DataCore.DayStamp(DateTime.Now).ToString());
 			RegTodayAppSetting.SetInfo("Main", "1");
+			sumActiveCount = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime", "0"));
+			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime", "0"));
 			RegSumAppHourRuntime = RegAppSetting.In("Data").In("SumDay");
 			for (int i = 0; i < 24; i++)
 			{
@@ -98,10 +99,11 @@ namespace 时间管理大师.Util
 		private SortedList<string, Reg> dayRuntimeSettingBase = new SortedList<string, Reg>();
 		public int GetDayRunTime(int day, int h) => GetDayRunTime(day.ToString(), h);
 		public int GetDayRunTime(string day,int h)=> GetDayRunTime(InitDaySetting(day), h);
-		public bool CheckDayData(Reg day)
-		{
-			return day.GetInfo("Main") != "";
-		}
+
+		public int GetDayWasteTime(Reg day) =>Convert.ToInt32(day.GetInfo("WasteTime","0"));
+		public int GetDayWasteTime(string day) => GetDayWasteTime(InitDaySetting(day));
+		public int GetDayWasteTime(int day) => GetDayWasteTime(day.ToString());
+
 		public int SumActiveTime { get => sumActiveCount; set {
 				var delta =   value- sumActiveCount;
 				daySumRunCount[DateTime.Now.Hour] += delta;

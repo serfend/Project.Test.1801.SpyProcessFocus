@@ -25,8 +25,6 @@ namespace 时间管理大师
 			_process = new ProcessGroup();
 			ui = new UI.UI(this);
 
-
-			this.DoubleClick += Form1_DoubleClick;
 			InfoShow.DoubleClick += (x, xx) =>
 			{
 				this.ShowInTaskbar = true;
@@ -39,13 +37,13 @@ namespace 时间管理大师
 			Program.Running = true;
 		}
 
-		public void Form1_DoubleClick(object sender, EventArgs e)
+		public void FrmHide(object sender, EventArgs e)
 		{
 			this.ShowInTaskbar = false;
 			this.Hide();
 			this.InfoShow.Visible = true;
-			var info=Program.Title + "已隐藏并持续在后台运行";
-			InfoShow.ShowBalloonTip(5000, info,info+",您可以在托盘中双击重新显示",ToolTipIcon.Info);
+			var info = Program.Title + "已隐藏并持续在后台运行";
+			InfoShow.ShowBalloonTip(5000, info, info + ",您可以在托盘中双击重新显示", ToolTipIcon.Info);
 			Program.Running = false;
 		}
 
@@ -129,20 +127,68 @@ namespace 时间管理大师
 			InfoShow.Dispose();
 		}
 
-		private const int WM_NCHITTEST = 0x84;
-		private const int HTCLIENT = 0x1;
+		private const int Guying_HTLEFT = 10;
+		private const int Guying_HTRIGHT = 11;
+		private const int Guying_HTTOP = 12;
+		private const int Guying_HTTOPLEFT = 13;
+		private const int Guying_HTTOPRIGHT = 14;
+		private const int Guying_HTBOTTOM = 15;
+		private const int Guying_HTBOTTOMLEFT = 0x10;
+		private const int Guying_HTBOTTOMRIGHT = 17;
 		private const int HTCAPTION = 0x2;
 		protected override void WndProc(ref Message m)
 		{
 			switch (m.Msg)
 			{
-				case WM_NCHITTEST:
+
+				case 0x0084:
 					base.WndProc(ref m);
-					if ((int)m.Result == HTCLIENT)
+					Point vPoint = new Point((int)m.LParam & 0xFFFF,
+						(int)m.LParam >> 16 & 0xFFFF);
+					vPoint = PointToClient(vPoint);
+					if (vPoint.X <= 5)
+						if (vPoint.Y <= 5)
+							m.Result = (IntPtr)Guying_HTTOPLEFT;
+						else if (vPoint.Y >= ClientSize.Height - 5)
+							m.Result = (IntPtr)Guying_HTBOTTOMLEFT;
+						else m.Result = (IntPtr)Guying_HTLEFT;
+					else if (vPoint.X >= ClientSize.Width - 5)
+						if (vPoint.Y <= 5)
+							m.Result = (IntPtr)Guying_HTTOPRIGHT;
+						else if (vPoint.Y >= ClientSize.Height - 5)
+							m.Result = (IntPtr)Guying_HTBOTTOMRIGHT;
+						else m.Result = (IntPtr)Guying_HTRIGHT;
+					else if (vPoint.Y <= 5)
+						m.Result = (IntPtr)Guying_HTTOP;
+					else if (vPoint.Y >= ClientSize.Height - 5)
+						m.Result = (IntPtr)Guying_HTBOTTOM;
+					else
+					{
 						m.Result = (IntPtr)HTCAPTION;
-					return;
+					}
+					break;
+				case 0x0201:                //鼠标左键按下的消息   
+					m.Msg = 0x00A1;         //更改消息为非客户区按下鼠标   
+					m.LParam = IntPtr.Zero; //默认值   
+					m.WParam = new IntPtr(2);//鼠标放在标题栏内   
+					base.WndProc(ref m);
+					break;
+				default:
+					base.WndProc(ref m);
+					break;
 			}
-			base.WndProc(ref m);
+			//base.WndProc(ref m);
+		}
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			Rectangle myRectangle = new Rectangle(0, 0, this.Width, this.Height);
+			//ControlPaint.DrawBorder(e.Graphics, myRectangle, Color.Blue, ButtonBorderStyle.Solid);//画个边框   
+			ControlPaint.DrawBorder(e.Graphics, myRectangle,
+				Color.LightSlateGray, 1, ButtonBorderStyle.Inset,
+				Color.Black, 1, ButtonBorderStyle.Outset,
+				Color.Black, 1, ButtonBorderStyle.Outset,
+				Color.LightSlateGray, 1, ButtonBorderStyle.Outset
+			);
 		}
 	}
 }

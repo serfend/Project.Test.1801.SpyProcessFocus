@@ -113,13 +113,17 @@ namespace 时间管理大师.Util
 			SHFILEINFO shFileInfo = new SHFILEINFO();
 			IntPtr hI;
 			FileInfoFlags flag = isLargeIcon ? FileInfoFlags.SHGFI_LARGEICON : FileInfoFlags.SHGFI_SMALLICON;
-				hI = SHGetFileInfo(fileName, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo),(uint)FileInfoFlags.SHGFI_ICON | (uint)FileInfoFlags.SHGFI_USEFILEATTRIBUTES | (uint)flag);
+			hI = SHGetFileInfo(fileName, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo), (uint)FileInfoFlags.SHGFI_ICON | (uint)flag);
 
 			Icon icon = Icon.FromHandle(shFileInfo.hIcon).Clone() as Icon;
 
-			DestroyIcon(shFileInfo.hIcon); //释放资源
+			DestroyIcon(shFileInfo.hIcon);
+
 			return icon;
 		}
+		[System.Runtime.InteropServices.DllImport("shell32.dll")]
+		private static extern int ExtractIconEx(string lpszFile, int niconIndex, IntPtr[] phiconLarge, IntPtr[] phiconSmall, int nIcons);
+
 		#endregion
 	}
 }

@@ -39,7 +39,7 @@ namespace 时间管理大师
 
 		internal static void HideProgram()
 		{
-			frmMain.Form1_DoubleClick(new object(),new EventArgs());
+			frmMain.FrmHide(new object(),new EventArgs());
 		}
 
 		public static void ExitProgram()
@@ -66,7 +66,19 @@ namespace 时间管理大师
 		public static string Title = "时间管理大师";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
-		public static string QueryingDay { get;  set; }
+		private static string queryingDay;
+		public static string QueryingDay { get=>queryingDay;  set {
+				if (value == queryingDay) return;
+				if(frmMain!=null)
+					foreach(var p in frmMain._process)
+					{
+						p.AnyDataRefresh = true;
+					}
+				queryingDay = value;
+			} }
+		public static bool AutoCurrentVersion { get=> RegUtil.SetRunCurrentVersion(false,true);  set {
+				RegUtil.SetRunCurrentVersion(value);
+			} }
 
 		public static DataCore ProcessData=new DataCore();
 	}

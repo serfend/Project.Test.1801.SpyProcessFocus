@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using 时间管理大师.UI.AppComponent;
 using 时间管理大师.UI.Bar;
 using 时间管理大师.Util;
+using 时间管理大师.Util.Image;
 
 namespace 时间管理大师.UI
 {
@@ -32,7 +34,7 @@ namespace 时间管理大师.UI
 		public int Index;
 		public App(string name)
 		{
-			
+			pen = new Pen(boardColor, 1);
 			BackColor = Color.White;
 			ForeColor = Color.Black;
 			Font = new Font("微软雅黑", 10);
@@ -81,16 +83,16 @@ namespace 时间管理大师.UI
 
 		protected override void OnResize(EventArgs e)
 		{
-			logo.DBounds = new Rectangle(10, 35, 90, 90);
-			title.DBounds = new Rectangle(10, 5, 90, 30);
-			sumUsedTime.DBounds = new Rectangle(101, 37, 50, 30);
-			SumUsedTimeLine.DBounds = new Rectangle(151, 37,Width-661, 30);
-			sumUsedCount.DBounds = new Rectangle(101, 69, 50, 30);
-			relateAppLabel.DBounds = new Rectangle(101,101,50,24);
-			RelateApp.DBounds = new Rectangle(151, 101,Width-661, 24);
-			SumUsedCountLine.DBounds = new Rectangle(151, 69, 60, 30);
-			TimeLine.DBounds = new Rectangle(100, 5, Width - 110, 30);
-			frequency.DBounds = new Rectangle(Width - 500, 40, 490, 160);
+			logo.DBounds = new Rectangle(10, 40, 90, 90);
+			title.DBounds = new Rectangle(10, 10, 90, 30);
+			sumUsedTime.DBounds = new Rectangle(101, 42, 50, 30);
+			SumUsedTimeLine.DBounds = new Rectangle(151, 42,Width-661, 30);
+			sumUsedCount.DBounds = new Rectangle(101, 74, 50, 30);
+			relateAppLabel.DBounds = new Rectangle(101,106,50,24);
+			RelateApp.DBounds = new Rectangle(151, 106,Width-661, 24);
+			SumUsedCountLine.DBounds = new Rectangle(151, 74, 60, 30);
+			TimeLine.DBounds = new Rectangle(100, 10, Width - 110, 30);
+			frequency.DBounds = new Rectangle(Width - 500, 42, 490, 150);
 			base.OnResize(e);
 		}
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -126,14 +128,22 @@ namespace 时间管理大师.UI
 		public UseFrequency Frequency { get => frequency; set => frequency = value; }
 		public TimeLine SumUsedTimeLine { get => sumUsedTimeLine; set => sumUsedTimeLine = value; }
 		public BtnNormal SumUsedCountLine { get => sumUsedCountLine; set => sumUsedCountLine = value; }
-
+		
+		private Color boardColor = Color.FromArgb(0, 0, 0, 0);
+		private Pen pen;
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			//软件实例
 			//程序logo  使用时间条
 			//程序名称                                                  
 			//展开后展示最近使用（略）        频率图表                展开/收回 按钮
-			base.OnPaint(e);
+			//base.OnPaint(e);
+			int shadowWidth = 5;
+			for (int i = 0; i < shadowWidth; i++)
+			{
+				pen.Color = Color.FromArgb((255 / 10 / shadowWidth) * i, boardColor);
+				GDIShadow.DrawRoundRectangle(e.Graphics, pen, new Rectangle(i, i, Width - (2 * i) - 1, Height - (2 * i) - 1), 8);
+			}
 			//e.Graphics.FillRectangle(Brushes.Aquamarine,0, 0, Bounds.Width,Bounds.Height);
 		}
 	}

@@ -24,7 +24,8 @@ namespace 时间管理大师.UI.AppComponent
 				if (anyChange)
 				{
 					todayPercent = (float)todayTime / (float)softAvgTime;
-					anyChange = false;
+					if (todayPercent > 1) todayPercent = 1;
+					 anyChange = false;
 					this.Invalidate();
 				}
 			}

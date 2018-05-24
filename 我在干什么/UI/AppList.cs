@@ -116,9 +116,9 @@ namespace 时间管理大师.UI
 				var app = list.Find((x) => x.ProcessName == p.ProcessName);
 				if (app!=null) { 
 					var data=Program.ProcessData[p.ProcessName];
-					app.TimeLine.TodayTime = data.TodayWasteTime/1000;
+					app.TimeLine.TodayTime = (Program.QueryingDay == "SumDay" ? data.SumWasteTime : data.GetDayWasteTime(Program.QueryingDay) )/ 1000;
 					app.SumUsedTimeLine.TodayTime = data.SumWasteTime/1000;
-					app.SumUsedTimeLine.SoftAvgTime = 1000;
+					app.SumUsedTimeLine.SoftAvgTime = 86400;
 					app.SumUsedCountLine.Text = data.SumActiveTime.ToString();
 					app.RelateApp.RefreshData();
 					for (int h = 0; h < 24; h++)

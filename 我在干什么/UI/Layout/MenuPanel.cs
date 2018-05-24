@@ -17,8 +17,10 @@ namespace 时间管理大师.UI.Layout
 
 		public Bar.BtnCmd cmdHider;
 		private Bar.BtnCmd cmdPauser;
-		private Bar.BtnCmd cmdGraphic;
+		//private Bar.BtnCmd cmdGraphic;
 		private Bar.BtnCmd cmdFlashEnable;
+		private Bar.BtnCmd cmdAutoCurrentVersion;
+
 		public void 更新饼图()
 		{
 			if (cmdHider.StateIsON)
@@ -75,14 +77,14 @@ namespace 时间管理大师.UI.Layout
 				//ForeColor = Color.White,
 				Parent = this
 			};
-			cmdGraphic = new Bar.BtnCmd((x) => { })
-			{
-				Text = "隐藏分析|分析交集",
-				Image = Resources.图表,
-				Font=this.Font,
-				//ForeColor = Color.White,
-				Parent = this
-			};
+			//cmdGraphic = new Bar.BtnCmd((x) => { })
+			//{
+			//	Text = "隐藏分析|分析交集",
+			//	Image = Resources.图表,
+			//	Font=this.Font,
+			//	//ForeColor = Color.White,
+			//	Parent = this
+			//};
 
 			cmdFlashEnable = new Bar.BtnCmd((x) => {
 				Program.UsedFlash = !cmdFlashEnable.StateIsON;
@@ -95,7 +97,17 @@ namespace 时间管理大师.UI.Layout
 				Parent = this,
 				StateIsON=!Program.UsedFlash
 			};
-
+			cmdAutoCurrentVersion = new Bar.BtnCmd((x) => {
+				Program.AutoCurrentVersion = !cmdAutoCurrentVersion.StateIsON;
+			})
+			{
+				Text = "开机启动|取消启动",
+				//Image = Resources.图表,
+				Font = this.Font,
+				//ForeColor = Color.White,
+				Parent = this,
+				StateIsON = !Program.AutoCurrentVersion
+			};
 			AppAboutLabel = new Bar.BtnCmd((x) => { })
 			{
 				Parent = this,
@@ -123,14 +135,16 @@ namespace 时间管理大师.UI.Layout
 			menu.DBounds = new System.Drawing.Rectangle(0,0,(int)(Parent.Width * 0.03),(int)(Parent.Height));
 			cmdHider.SetLayoutPos(0, 0.2f, 1, 0.05f);
 			cmdPauser.SetLayoutPos(0, 0.251f, 1, 0.05f);
-			cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
-			cmdFlashEnable.SetLayoutPos(0, 0.353f, 1, 0.05f);
+			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
+			cmdFlashEnable.SetLayoutPos(0, 0.302f, 1, 0.05f);
+			cmdAutoCurrentVersion.SetLayoutPos(0, 0.404f, 1, 0.05f);
+
 			AppAboutLabel.SetLayoutPos(0, 0.07f, 1, 0.05f);
 			
 			for(int i=0;i<4;i++)
 			{
 				if (SelectQueryDay[i] != null)
-					SelectQueryDay[i].SetLayoutPos(0, 0.45f + 0.051f * i, 1, 0.05f);
+					SelectQueryDay[i].SetLayoutPos(0, 0.48f + 0.052f * i, 1, 0.05f);
 			}
 			//avatarNowSize = avatarNowSize * 0.8f + (menu.expandMenu ? 0.1f : 0.2f);
 

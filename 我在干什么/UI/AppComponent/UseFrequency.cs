@@ -49,7 +49,13 @@ namespace 时间管理大师.UI.AppComponent
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-			e.Graphics.DrawCurve(LineBrush, points);
+			if (maxCount - minCount <= 0)
+			{
+				var info = "数据量过少,暂无预览图";
+				var strSize = e.Graphics.MeasureString(info, Font);
+				e.Graphics.DrawString(info, Font, Brushes.Gray, (int)((Width-strSize.Width) * 0.5),(int)(( Height-strSize.Height) * 0.5));
+				return;
+			}
 			int l = (int)(minCount * 0.9),h=(int)(maxCount*1.1);
 			float w = (float)Width / 25f;
 			for (int i = 0; i < 24; i++)
@@ -59,8 +65,8 @@ namespace 时间管理大师.UI.AppComponent
 				if (Count[i] > (int)(maxCount * 0.5))e.Graphics.DrawString(Count[i].ToString(),Font,Brushes.Black, points[i].X, points[i].Y-10) ;
 				if (i % 4 == 0) e.Graphics.DrawString(i.ToString(), Font, Brushes.Gray, (float)points[i].X, (float)(Height-15));
 			}
-			
-			
+
+			e.Graphics.DrawCurve(LineBrush, points);
 			base.OnPaint(e);
 		}
 		private int ConvertValueToTop(int value,int minCount,int maxCount)
