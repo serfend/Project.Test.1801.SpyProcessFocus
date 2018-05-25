@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.AppComponent
+namespace Inst.UI.AppComponent
 {
 	class Logo : Control
 	{
@@ -21,6 +21,7 @@ namespace 时间管理大师.UI.AppComponent
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 			if(Icon == null)base.OnPaint(e);
 			else
 			{

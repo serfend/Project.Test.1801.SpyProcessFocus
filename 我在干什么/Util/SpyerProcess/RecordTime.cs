@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace 时间管理大师.Util
+namespace Inst.Util
 {
 	/// <summary>
 	/// 进程时间对

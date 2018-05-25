@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.AppComponent
+namespace Inst.UI.AppComponent
 {
 	public class AppRelate:Control
 	{

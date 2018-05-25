@@ -1,0 +1,10 @@
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.Properties.Resources.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.Util.Input.InputBox.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\我在干什么.csproj.GenerateResource.cache
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\我在干什么.csproj.CoreCompileInputs.cache
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\bin\Release\Inst.exe
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\bin\Release\Inst.pdb
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\我在干什么.csprojResolveAssemblyReference.cache
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.Form1.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.exe
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.pdb

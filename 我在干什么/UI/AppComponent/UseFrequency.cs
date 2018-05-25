@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.AppComponent
+namespace Inst.UI.AppComponent
 {
 	public class UseFrequency:Control
 	{
@@ -62,7 +62,7 @@ namespace 时间管理大师.UI.AppComponent
 			{
 				points[i] = new Point(15 + (int)(w * i), ConvertValueToTop(Count[i], l, h));
 				e.Graphics.FillEllipse(PointBrush,points[i].X-2,points[i].Y-2,5,5);
-				if (Count[i] > (int)(maxCount * 0.5))e.Graphics.DrawString(Count[i].ToString(),Font,Brushes.Black, points[i].X, points[i].Y-10) ;
+				if (Count[i] > (int)(maxCount * 0.5))e.Graphics.DrawString(Count[i].ToString(),Font,Brushes.Black, points[i].X-15, points[i].Y-10) ;
 				if (i % 4 == 0) e.Graphics.DrawString(i.ToString(), Font, Brushes.Gray, (float)points[i].X, (float)(Height-15));
 			}
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	public class BtnNormal : Control
 	{
@@ -50,7 +50,7 @@ namespace 时间管理大师.UI.Bar
 
 		protected override void OnForeColorChanged(EventArgs e)
 		{
-			foreBrush = new SolidBrush(BackColor);
+			foreBrush = new SolidBrush(ForeColor);
 			base.OnForeColorChanged(e);
 		}
 		protected override void OnBackColorChanged(EventArgs e)

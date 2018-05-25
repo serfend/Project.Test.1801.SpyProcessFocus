@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace 时间管理大师.Util
+namespace Inst.Util
 {
 
 	public class DataCore : SortedList<string,AppRecord>

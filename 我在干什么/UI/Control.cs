@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Layout;
 
-namespace 时间管理大师.UI
+namespace Inst.UI
 {
 	public class Control : System.Windows.Forms.Control
 	{
@@ -23,17 +23,17 @@ namespace 时间管理大师.UI
 		{
 			refreshBounds = new RefreshBounds(更新);
 			this.DoubleBuffered = true;
-			var t = new Thread(() =>
-			{
-				while (true)
-				{
-					if (Program.Running) this.RefreshLayout();
-					Thread.Sleep(50);
-					
-				}
-			})
-			{ IsBackground = true };
-			t.Start();
+			//var t = new Thread(() =>
+			//{
+			//	while (true)
+			//	{
+			//		if (Program.Running) this.RefreshLayout();
+			//		Thread.Sleep(10);
+
+			//	}
+			//})
+			//{ IsBackground = true };
+			//t.Start();
 			this.MouseEnter += Control_MouseEnter; ;
 			this.MouseLeave += Control_MouseLeave;
 		}
@@ -65,10 +65,10 @@ namespace 时间管理大师.UI
 				dBounds = value;
 				//SetBounds((int)(DBounds.X - DBounds.Width * 0.1), (int)(DBounds.Y - DBounds.Height * 0.1), (int)(DBounds.Width * 1.2), (int)(DBounds.Height * 1.2));
 				SetBounds((int)(DBounds.X + nowOffset.X),
-						(int)(DBounds.Y+nowOffset.Y), 
-						(int)(DBounds.Width+nowOffset.Width),
-						(int)(DBounds.Height+nowOffset.Height));
-				this.Invalidate();
+						(int)(DBounds.Y + nowOffset.Y),
+						(int)(DBounds.Width + nowOffset.Width),
+						(int)(DBounds.Height + nowOffset.Height));
+				//this.Invalidate();// TODO 此处万不可加！！！！
 			}
 		}
 		/// <summary>
@@ -169,6 +169,7 @@ namespace 时间管理大师.UI
 				Math.Abs(nowOffset.Y - TargetOffset.Y) +
 				Math.Abs(nowOffset.Width - TargetOffset.Width) +
 				Math.Abs(nowOffset.Height - TargetOffset.Height);
+			bool anyRefresh = false;
 			if (offsetMoving > 0.1)
 			{
 				if (!Program.UsedFlash) nowOffset = TargetOffset;
@@ -177,10 +178,16 @@ namespace 时间管理大师.UI
 				nowOffset.Width = nowOffset.Width * (1 - MovingSpeed) + TargetOffset.Width * MovingSpeed;
 				nowOffset.Height = nowOffset.Height * (1 - MovingSpeed) + TargetOffset.Height * MovingSpeed;
 				更新();
+				anyRefresh = true;
+			}
+			else
+			{
+				nowOffset = TargetOffset;
+				
 			}
 
-			bool anyRefresh = false;
-			for(int i=0;i< Controls.Count;i++)
+
+			for (int i = 0; i < Controls.Count; i++)
 			{
 				var ctl = Controls[i];
 				if (ctl is Control nCtl)

@@ -8,11 +8,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using DotNet4.Utilities.UtilExcel;
-using 时间管理大师.Util;
+using Inst.Util;
 using System.Threading;
 
 
-namespace 时间管理大师
+namespace Inst
 {
 	public partial class Form1 : Form
 	{
@@ -68,16 +68,39 @@ namespace 时间管理大师
 			
 			ui.RefreshData(_process);
 		}
-
+		private int thisAppRuntime = 0;
+		private int nextTipTime = 60;
+		private Random rnd = new Random();
 		private void _bckProcessRecord_DoWork(object sender, DoWorkEventArgs e)
 		{
 			do
 			{
-				System.Threading.Thread.Sleep(500+ (int)(new Random().NextDouble() * 500));
+				System.Threading.Thread.Sleep(2500+ (int)(new Random().NextDouble() * 500));
 				var process = SpyerProcess.GetCurrentProcessFocus();
 				var now =new ProcessRecord( process.ProcessName, process.MainWindowTitle, process);
-				
-				if (_process.Last.RemarkName == now.RemarkName) continue;
+				var nowTime = (int)(DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
+				if (_process.Last.ProcessName == now.ProcessName) {
+					if (thisAppRuntime>0&&nowTime - thisAppRuntime > nextTipTime)
+					{
+						int h = nextTipTime / 3600;
+						int m = (nextTipTime - h * 3600) / 60;
+						int s = nextTipTime % 60;
+						string timeStr = "";
+						if (h > 1) timeStr = string.Format("{0}小时{1}分钟", h, m);
+						else if (h == 1 || m > 9) timeStr = string.Format("{0}分钟{1}秒", h * 60 + m, s);
+						else timeStr = nextTipTime+"秒";
+						Program.ShowNotice(100000, "疲劳提醒", "您已经在"+now.ProcessName+"上耗费了"+timeStr+"了哦");
+						if (nextTipTime < 7200) nextTipTime = nextTipTime * 2 + rnd.Next(250, 350);
+						else {
+							nextTipTime /= 3600;
+							nextTipTime *= 3600;
+							nextTipTime += 3600;
+						}
+					}
+					continue;
+				}
+				nextTipTime = 60;
+				thisAppRuntime = nowTime;
 				var p= _process.SetBegin(now);
 				_bckProcessRecord.ReportProgress(0);
 			} while (!_bckProcessRecord.CancellationPending);
@@ -107,7 +130,7 @@ namespace 时间管理大师
 					nowRowIndex++;
 				}
 				
-				xls.SaveAs(Application.StartupPath +string.Format( @"\时间管理大师-{0:D}.xls",DateTime.Today));
+				xls.SaveAs(Application.StartupPath +string.Format( @"\Inst-{0:D}.xls",DateTime.Today));
 			}
 		}
 		
@@ -181,14 +204,14 @@ namespace 时间管理大师
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			Rectangle myRectangle = new Rectangle(0, 0, this.Width, this.Height);
-			//ControlPaint.DrawBorder(e.Graphics, myRectangle, Color.Blue, ButtonBorderStyle.Solid);//画个边框   
-			ControlPaint.DrawBorder(e.Graphics, myRectangle,
-				Color.LightSlateGray, 1, ButtonBorderStyle.Inset,
-				Color.Black, 1, ButtonBorderStyle.Outset,
-				Color.Black, 1, ButtonBorderStyle.Outset,
-				Color.LightSlateGray, 1, ButtonBorderStyle.Outset
-			);
+			//Rectangle myRectangle = new Rectangle(0, 0, this.Width, this.Height);
+			////ControlPaint.DrawBorder(e.Graphics, myRectangle, Color.Blue, ButtonBorderStyle.Solid);//画个边框   
+			//ControlPaint.DrawBorder(e.Graphics, myRectangle,
+			//	Color.LightSlateGray, 1, ButtonBorderStyle.Inset,
+			//	Color.Black, 1, ButtonBorderStyle.Outset,
+			//	Color.Black, 1, ButtonBorderStyle.Outset,
+			//	Color.LightSlateGray, 1, ButtonBorderStyle.Outset
+			//);
 		}
 	}
 }

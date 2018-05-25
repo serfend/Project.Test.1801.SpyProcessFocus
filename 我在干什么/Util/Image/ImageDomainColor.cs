@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace 时间管理大师.Util.Image
+namespace Inst.Util.Image
 {
 	public static unsafe class ImageDomainColor
 	{

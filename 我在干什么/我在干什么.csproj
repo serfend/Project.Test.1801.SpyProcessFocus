@@ -6,10 +6,25 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1EF77BC5-9576-4829-AA24-34006087C9A4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>时间管理大师</RootNamespace>
-    <AssemblyName>时间管理大师</AssemblyName>
+    <RootNamespace>Inst</RootNamespace>
+    <AssemblyName>Inst</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,12 +45,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -85,6 +105,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Bar\BtnHide.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Bar\BtnMaxSize.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Bar\BtnMenu.cs">
@@ -180,19 +203,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Img\图表.png" />
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Img\隐藏.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Img\暂停.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Img\defaultUserAvatar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\banner.png" />
+    <Content Include="2.ico" />
+    <None Include="Resources\defaultAvatar.png" />
+    <None Include="Resources\总计.png" />
+    <None Include="Resources\昨天.png" />
+    <None Include="Resources\banner3.png" />
+    <None Include="Resources\banner1.jpg" />
+    <None Include="Resources\banner2.jpg" />
+    <None Include="Resources\logo.png" />
+    <None Include="Resources\隐藏.png" />
+    <None Include="Resources\动画.png" />
+    <None Include="Resources\开机启动.png" />
+    <None Include="Resources\暂停.png" />
+    <None Include="Resources\日期.png" />
+    <None Include="Resources\单天.png" />
+    <None Include="Resources\关于.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

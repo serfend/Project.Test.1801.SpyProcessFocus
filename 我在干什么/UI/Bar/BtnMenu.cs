@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	class BtnMenu : Control
 	{
@@ -17,6 +17,7 @@ namespace 时间管理大师.UI.Bar
 		} 
 		public override bool RefreshLayout()
 		{
+			//base.RefreshLayout();
 			float lastSize = nowAngle;
 			nowAngle = nowAngle * (1 - MovingSpeed) + targetAngle * MovingSpeed;
 			
@@ -30,11 +31,11 @@ namespace 时间管理大师.UI.Bar
 		}
 		protected override void OnMouseEnter(EventArgs e)
 		{
-			targetAngle += 180f;
+			targetAngle += 90f;
 		}
 		protected override void OnMouseLeave(EventArgs e)
 		{
-			targetAngle += 180f;
+			targetAngle += 90f;
 			targetAngle %= 3600;
 		}
 

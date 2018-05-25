@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace 时间管理大师.UI.Layout
+namespace Inst.UI.Layout
 {
 	public class TopLayout:Layout
 	{

@@ -5,17 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	public  class BtnCmd:Control
 	{
 		public bool AliasTextPos = true;//标签是否移位至图标右边
 		private Color deactiveColor= Color.FromArgb(255, 139, 155, 200);
 		private Color activeColor = Color.FromArgb(255, 89, 255, 138);
+		public bool Center = false;
 		public BtnCmd(Action<Control> CallBack):base(CallBack)
 		{
 			MovingSpeed = 0.05f;
-			ForeColor = Color.FromArgb(255,210,210,200);
+			ForeColor = Color.FromArgb(255,240, 255, 240);
 			BackColor = deactiveColor;
 		}
 		public Image Image;
@@ -81,17 +82,17 @@ namespace 时间管理大师.UI.Bar
 		float targetAngle = 0;
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			
-
-			//TODO 不应用固定数值 ，此处需要优化
-			var size = Parent.Controls[Parent.Controls.Count-1].Width;
+			var size = Parent.Controls[Parent.Controls.Count - 1].Width;
 
 			var top = (int)((Height - size) * 0.5);
-			if (Image != null&& AliasTextPos) e.Graphics.DrawImage(Image,new RectangleF(0,top,size,size));//以menu为界限
-			showText = StateIsON ? StateText[0] : StateText[1];
-			var strTop = (int)((Height - e.Graphics.MeasureString(showText, Font).Height)*0.5);
+			if (Image != null && (AliasTextPos || !expand)) e.Graphics.DrawImage(Image, new RectangleF(0, top, size, size));//以menu为界限
 			if (expand) {
-				 e.Graphics.DrawString(showText, Font, foreBrush, (AliasTextPos ? size * 1.2f : 0f )+ nowAngle*Width*0.2f, strTop);
+				//TODO 不应用固定数值 ，此处需要优化
+				
+				showText = StateIsON ? StateText[0] : StateText[1];
+				var strSize = e.Graphics.MeasureString(showText, Font);
+				var strTop = (int)((Height - strSize.Height) * 0.5);
+				e.Graphics.DrawString(showText, Font, foreBrush, (AliasTextPos ? size * 1.05f : (Center?(Width-strSize.Width)*0.5f:0) )+ nowAngle*Width*0.12f, strTop);
 			}
 			//base.OnPaint(e);
 		}

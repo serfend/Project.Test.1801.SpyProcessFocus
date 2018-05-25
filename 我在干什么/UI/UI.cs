@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
-using 时间管理大师.UI.Layout;
-using 时间管理大师.Util;
+using Inst.UI.Layout;
+using Inst.Util;
 
-namespace 时间管理大师.UI
+namespace Inst.UI
 {
 	public class UI
 	{
@@ -22,8 +23,8 @@ namespace 时间管理大师.UI
 		public void ExpandMenu(bool expand)
 		{
 			Program.frmMain.ui.menuPanel.menu.expandMenu = expand;
-			float x = expand ? 0.1f*frm.Width : 0;
-			float y = expand ? 0.1f*frm.Height : 0;
+			float x = expand ? 0.12f*frm.Width : 0;
+			float y = expand ? 0.22f*frm.Height : 0;
 			//title.Offset(x, 0, 0, 0);
 			//top.Offset(x, 0, 0, 0);
 			banner.Offset(x, center.TargetOffset.Y, 0, 0);
@@ -38,7 +39,6 @@ namespace 时间管理大师.UI
 					cmd.Offset(0, y, 0, 0);
 				}
 			}
-			menuPanel.AppAboutLabel.Offset(0, 0, 0, 1.5f*y);
 		}
 		public UI( Form frm)
 		{
@@ -50,13 +50,31 @@ namespace 时间管理大师.UI
 			menuPanel.Parent = frm;
 			//title.Parent = frm;
 			frm.Resize += Frm_Resize;
+
+			var t = new Thread(() =>
+			{
+				while (true)
+				{
+					if (Program.Running) {
+						menuPanel.RefreshLayout();
+						bar.RefreshLayout();
+						up.RefreshLayout();
+						center.RefreshLayout();
+						banner.RefreshLayout();
+					}
+					Thread.Sleep(10);
+
+				}
+			})
+			{ IsBackground = true };
+			t.Start();
 		}
 
 		private void Frm_Resize(object sender, EventArgs e)
 		{
 			menuPanel.更新饼图();
 			ExpandMenu(Program.frmMain.ui.menuPanel.menu.expandMenu);
-			bar.SetLayoutPos(0.85f, 0, 0.15f, 0.03f);
+			bar.SetLayoutPos(0.85f, 0.002f, 0.15f, 0.03f);
 			//top.SetLayoutPos(0.46f, 0.03f, 0.54f, 0.02f);
 			banner.SetLayoutPos(0.05f, 0.05f, 0.93f, 0.2f);
 			up.SetLayoutPos(0.05f, 0.25f, 0.93f, 0.3f);

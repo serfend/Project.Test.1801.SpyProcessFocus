@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.AppComponent
+namespace Inst.UI.AppComponent
 {
 	public class TimeLine : Control
 	{
@@ -43,7 +43,7 @@ namespace 时间管理大师.UI.AppComponent
 			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGreen, 0, 0, todayPercent * Width, Height);//今日
 
 			int time = TodayTime;
-			int h = time / 86400;
+			int h = time / 3600;
 			time -= h * 3600;
 			int m =time/60;
 			int s = time - m * 60;

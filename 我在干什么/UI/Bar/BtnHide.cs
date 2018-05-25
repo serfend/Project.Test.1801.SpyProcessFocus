@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	public class BtnHide:Control
 	{
@@ -23,7 +23,7 @@ namespace 时间管理大师.UI.Bar
 			{
 				if (!Program.UsedFlash) nowSize = targetSize;
 				BackColor = Color.FromArgb(255, (int)(deactiveColor.R * nowSize + activeColor.R * (1 - nowSize)), (int)(deactiveColor.G * nowSize + activeColor.G * (1 - nowSize)), (int)(deactiveColor.B * nowSize + activeColor.B * (1 - nowSize)));
-					this.Invalidate();
+				this.Invalidate();
 				return true;
 			}
 			return false;

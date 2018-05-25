@@ -1,4 +1,4 @@
-﻿namespace 时间管理大师
+﻿namespace Inst
 {
 	partial class Form1
 	{
@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.InfoShow = new System.Windows.Forms.NotifyIcon(this.components);
 			this.SuspendLayout();
 			// 
@@ -46,6 +47,7 @@
 			this.ControlBox = false;
 			this.DoubleBuffered = true;
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Form1";
 			this.Text = "时间掌控大师";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);

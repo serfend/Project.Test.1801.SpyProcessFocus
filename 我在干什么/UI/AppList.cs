@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using 时间管理大师.Util;
+using Inst.Util;
 
-namespace 时间管理大师.UI
+namespace Inst.UI
 {
 	public class AppList:Control
 	{

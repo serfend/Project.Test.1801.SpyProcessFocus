@@ -6,12 +6,12 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using 时间管理大师.UI.AppComponent;
-using 时间管理大师.UI.Bar;
-using 时间管理大师.Util;
-using 时间管理大师.Util.Image;
+using Inst.UI.AppComponent;
+using Inst.UI.Bar;
+using Inst.Util;
+using Inst.Util.Image;
 
-namespace 时间管理大师.UI
+namespace Inst.UI
 {
 	public class App:Control
 	{
@@ -37,7 +37,7 @@ namespace 时间管理大师.UI
 			pen = new Pen(boardColor, 1);
 			BackColor = Color.White;
 			ForeColor = Color.Black;
-			Font = new Font("微软雅黑", 10);
+			Font = new Font("微软雅黑", 10,FontStyle.Bold);
 			logo = new Logo((x) => { })
 			{
 				Parent = this
@@ -47,11 +47,13 @@ namespace 时间管理大师.UI
 				DotNet4.Utilities.UtilInput.InputBox.ShowInputBox("修改备注", "修改进程备注名称", p.RemarkName, (newName) =>
 				{
 					p.RemarkName = newName;
+					ProcessName = ProcessName;
 				});
 			})
 			{
 				Parent = this,
-				deactiveColor = Color.FromArgb(200, 91, 155, 213)
+				deactiveColor = Color.FromArgb(200, 91, 155, 213),
+				Font=this.Font
 			};
 			ProcessName = name;
 			TimeLine = new TimeLine()
@@ -59,13 +61,14 @@ namespace 时间管理大师.UI
 				TodayTime = 0,
 				AvgTime = 0,
 				SoftAvgTime = 0,
-				Parent = this
+				Parent = this,
+				Font = this.Font
 			};
-			sumUsedTime = new Bar.BtnNormal((x) => { }) {Parent=this,Text="总耗时" };
-			sumUsedCount = new Bar.BtnNormal((x) => { }) { Parent = this,Text="总激活" };
-			SumUsedTimeLine = new TimeLine() { Parent=this};
-			SumUsedCountLine = new Bar.BtnNormal((x)=> { }) { Parent=this};
-			frequency = new UseFrequency() {  Parent=this};
+			sumUsedTime = new Bar.BtnNormal((x) => { }) {Parent=this,Text="总耗时",Font=this.Font};
+			sumUsedCount = new Bar.BtnNormal((x) => { }) { Parent = this,Text="总激活", Font = this.Font };
+			SumUsedTimeLine = new TimeLine() { Parent=this, Font = this.Font };
+			SumUsedCountLine = new Bar.BtnNormal((x)=> { }) { Parent=this, Font = this.Font };
+			frequency = new UseFrequency() {  Parent=this, Font = this.Font };
 
 			relateAppLabel = new BtnNormal((x) =>
 			{
@@ -74,10 +77,10 @@ namespace 时间管理大师.UI
 					RelateApp.ShowIconNum = Convert.ToInt32(ans);
 				});
 			})
-			{ Parent = this, Text = "相关应用" };
+			{ Parent = this, Text = "相关应用", Font = this.Font };
 			RelateApp = new AppRelate((x)=> { },name) {
 				Parent=this,
-				
+				Font = this.Font
 			};
 		}
 
@@ -88,8 +91,8 @@ namespace 时间管理大师.UI
 			sumUsedTime.DBounds = new Rectangle(101, 42, 50, 30);
 			SumUsedTimeLine.DBounds = new Rectangle(151, 42,Width-661, 30);
 			sumUsedCount.DBounds = new Rectangle(101, 74, 50, 30);
-			relateAppLabel.DBounds = new Rectangle(101,106,50,24);
-			RelateApp.DBounds = new Rectangle(151, 106,Width-661, 24);
+			relateAppLabel.DBounds = new Rectangle(10,135,90,24);
+			RelateApp.DBounds = new Rectangle(105, 135,Width-661, 24);
 			SumUsedCountLine.DBounds = new Rectangle(151, 74, 60, 30);
 			TimeLine.DBounds = new Rectangle(100, 10, Width - 110, 30);
 			frequency.DBounds = new Rectangle(Width - 500, 42, 490, 150);

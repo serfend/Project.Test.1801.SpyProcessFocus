@@ -7,21 +7,26 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace 时间管理大师.Util
+namespace Inst.Util
 {
 	public class ApplicationInfomations
 	{
 		private Process handleApp;
 		private Icon icon;
 		private Color iconMainColor;
-		public Icon Icon { get => icon; set {
+		public Icon Icon
+		{
+			get => icon; set
+			{
 				icon = value;
-				if (icon != null) {
-					var colors = 时间管理大师.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(),3);
+				if (icon != null)
+				{
+					var colors = Inst.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(), 1);
 					iconMainColor = Color.FromArgb(255, Color.FromArgb(colors[0].Color));
 				}
 				else IconMainColor = Color.Gray;
-			} }
+			}
+		}
 		public Color IconMainColor { get => iconMainColor; set => iconMainColor = value; }
 
 
@@ -30,19 +35,34 @@ namespace 时间管理大师.Util
 		{
 
 		}
-		
+
 		public ApplicationInfomations(Process handleApp)
 		{
 			this.handleApp = handleApp;
 			try
 			{
-				this.Icon = ApplicationInfomations.GetIcon(handleApp.MainModule.FileName, true);
+				this.Icon = ApplicationInfomations.GetMaxIcon(handleApp.MainModule.FileName);
 			}
 			catch (Exception)
 			{
 				this.Icon = null;
 			}
+			finally
+			{
+				if (this.Icon == null)
+				{
+					try
+					{
+						this.icon = ApplicationInfomations.GetIcon(handleApp.MainModule.FileName,true);
+					}
+					catch (Exception)
+					{
+						this.Icon = null;
+					}
+				}
+			}
 			
+
 		}
 		#region 获取图标
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -113,17 +133,67 @@ namespace 时间管理大师.Util
 			SHFILEINFO shFileInfo = new SHFILEINFO();
 			IntPtr hI;
 			FileInfoFlags flag = isLargeIcon ? FileInfoFlags.SHGFI_LARGEICON : FileInfoFlags.SHGFI_SMALLICON;
-			hI = SHGetFileInfo(fileName, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo), (uint)FileInfoFlags.SHGFI_ICON | (uint)flag);
+			hI = SHGetFileInfo(fileName, 0, ref shFileInfo, (uint)Marshal.SizeOf(shFileInfo), (uint)FileInfoFlags.SHGFI_ICON | (uint)FileInfoFlags.SHGFI_USEFILEATTRIBUTES | (uint)flag);
 
 			Icon icon = Icon.FromHandle(shFileInfo.hIcon).Clone() as Icon;
 
-			DestroyIcon(shFileInfo.hIcon);
-
+			DestroyIcon(shFileInfo.hIcon); //释放资源
 			return icon;
 		}
-		[System.Runtime.InteropServices.DllImport("shell32.dll")]
-		private static extern int ExtractIconEx(string lpszFile, int niconIndex, IntPtr[] phiconLarge, IntPtr[] phiconSmall, int nIcons);
-
 		#endregion
+		public static Icon GetMaxIcon(string path) { 
+				
+			//选中文件中的图标总数
+			var iconTotalCount = PrivateExtractIcons(path, 0, 0, 0, null, null, 0, 0);
+
+			//用于接收获取到的图标指针
+			IntPtr[] hIcons = new IntPtr[iconTotalCount];
+			//对应的图标id
+			int[] ids = new int[iconTotalCount];
+			//成功获取到的图标个数
+			var successCount = PrivateExtractIcons(path, 0, 256, 256, hIcons, ids, iconTotalCount, 0);
+			if (successCount == 0) return null;
+			Icon icon = Icon.FromHandle(hIcons[0]);
+			int maxSize = icon.Width;
+			int maxIndex = 0;
+			//遍历并保存图标
+			for (var i = 1; i < successCount; i++)
+			{
+				//指针为空，跳过
+				if (hIcons[i] == IntPtr.Zero) continue;
+
+				using (var ico = Icon.FromHandle(hIcons[i]))
+				{
+					if (ico.Width > maxSize)
+					{
+						DestroyIcon(hIcons[maxIndex]);
+						maxSize = ico.Width;
+						icon = ico;
+						maxIndex = i;
+					}
+				}
+				//内存回收
+				
+			}
+			return icon;
+		}
+
+
+			//details: https://msdn.microsoft.com/en-us/library/windows/desktop/ms648075(v=vs.85).aspx
+			//Creates an array of handles to icons that are extracted from a specified file.
+			//This function extracts from executable (.exe), DLL (.dll), icon (.ico), cursor (.cur), animated cursor (.ani), and bitmap (.bmp) files. 
+			//Extractions from Windows 3.x 16-bit executables (.exe or .dll) are also supported.
+			[DllImport("User32.dll")]
+			public static extern int PrivateExtractIcons(
+				string lpszFile, //file name
+				int nIconIndex,  //The zero-based index of the first icon to extract.
+				int cxIcon,      //The horizontal icon size wanted.
+				int cyIcon,      //The vertical icon size wanted.
+				IntPtr[] phicon, //(out) A pointer to the returned array of icon handles.
+				int[] piconid,   //(out) A pointer to a returned resource identifier.
+				int nIcons,      //The number of icons to extract from the file. Only valid when *.exe and *.dll
+				int flags        //Specifies flags that control this function.
+			);
+
+		}
 	}
-}

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using 时间管理大师.Util;
+using Inst.Util;
 
-namespace 时间管理大师
+namespace Inst
 {
 	static class Program
 	{
@@ -63,7 +63,7 @@ namespace 时间管理大师
 			frmMain.InfoShow.ShowBalloonTip(time,title,info,icon);
 		}
 
-		public static string Title = "时间管理大师";
+		public static string Title = "Inst";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
 		private static string queryingDay;

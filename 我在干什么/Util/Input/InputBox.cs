@@ -14,6 +14,7 @@ namespace DotNet4.Utilities.UtilInput
 
 		private InputBox()
 		{
+			this.Icon = Inst.Program.frmMain.Icon;
 			InitializeComponent();
 		}
 
@@ -62,10 +63,8 @@ namespace DotNet4.Utilities.UtilInput
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
 			this.ClientSize = new System.Drawing.Size(350, 48);
-			this.ControlBox = false;
 			this.Controls.Add(this.lblInfo);
 			this.Controls.Add(this.txtData);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "InputBox";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

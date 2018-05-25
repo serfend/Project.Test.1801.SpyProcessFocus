@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	class BtnAvatar:Control
 	{

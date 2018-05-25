@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Bar
+namespace Inst.UI.Bar
 {
 	class BtnTitle : Control
 	{
@@ -23,7 +23,7 @@ namespace 时间管理大师.UI.Bar
 			if (Math.Abs(lastSize - nowSize) > 0.001)
 			{
 				if (!Program.UsedFlash) nowSize = targetSize;
-					this.Invalidate();
+				this.Invalidate();
 				return true;
 			}
 			return false;

@@ -6,10 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using 时间管理大师.Properties;
-using 时间管理大师.Util;
+using Inst.Properties;
+using Inst.Util;
 
-namespace 时间管理大师.UI.Layout
+namespace Inst.UI.Layout
 {
 	public class MenuPanel:Layout
 	{
@@ -20,6 +20,8 @@ namespace 时间管理大师.UI.Layout
 		//private Bar.BtnCmd cmdGraphic;
 		private Bar.BtnCmd cmdFlashEnable;
 		private Bar.BtnCmd cmdAutoCurrentVersion;
+
+		private Bar.BtnImage logo;
 
 		public void 更新饼图()
 		{
@@ -91,7 +93,7 @@ namespace 时间管理大师.UI.Layout
 			})
 			{
 				Text = "启用动画|关闭动画",
-				//Image = Resources.图表,
+				Image = Resources.动画,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,
@@ -102,49 +104,56 @@ namespace 时间管理大师.UI.Layout
 			})
 			{
 				Text = "开机启动|取消启动",
-				//Image = Resources.图表,
+				Image = Resources.开机启动,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,
 				StateIsON = !Program.AutoCurrentVersion
 			};
-			AppAboutLabel = new Bar.BtnCmd((x) => { })
-			{
-				Parent = this,
-				Font = this.Font,
-				Text = "开发团队\n李培培教员\nxx队xxx\nxx队xxx\nxx队xxx|时间掌控大师\nTimeMaster\n版本:1.0",
-				AliasTextPos=false
-			};
 
 			SelectQueryDay = new Bar.BtnCmd[4];
-			SelectQueryDay[0] = new Bar.BtnCmd((x) => { Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString(); }) {Parent=this,Font=this.Font,Text="今天" };
-			SelectQueryDay[1] = new Bar.BtnCmd((x) => { Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString(); }) { Parent = this, Font = this.Font, Text = "昨天" };
+			SelectQueryDay[0] = new Bar.BtnCmd((x) => { Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString(); }) {Parent=this,Font=this.Font,Text="今天",Image=Resources.单天 };
+			SelectQueryDay[1] = new Bar.BtnCmd((x) => { Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString(); }) { Parent = this, Font = this.Font, Text = "昨天", Image = Resources.昨天 };
 			SelectQueryDay[2] = new Bar.BtnCmd((x) => {
 				var date = InputBox.ShowInputBox("", "请按照格式输入日期", DateTime.Now.Date.ToShortDateString());
 				Program.QueryingDay = DataCore.DayStamp(Convert.ToDateTime(date)).ToString();
-			}) { Parent = this, Font = this.Font, Text = "其他.." };
-			SelectQueryDay[3] = new Bar.BtnCmd((x) => { Program.QueryingDay = "SumDay"; }) { Parent = this, Font = this.Font, Text = "总计" };
+			}) { Parent = this, Font = this.Font, Text = "其他..", Image = Resources.日期 };
+			SelectQueryDay[3] = new Bar.BtnCmd((x) => { Program.QueryingDay = "SumDay"; }) { Parent = this, Font = this.Font, Text = "总计", Image = Resources.总计 };
+
+			logo = new Bar.BtnImage((x) => { }) {
+				Parent = this,
+				Image = Resources.Logo,
+				BackColor = this.BackColor,Center=true
+			};
 			//菜单下方的控件将不显示左侧栏目
 			menu.Parent = this;
 			
 		}
-		public Bar.BtnCmd AppAboutLabel;
 		public Bar.BtnCmd[] SelectQueryDay;
 		protected override void OnResize(EventArgs e)
 		{
 			menu.DBounds = new System.Drawing.Rectangle(0,0,(int)(Parent.Width * 0.03),(int)(Parent.Height));
-			cmdHider.SetLayoutPos(0, 0.2f, 1, 0.05f);
-			cmdPauser.SetLayoutPos(0, 0.251f, 1, 0.05f);
-			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
-			cmdFlashEnable.SetLayoutPos(0, 0.302f, 1, 0.05f);
-			cmdAutoCurrentVersion.SetLayoutPos(0, 0.404f, 1, 0.05f);
 
-			AppAboutLabel.SetLayoutPos(0, 0.07f, 1, 0.05f);
-			
-			for(int i=0;i<4;i++)
+			if (Program.frmMain.ui.menuPanel.menu.expandMenu)
+			{
+				logo.SetLayoutPos(0, 0.05f, 1, 0.2f);
+			}
+			else
+			{
+				logo.SetLayoutPos(1f, 0.05f, 1, 0.2f);
+			}
+
+			cmdHider.SetLayoutPos(0, 0.15f, 1, 0.05f);
+			cmdPauser.SetLayoutPos(0, 0.201f, 1, 0.05f);
+			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
+			cmdFlashEnable.SetLayoutPos(0, 0.252f, 1, 0.05f);
+			cmdAutoCurrentVersion.SetLayoutPos(0, 0.304f, 1, 0.05f);
+
+
+			for (int i = 0; i < 4; i++)
 			{
 				if (SelectQueryDay[i] != null)
-					SelectQueryDay[i].SetLayoutPos(0, 0.48f + 0.052f * i, 1, 0.05f);
+					SelectQueryDay[i].SetLayoutPos(0, 0.38f + 0.052f * i, 1, 0.05f);
 			}
 			//avatarNowSize = avatarNowSize * 0.8f + (menu.expandMenu ? 0.1f : 0.2f);
 
@@ -153,8 +162,12 @@ namespace 时间管理大师.UI.Layout
 			//	for(int i=0;i<3;i++)
 			//		ShowUserInfoOfDay[i].SetLayoutPos(0.51f, 0.05f*i+0.08f, 0.5f, 0.05f);
 			//}
-			base.OnResize(e);
+			//base.OnResize(e);
 		}
-		//private float avatarNowSize = 1;
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			e.Graphics.DrawString("硬时头 Inst\n版本:1.0", Font, Brushes.White, Program.frmMain.Width*0.03f, Height*0.9f);
+			//base.OnPaint(e);
+		}
 	}
 }

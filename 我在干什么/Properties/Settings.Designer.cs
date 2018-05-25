@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 时间管理大师.Properties {
+namespace Inst.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

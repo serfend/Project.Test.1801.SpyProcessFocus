@@ -5,10 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using 时间管理大师.UI;
-using 时间管理大师.Util.Image;
+using Inst.UI;
+using Inst.Util.Image;
 
-namespace 时间管理大师.UI.Layout
+namespace Inst.UI.Layout
 {
 	public class UpLayout:Layout
 	{

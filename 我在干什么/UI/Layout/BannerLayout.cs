@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace 时间管理大师.UI.Layout
+namespace Inst.UI.Layout
 {
 	public class BannerLayout:Layout
 	{
@@ -20,27 +20,38 @@ namespace 时间管理大师.UI.Layout
 			avatar = new Bar.BtnAvatar((x) =>
 			{
 				var path = SetImageNew(userAvatarFile, "Default", "更换头像");
-				avatar.Avatar = path == null ? Properties.Resources.defaultUserAvatar : new Bitmap(path);
+				avatar.Avatar = path == null ? Properties.Resources.defaultAvatar : new Bitmap(path);
 				//TODO 可能可以显示下用户信息
 			})
 			{
-				Avatar = userAvatarFilePath == null ? Properties.Resources.defaultUserAvatar : new Bitmap(userAvatarFilePath),
+				Avatar = userAvatarFilePath == null ? Properties.Resources.defaultAvatar : new Bitmap(userAvatarFilePath),
 				Parent = this,
 				BackColor = this.BackColor
 			};
 			banner = new Bar.BtnImage((x) => {
 				var path= SetImageNew(userAvatarFile, "Banner");
-				banner.Image = path == null ? Properties.Resources.banner : new Bitmap(path);
+				banner.Image = path == null ? GetRandomBanner (): new Bitmap(path);
 			}) {
-				Image = userBannerImageFilePath == null ? Properties.Resources.banner : new Bitmap(userBannerImageFilePath),
+				Image = userBannerImageFilePath == null ? GetRandomBanner (): new Bitmap(userBannerImageFilePath),
 				Parent = this,
 				BackColor = this.BackColor
 			};
 		}
+		private Image GetRandomBanner()
+		{
+			var index = new Random().Next(1, 3);
+			switch (index)
+			{
+				case 1:return Properties.Resources.banner1;
+				case 2: return Properties.Resources.banner2;
+				case 3: return Properties.Resources.banner3;
+			}
+			return null;
+		}
 		protected override void OnResize(EventArgs e)
 		{
 			avatar.SetLayoutPos(0, 0, 0, 1);
-			banner.SetLayoutPos(0.2f, 0, 0.8f, 1);
+			banner.SetLayoutPos(0, 0, 1, 1);
 			base.OnResize(e);
 		}
 

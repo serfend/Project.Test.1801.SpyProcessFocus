@@ -5,10 +5,10 @@ using System.Drawing.Drawing2D;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using 时间管理大师.Util;
-using 时间管理大师.Util.Image;
+using Inst.Util;
+using Inst.Util.Image;
 
-namespace 时间管理大师.UI
+namespace Inst.UI
 {
 	public class 时间分布饼图 : Control
 	{
