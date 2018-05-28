@@ -19,6 +19,7 @@ namespace Inst.UI
 		public CenterLayout center = new CenterLayout();
 		public MenuPanel menuPanel = new MenuPanel();
 		//public TitleLayout title = new TitleLayout();
+		public TomatoClock clock;
 		public Form frm;
 		public void ExpandMenu(bool expand)
 		{
@@ -40,8 +41,29 @@ namespace Inst.UI
 				}
 			}
 		}
+		public void HideAll(bool hide)
+		{
+			clock.Visible = hide;
+			Program.frmMain.ui.menuPanel.cmdShowTomato.StateIsON = !hide;
+			ExpandMenu(false);
+			if (hide)
+			{
+				clock.显示();
+				float x = 0.8f*frm.Width;
+				banner.Offset(x, center.TargetOffset.Y, 0, 0);
+				up.Offset(x, 0, 0, up.TargetOffset.Height);
+				center.Offset(x, center.TargetOffset.Y, 0, center.TargetOffset.Height);
+			}
+			else  clock.隐藏();
+		}
 		public UI( Form frm)
 		{
+			clock = new TomatoClock((x) => { }) {
+				Parent = frm,
+				Visible = false,
+				Font = new Font("微软雅黑", 24)
+			};
+			clock.隐藏();
 			this.frm = frm;
 			bar.Parent = frm;
 			banner.Parent = frm;
@@ -49,6 +71,7 @@ namespace Inst.UI
 			center.Parent = frm;
 			menuPanel.Parent = frm;
 			//title.Parent = frm;
+			
 			frm.Resize += Frm_Resize;
 
 			var t = new Thread(() =>
@@ -61,9 +84,14 @@ namespace Inst.UI
 						up.RefreshLayout();
 						center.RefreshLayout();
 						banner.RefreshLayout();
+						clock.RefreshLayout();
+						Thread.Sleep(10);
 					}
-					Thread.Sleep(10);
-
+					else
+					{
+						Thread.Sleep(500);
+					}
+					
 				}
 			})
 			{ IsBackground = true };
@@ -74,13 +102,15 @@ namespace Inst.UI
 		{
 			menuPanel.更新饼图();
 			ExpandMenu(Program.frmMain.ui.menuPanel.menu.expandMenu);
+			HideAll(clock.Visible);
 			bar.SetLayoutPos(0.85f, 0.002f, 0.15f, 0.03f);
 			//top.SetLayoutPos(0.46f, 0.03f, 0.54f, 0.02f);
 			banner.SetLayoutPos(0.05f, 0.05f, 0.93f, 0.2f);
-			up.SetLayoutPos(0.05f, 0.25f, 0.93f, 0.3f);
+			up.SetLayoutPos(0.05f, 0.3f, 0.93f, 0.26f);
 			center.SetLayoutPos(0.05f, 0.56f, 0.93f, 0.44f);
 			menuPanel.SetLayoutPos(0, 0, 0.03f, 1);
 			//title.SetLayoutPos(0.05f, 0, 0.4f, 0.05f);
+			clock.SetLayoutPos(0.2f, 0.1f, 0.5f, 0);
 		}
 
 		internal void RefreshData(ProcessGroup process)

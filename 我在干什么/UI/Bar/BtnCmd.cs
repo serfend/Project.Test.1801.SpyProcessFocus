@@ -10,14 +10,14 @@ namespace Inst.UI.Bar
 	public  class BtnCmd:Control
 	{
 		public bool AliasTextPos = true;//标签是否移位至图标右边
-		private Color deactiveColor= Color.FromArgb(255, 139, 155, 200);
-		private Color activeColor = Color.FromArgb(255, 89, 255, 138);
+		private Color deactiveColor = Color.FromArgb(255, 50, 50, 50);
+		private Color activeColor = Color.FromArgb(255, 124, 165, 199);
 		public bool Center = false;
 		public BtnCmd(Action<Control> CallBack):base(CallBack)
 		{
-			MovingSpeed = 0.05f;
+			MovingSpeed = 0.2f;
 			ForeColor = Color.FromArgb(255,240, 255, 240);
-			BackColor = deactiveColor;
+			BackColor = DeactiveColor;
 		}
 		public Image Image;
 		private bool expand = false;
@@ -49,9 +49,9 @@ namespace Inst.UI.Bar
 			{
 				if (!Program.UsedFlash) nowAngle = targetAngle;
 					BackColor = Color.FromArgb(
-					(int)(deactiveColor.R * (1 - nowAngle) + activeColor.R * nowAngle),
-					(int)(deactiveColor.G * (1 - nowAngle) + activeColor.G * nowAngle),
-					(int)(deactiveColor.B * (1 - nowAngle) + activeColor.B * nowAngle));
+					(int)(DeactiveColor.R * (1 - nowAngle) + ActiveColor.R * nowAngle),
+					(int)(DeactiveColor.G * (1 - nowAngle) + ActiveColor.G * nowAngle),
+					(int)(DeactiveColor.B * (1 - nowAngle) + ActiveColor.B * nowAngle));
 				this.Invalidate();
 				return true;
 			}
@@ -80,6 +80,10 @@ namespace Inst.UI.Bar
 		private Brush bckBrush;
 		float nowAngle = 1;//可拓展的图标 
 		float targetAngle = 0;
+
+		public Color DeactiveColor { get => deactiveColor; set { deactiveColor = value; nowAngle = 1-targetAngle; } }
+		public Color ActiveColor { get => activeColor; set { activeColor = value; nowAngle = 1 - targetAngle; } }
+
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var size = Parent.Controls[Parent.Controls.Count - 1].Width;

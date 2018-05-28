@@ -16,7 +16,7 @@ namespace Inst.Util
 			{
 				foreach (var p in Process)
 				{
-					if (p.ProcessName == name) return p;
+					if (p.ProcessAliasName == name) return p;
 				}
 				return null;
 			}
@@ -82,7 +82,7 @@ namespace Inst.Util
 			if (process == null) return new ProcessRecord("#null#", "#null#",null);
 			foreach (var p in Process)//在记录中寻找进程
 			{
-				if (p.RemarkName == process.RemarkName)
+				if (p.ProcessAliasName == process.ProcessAliasName)
 				{
 					return p;
 				}
@@ -94,11 +94,12 @@ namespace Inst.Util
 		private ProcessRecord _last;
 		public ProcessRecord SetBegin(ProcessRecord process)
 		{
-			if (_last.RemarkName == process.RemarkName) return _last;
+			//Console.WriteLine(Last.ProcessName + ":" + process.ProcessName);
+			if (_last.ProcessAliasName == process.ProcessAliasName) return _last;
 			if (!nowRunningStatus) return _last;
 			var p = GetProcess(process);
 			_last.End();
-			p.Begin(_last.ProcessName);
+			p.Begin(_last.ProcessAliasName);
 			_last = p;
 			return p;
 		}
@@ -114,7 +115,7 @@ namespace Inst.Util
 			StringBuilder s = new StringBuilder();
 			foreach (var p in Process)
 			{
-				s.Append(p.ProcessName).Append(":").Append(p.SumUsedTime()).Append("\n");
+				s.Append(p.ProcessAliasName).Append(":").Append(p.SumUsedTime()).Append("\n");
 			}
 			return s.ToString();
 		}

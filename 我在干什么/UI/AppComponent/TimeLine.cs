@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -11,9 +12,12 @@ namespace Inst.UI.AppComponent
 		//本软件今日用时/本软件日平均用时/所有软件日平均最高用时 
 		private int todayTime, avgTime;
 		private int softAvgTime;
+		private Color deActiveColor ;
+		private Brush deActiveBrush;
 		public TimeLine()
 		{
 			BackColor = System.Drawing.Color.LightGray;
+			DeActiveColor = Color.FromArgb(255, 123, 191, 234);
 		}
 
 		public override bool RefreshLayout()
@@ -21,7 +25,7 @@ namespace Inst.UI.AppComponent
 			bool changed = anyChange;
 			if (SoftAvgTime > 0)
 			{
-				if (anyChange)
+				if (changed)
 				{
 					todayPercent = (float)todayTime / (float)softAvgTime;
 					if (todayPercent > 1) todayPercent = 1;
@@ -35,12 +39,22 @@ namespace Inst.UI.AppComponent
 		public int TodayTime { get => todayTime; set { todayTime = value; anyChange = true; } }
 		public int AvgTime { get => avgTime; set { avgTime = value; anyChange = true; } }
 		public int SoftAvgTime { get => softAvgTime; set { softAvgTime = value; anyChange = true; } }
+
+		public Color DeActiveColor
+		{
+			get => deActiveColor; set
+			{
+				deActiveColor = value;
+				deActiveBrush = new SolidBrush(deActiveColor);
+			}
+		}
+
 		private bool anyChange = false;
 		private float todayPercent,avgPercent;
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
-			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGreen, 0, 0, todayPercent * Width, Height);//今日
+			e.Graphics.FillRectangle(deActiveBrush, 0, 0, todayPercent * Width, Height);//今日
 
 			int time = TodayTime;
 			int h = time / 3600;

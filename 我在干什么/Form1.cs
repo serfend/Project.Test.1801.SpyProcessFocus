@@ -10,7 +10,8 @@ using System.Diagnostics;
 using DotNet4.Utilities.UtilExcel;
 using Inst.Util;
 using System.Threading;
-
+using System.Runtime.InteropServices;
+using DotNet4.Utilities.UtilReg;
 
 namespace Inst
 {
@@ -25,15 +26,21 @@ namespace Inst
 			_process = new ProcessGroup();
 			ui = new UI.UI(this);
 
-			InfoShow.DoubleClick += (x, xx) =>
-			{
-				this.ShowInTaskbar = true;
-				this.Show();
-				this.Activate();
-				this.InfoShow.Visible = false;
-				Program.Running = true;
-			};
+			InfoShow.DoubleClick += InfoShow_DoubleClick;
 			InfoShow.Icon = this.Icon;
+			InfoShow.BalloonTipClicked += Program.ResponseNoticeClick;
+			Program.Running = true;
+
+			var bound=RegUtil.GetFormPos(this);
+			this.Load += (x, xx) => { SetBounds(bound[0], bound[1], bound[2], bound[3]); };
+		}
+
+		public void InfoShow_DoubleClick(object sender, EventArgs e)
+		{
+			this.ShowInTaskbar = true;
+			this.Show();
+			this.Activate();
+			this.InfoShow.Visible = false;
 			Program.Running = true;
 		}
 
@@ -43,7 +50,7 @@ namespace Inst
 			this.Hide();
 			this.InfoShow.Visible = true;
 			var info = Program.Title + "已隐藏并持续在后台运行";
-			InfoShow.ShowBalloonTip(5000, info, info + ",您可以在托盘中双击重新显示", ToolTipIcon.Info);
+			Program.ShowNotice(5000, info, info + ",您可以在托盘中双击重新显示", ToolTipIcon.Info);
 			Program.Running = false;
 		}
 
@@ -70,16 +77,20 @@ namespace Inst
 		}
 		private int thisAppRuntime = 0;
 		private int nextTipTime = 60;
+
 		private Random rnd = new Random();
+		private string lastRunAppName;
+		private int lastRunAppTimeRecord;
 		private void _bckProcessRecord_DoWork(object sender, DoWorkEventArgs e)
 		{
 			do
 			{
-				System.Threading.Thread.Sleep(2500+ (int)(new Random().NextDouble() * 500));
+				System.Threading.Thread.Sleep(500);
 				var process = SpyerProcess.GetCurrentProcessFocus();
+				if (process.ProcessName == "Idle") continue;
 				var now =new ProcessRecord( process.ProcessName, process.MainWindowTitle, process);
 				var nowTime = (int)(DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
-				if (_process.Last.ProcessName == now.ProcessName) {
+				if (lastRunAppName == now.ProcessAliasName) {
 					if (thisAppRuntime>0&&nowTime - thisAppRuntime > nextTipTime)
 					{
 						int h = nextTipTime / 3600;
@@ -89,7 +100,10 @@ namespace Inst
 						if (h > 1) timeStr = string.Format("{0}小时{1}分钟", h, m);
 						else if (h == 1 || m > 9) timeStr = string.Format("{0}分钟{1}秒", h * 60 + m, s);
 						else timeStr = nextTipTime+"秒";
-						Program.ShowNotice(100000, "疲劳提醒", "您已经在"+now.ProcessName+"上耗费了"+timeStr+"了哦");
+						Program.ShowNotice(100000, "疲劳提醒", "您已经在"+now.ProcessAliasName+"上耗费了"+timeStr+"了哦",ToolTipIcon.Info,()=> {
+							if (!Program.Running) Program.frmMain.InfoShow_DoubleClick(this,EventArgs.Empty);
+							Program.frmMain.ui.center.apps.SetFocus(now.ProcessAliasName);//用户点击时聚焦到当前
+						});
 						if (nextTipTime < 7200) nextTipTime = nextTipTime * 2 + rnd.Next(250, 350);
 						else {
 							nextTipTime /= 3600;
@@ -99,9 +113,17 @@ namespace Inst
 					}
 					continue;
 				}
-				nextTipTime = 60;
-				thisAppRuntime = nowTime;
-				var p= _process.SetBegin(now);
+				var p = _process.SetBegin(now);
+				if(Environment.TickCount- lastRunAppTimeRecord > 10000)//当前的App被关闭了10秒以上方可记录
+				{
+					lastRunAppName = now.ProcessAliasName;
+					lastRunAppTimeRecord = Environment.TickCount;
+					nextTipTime = 60;
+					thisAppRuntime = nowTime;
+				}
+
+				//Console.WriteLine(now.ProcessName);
+				
 				_bckProcessRecord.ReportProgress(0);
 			} while (!_bckProcessRecord.CancellationPending);
 
@@ -115,7 +137,7 @@ namespace Inst
 				int nowRowIndex = 0;
 				foreach(var p in  _process)
 				{
-					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "进程:"+ p.ProcessName +":" + p.MainWindowTitle + "(" + p.RemarkName + ")";
+					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "进程:"+ p.ProcessAliasName +":" + p.MainWindowTitle + "(" + p.RemarkName + ")";
 
 					xls.ExlWorkSheet.Cells[nowRowIndex, 2] = "用户总用时:" +  SpyerProcess.GetMillToString(p.SumUsedTime());// +"ms";
 					xls.ExlWorkSheet.Cells[++nowRowIndex, 1] = "焦点时间";
@@ -147,6 +169,8 @@ namespace Inst
 
 		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
 		{
+
+			RegUtil.SetFormPos(this);
 			InfoShow.Dispose();
 		}
 
@@ -163,6 +187,22 @@ namespace Inst
 		{
 			switch (m.Msg)
 			{
+				case WM_NCPAINT:                        // box shadow
+					if (m_aeroEnabled)
+					{
+						var v = 2;
+						DwmSetWindowAttribute(this.Handle, 2, ref v, 4);
+						MARGINS margins = new MARGINS()
+						{
+							bottomHeight = 1,
+							leftWidth = 1,
+							rightWidth = 1,
+							topHeight = 1
+						};
+						DwmExtendFrameIntoClientArea(this.Handle, ref margins);
+
+					}
+					break;
 
 				case 0x0084:
 					base.WndProc(ref m);
@@ -202,16 +242,68 @@ namespace Inst
 			}
 			//base.WndProc(ref m);
 		}
-		protected override void OnPaint(PaintEventArgs e)
+
+		[DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+		private static extern IntPtr CreateRoundRectRgn
+			(
+				int nLeftRect, // x-coordinate of upper-left corner
+				int nTopRect, // y-coordinate of upper-left corner
+				int nRightRect, // x-coordinate of lower-right corner
+				int nBottomRect, // y-coordinate of lower-right corner
+				int nWidthEllipse, // height of ellipse
+				int nHeightEllipse // width of ellipse
+			 );
+
+		[DllImport("dwmapi.dll")]
+		public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
+
+		[DllImport("dwmapi.dll")]
+		public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+		[DllImport("dwmapi.dll")]
+		public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
+
+		private bool m_aeroEnabled;                     // variables for box shadow
+		private const int CS_DROPSHADOW = 0x00020000;
+		private const int WM_NCPAINT = 0x0085;
+		private const int WM_ACTIVATEAPP = 0x001C;
+
+		public struct MARGINS                           // struct for box shadow
 		{
-			//Rectangle myRectangle = new Rectangle(0, 0, this.Width, this.Height);
-			////ControlPaint.DrawBorder(e.Graphics, myRectangle, Color.Blue, ButtonBorderStyle.Solid);//画个边框   
-			//ControlPaint.DrawBorder(e.Graphics, myRectangle,
-			//	Color.LightSlateGray, 1, ButtonBorderStyle.Inset,
-			//	Color.Black, 1, ButtonBorderStyle.Outset,
-			//	Color.Black, 1, ButtonBorderStyle.Outset,
-			//	Color.LightSlateGray, 1, ButtonBorderStyle.Outset
-			//);
+			public int leftWidth;
+			public int rightWidth;
+			public int topHeight;
+			public int bottomHeight;
 		}
+
+		private const int WM_NCHITTEST = 0x84;          // variables for dragging the form
+		private const int HTCLIENT = 0x1;
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				m_aeroEnabled = CheckAeroEnabled();
+
+				CreateParams cp = base.CreateParams;
+				if (!m_aeroEnabled)
+					cp.ClassStyle |= CS_DROPSHADOW;
+
+				return cp;
+			}
+		}
+
+		private bool CheckAeroEnabled()
+		{
+			if (Environment.OSVersion.Version.Major >= 6)
+			{
+				int enabled = 0;
+				DwmIsCompositionEnabled(ref enabled);
+				return (enabled == 1) ? true : false;
+			}
+			return false;
+		}
+		
+
 	}
 }

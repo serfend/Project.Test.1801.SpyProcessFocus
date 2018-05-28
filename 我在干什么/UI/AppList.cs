@@ -111,12 +111,16 @@ namespace Inst.UI
 			for(int i=0;i< process.Process.Count; i++)
 			{
 				var p = process.Process[i];
-				if (!p.AnyDataRefresh) continue;
-				p.AnyDataRefresh = false;
-				var app = list.Find((x) => x.ProcessName == p.ProcessName);
+				
+				var app = list.Find((x) => x.ProcessName == p.ProcessAliasName);
 				if (app!=null) { 
-					var data=Program.ProcessData[p.ProcessName];
-					app.TimeLine.TodayTime = (Program.QueryingDay == "SumDay" ? data.SumWasteTime : data.GetDayWasteTime(Program.QueryingDay) )/ 1000;
+					var data=Program.ProcessData[p.ProcessAliasName];
+					app.TimeLine.TodayTime = (Program.QueryingDay == "SumDay" ? data.SumWasteTime : data.GetDayWasteTime(Program.QueryingDay))/1000;
+
+					if (app.TimeLine.TodayTime > maxValue) maxValue = app.TimeLine.TodayTime;
+					if (!p.AnyDataRefresh) continue;
+					p.AnyDataRefresh = false;
+					
 					app.SumUsedTimeLine.TodayTime = data.SumWasteTime/1000;
 					app.SumUsedTimeLine.SoftAvgTime = 86400;
 					app.SumUsedCountLine.Text = data.SumActiveTime.ToString();
@@ -126,14 +130,16 @@ namespace Inst.UI
 						int count = data.GetDayRunTime(Program.QueryingDay, h);
 						app.frequency.SetCount(h,count);
 					}
-					if (data.TodayWasteTime > maxValue) maxValue = data.TodayWasteTime;
+					app.frequency.Invalidate();
+					
 				}
 				else
 				{
-					App newApp = new App(p.ProcessName) {
+					App newApp = new App(p.ProcessAliasName) {
 						Font = this.Font,
 					};
 					newApp.Logo.Icon = p.AppInfo.Icon;
+					newApp.Logo.appPath = p.FilePath;
 					newApp.Logo.BackColor = p.AppInfo.IconMainColor;
 					newApp.TimeLine.TodayTime = 0;
 					newApp.TimeLine.AvgTime = 50;
@@ -147,9 +153,16 @@ namespace Inst.UI
 			SortControls(maxValue);
 			if (anyRefresh) this.OnResizeRaise();
 		}
+
+		internal void SetFocus(string processAliasName)
+		{
+			//TODO 切换到目标位置
+		}
+
 		private int lastAppIndex;
 		private void SortControls(int maxValue)
 		{
+		;
 			int maxIndex = 0;
 			bool anyRefresh = false;
 			for(int i=0; i < list.Count; i++)
@@ -168,7 +181,7 @@ namespace Inst.UI
 						}
 					}
 				}
-				app.TimeLine.SoftAvgTime = maxValue/1000;
+				app.TimeLine.SoftAvgTime = maxValue;
 				
 				if(maxIndex< app.Index)
 				{

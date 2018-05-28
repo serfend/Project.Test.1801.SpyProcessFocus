@@ -118,17 +118,17 @@ namespace Inst.UI
 				foreach (var p in process.Process)//刷新
 				{
 					ProcessData target = null;
-					if (Data.ContainsKey(p.RemarkName))
+					if (Data.ContainsKey(p.ProcessAliasName))
 					{
-						target = Data[p.RemarkName];
+						target = Data[p.ProcessAliasName];
 					}
 					else
 					{
 						brushs.Add(new SolidBrush(p.AppInfo.IconMainColor));
 						target = new ProcessData() { ColorIndex = brushs.Count - 1, Rank = nowNum++ };
-						Data.Add(p.RemarkName, target);
+						Data.Add(p.ProcessAliasName, target);
 					}
-					target.time = Program.ProcessData[p.ProcessName].TodayWasteTime;
+					target.time = Program.ProcessData[p.ProcessAliasName].TodayWasteTime;
 					sumTime += target.time;
 				}
 				if (sumTime == 0) sumTime = 10;

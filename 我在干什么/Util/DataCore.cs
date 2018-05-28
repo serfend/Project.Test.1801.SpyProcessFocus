@@ -44,6 +44,20 @@ namespace Inst.Util
 			TimeSpan dayNow = date - new DateTime(1970, 1, 1);
 			return (int)dayNow.TotalDays;
 		}
+		private static Reg appDataMain;
+		public static bool CheckDateValid(string day)
+		{
+			return appDataMain.GetInfo(day) != "";
+		}
+		public static void SetDateValid(string day)
+		{
+			appDataMain.SetInfo(day.ToString(), "ex");
+		}
+		 static DataCore()
+		{
+			appDataMain = Program.AppSetting.In("DayVailid");
+			SetDateValid("SumDay");
+		}
 	}
 	public class AppRecord
 	{
@@ -71,9 +85,9 @@ namespace Inst.Util
 				Relate.Add(r.Name, r);
 			}
 
-
-			RegTodayAppSetting = InitDaySetting(DataCore.DayStamp(DateTime.Now).ToString());
-			RegTodayAppSetting.SetInfo("Main", "1");
+			int daynow = DataCore.DayStamp(DateTime.Now);
+			RegTodayAppSetting = InitDaySetting(daynow.ToString());
+			if(name==Program.ProgramName)DataCore.SetDateValid(daynow.ToString());
 			sumActiveCount = Convert.ToInt32(RegAppSetting.GetInfo("SumActiveTime", "0"));
 			sumWasteTime = Convert.ToInt32(RegAppSetting.GetInfo("SumWasteTime", "0"));
 			RegSumAppHourRuntime = RegAppSetting.In("Data").In("SumDay");

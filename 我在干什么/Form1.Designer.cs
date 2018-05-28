@@ -35,7 +35,7 @@
 			// 
 			// InfoShow
 			// 
-			this.InfoShow.Text = "serfendInfoShow";
+			this.InfoShow.Text = "Inst";
 			this.InfoShow.Visible = true;
 			// 
 			// Form1
@@ -59,7 +59,6 @@
 		#endregion
 
 		public System.Windows.Forms.NotifyIcon InfoShow;
-
 	}
 }
 

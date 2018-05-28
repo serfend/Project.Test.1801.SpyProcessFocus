@@ -10,7 +10,7 @@ namespace Inst.UI.Bar
 	public class BtnNormal : Control
 	{
 		public Color deactiveColor = Color.FromArgb(255, 189, 215, 238);
-		public Color activeColor = Color.FromArgb(255, 89, 255, 138);
+		public Color activeColor = Color.FromArgb(255, 89, 89, 150);
 		public BtnNormal(Action<Control> CallBack) : base(CallBack)
 		{
 			MovingSpeed = 0.05f;

@@ -193,6 +193,26 @@ namespace Inst.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 番茄 {
+            get {
+                object obj = ResourceManager.GetObject("番茄", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 番茄暂停 {
+            get {
+                object obj = ResourceManager.GetObject("番茄暂停", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 隐藏 {
             get {
                 object obj = ResourceManager.GetObject("隐藏", resourceCulture);

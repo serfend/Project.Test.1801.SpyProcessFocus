@@ -15,7 +15,11 @@ namespace Inst.UI.Layout
 		public Action<Control> DoExpandMenu() {
 			return (x) => {
 				expandMenu = !expandMenu;
+				Program.frmMain.ui.clock.Visible = false;
+				Program.frmMain.ui.clock.隐藏();
 				Program.frmMain.ui.ExpandMenu(expandMenu);
+				
+				Program.frmMain.ui.menuPanel.cmdShowTomato.StateIsON = true;
 			};
 		}
 

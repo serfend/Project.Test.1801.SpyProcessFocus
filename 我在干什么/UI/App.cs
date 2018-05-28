@@ -125,6 +125,7 @@ namespace Inst.UI
 		public string ProcessName { get => name; set {
 				name = value;
 				title.Text = Program.frmMain._process[name].RemarkName;
+				title.Invalidate();
 			} }
 		internal Logo Logo { get => logo; set => logo = value; }
 		internal TimeLine TimeLine { get => timeLine; set => timeLine = value; }

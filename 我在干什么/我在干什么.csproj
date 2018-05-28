@@ -46,6 +46,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -146,6 +147,9 @@
     <Compile Include="UI\Layout\BarLayout.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\Layout\TomatoClock.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Layout\TopLayout.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -211,6 +215,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2.ico" />
+    <None Include="Resources\番茄暂停.png" />
+    <None Include="Resources\番茄.png" />
     <None Include="Resources\defaultAvatar.png" />
     <None Include="Resources\总计.png" />
     <None Include="Resources\昨天.png" />

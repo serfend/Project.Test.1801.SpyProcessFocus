@@ -16,12 +16,14 @@ namespace Inst.UI.Layout
 		public LeftLayout menu = new LeftLayout();
 
 		public Bar.BtnCmd cmdHider;
-		private Bar.BtnCmd cmdPauser;
+		public Bar.BtnCmd cmdPauser;
 		//private Bar.BtnCmd cmdGraphic;
-		private Bar.BtnCmd cmdFlashEnable;
-		private Bar.BtnCmd cmdAutoCurrentVersion;
+		public Bar.BtnCmd cmdFlashEnable;
+		public Bar.BtnCmd cmdShowTomato;
+		public Bar.BtnCmd cmdPauseTomato;
+		public Bar.BtnCmd cmdAutoCurrentVersion;
 
-		private Bar.BtnImage logo;
+		public Bar.BtnImage logo;
 
 		public void 更新饼图()
 		{
@@ -41,8 +43,25 @@ namespace Inst.UI.Layout
 				Program.frmMain.ui.banner.Offset(0, 0, 0, 0);
 			}
 		}
+		private Button cmdUAC;
 		public MenuPanel()
 		{
+			if (!Program.CheckAdminUAC())
+			{
+				cmdUAC = new Button
+				{
+					Location = new System.Drawing.Point(0, 300),
+					Size = new System.Drawing.Size(123, 24),
+					TabIndex = 0,
+					Text = "权限未开启",
+					UseVisualStyleBackColor = true,
+					FlatStyle = FlatStyle.System,
+					Parent = this,
+				};
+				cmdUAC.Click += (x, xx) => { Program.RunAsAdministrator(); };
+				Program.SetControlUACFlag(cmdUAC);
+
+			}
 			this.BackColor = System.Drawing.Color.FromArgb(255, 50, 50, 50);
 			Font = new System.Drawing.Font("微软雅黑", 12);
 			
@@ -59,6 +78,9 @@ namespace Inst.UI.Layout
 			//}
 			cmdHider = new Bar.BtnCmd((x) => {
 				Program.frmMain.ui.ExpandMenu(false);
+				Program.frmMain.ui.clock.Visible = false;
+				Program.frmMain.ui.clock.隐藏();
+				Program.frmMain.ui.menuPanel.cmdShowTomato.StateIsON = true;
 				更新饼图();
 
 		})
@@ -99,7 +121,29 @@ namespace Inst.UI.Layout
 				Parent = this,
 				StateIsON=!Program.UsedFlash
 			};
+			cmdShowTomato = new Bar.BtnCmd((x) => {
+				Program.frmMain.ui.HideAll(!cmdShowTomato.StateIsON);
+				this.OnResize(EventArgs.Empty);
+			})
+			{
+				Text = "打开番茄|关闭番茄",
+				Image = Resources.番茄,
+				Font = this.Font,
+				Parent = this,
+				StateIsON = true
+			};
+			cmdPauseTomato = new Bar.BtnCmd((x) => {
+				Program.frmMain.ui.clock.Pause =!Program.frmMain.ui.clock.Pause;
+			})
+			{
+				Parent = this,
+				Text = "暂停番茄|继续番茄",
+				Image = Resources.番茄暂停,
+				StateIsON=true,
+				Font=this.Font
+			};
 			cmdAutoCurrentVersion = new Bar.BtnCmd((x) => {
+				if (!Program.CheckAdminUAC()) Program.RunAsAdministrator();
 				Program.AutoCurrentVersion = !cmdAutoCurrentVersion.StateIsON;
 			})
 			{
@@ -110,15 +154,33 @@ namespace Inst.UI.Layout
 				Parent = this,
 				StateIsON = !Program.AutoCurrentVersion
 			};
-
+			
 			SelectQueryDay = new Bar.BtnCmd[4];
-			SelectQueryDay[0] = new Bar.BtnCmd((x) => { Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString(); }) {Parent=this,Font=this.Font,Text="今天",Image=Resources.单天 };
-			SelectQueryDay[1] = new Bar.BtnCmd((x) => { Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString(); }) { Parent = this, Font = this.Font, Text = "昨天", Image = Resources.昨天 };
+			SelectQueryDay[0] = new Bar.BtnCmd((x) => {
+				Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString();
+				SwitchButton(0);
+			}) {Parent=this,Font=this.Font,Text="今天",Image=Resources.单天 };
+			SelectQueryDay[1] = new Bar.BtnCmd((x) => {
+				Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString();
+				SwitchButton(1);
+			}) { Parent = this, Font = this.Font, Text = "昨天", Image = Resources.昨天 };
 			SelectQueryDay[2] = new Bar.BtnCmd((x) => {
 				var date = InputBox.ShowInputBox("", "请按照格式输入日期", DateTime.Now.Date.ToShortDateString());
-				Program.QueryingDay = DataCore.DayStamp(Convert.ToDateTime(date)).ToString();
+				try
+				{
+					Program.QueryingDay = DataCore.DayStamp(Convert.ToDateTime(date)).ToString();
+					SwitchButton(2);
+				}
+				catch (Exception ex)
+				{
+					
+				}
+				
 			}) { Parent = this, Font = this.Font, Text = "其他..", Image = Resources.日期 };
-			SelectQueryDay[3] = new Bar.BtnCmd((x) => { Program.QueryingDay = "SumDay"; }) { Parent = this, Font = this.Font, Text = "总计", Image = Resources.总计 };
+			SelectQueryDay[3] = new Bar.BtnCmd((x) => {
+				Program.QueryingDay = "SumDay";
+				SwitchButton(3);
+			}) { Parent = this, Font = this.Font, Text = "总计", Image = Resources.总计 };
 
 			logo = new Bar.BtnImage((x) => { }) {
 				Parent = this,
@@ -127,37 +189,60 @@ namespace Inst.UI.Layout
 			};
 			//菜单下方的控件将不显示左侧栏目
 			menu.Parent = this;
-			
+			SwitchButton(3);
 		}
+		private int nowFocusIndex = 0;
+		public void SwitchButton(int newIndex)
+		{
+			SelectQueryDay[nowFocusIndex].DeactiveColor  = Color.FromArgb(255, 50, 50, 50);
+			SelectQueryDay[nowFocusIndex].ActiveColor = Color.FromArgb(255, 124, 165, 199);
+			nowFocusIndex = newIndex;
+			SelectQueryDay[nowFocusIndex].DeactiveColor = Program.NowDateIsValid ? Color.FromArgb(255, 124, 165, 199):Color.FromArgb(255,139,139,139);
+			SelectQueryDay[nowFocusIndex].ActiveColor = Color.FromArgb(255, 124, 165, 199);
+
+		}
+
 		public Bar.BtnCmd[] SelectQueryDay;
 		protected override void OnResize(EventArgs e)
 		{
 			menu.DBounds = new System.Drawing.Rectangle(0,0,(int)(Parent.Width * 0.03),(int)(Parent.Height));
-
+			float spaceForTomatoPos=cmdShowTomato.StateIsON?0: 0.05f;
 			if (Program.frmMain.ui.menuPanel.menu.expandMenu)
 			{
 				logo.SetLayoutPos(0, 0.05f, 1, 0.2f);
+				if (cmdUAC != null)
+				{
+					cmdUAC.Visible = true;
+					cmdUAC.Left = (int)((Width - cmdUAC.Width));
+					cmdUAC.Top = (int)(Height - cmdUAC.Height);
+				}
 			}
 			else
 			{
+				if (cmdUAC != null)
+				{
+					cmdUAC.Visible = false;
+				}
 				logo.SetLayoutPos(1f, 0.05f, 1, 0.2f);
 			}
 
-			cmdHider.SetLayoutPos(0, 0.15f, 1, 0.05f);
-			cmdPauser.SetLayoutPos(0, 0.201f, 1, 0.05f);
-			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.05f);
-			cmdFlashEnable.SetLayoutPos(0, 0.252f, 1, 0.05f);
-			cmdAutoCurrentVersion.SetLayoutPos(0, 0.304f, 1, 0.05f);
+			cmdHider.SetLayoutPos(0, 0.15f, 1, 0.052f);
+			cmdPauser.SetLayoutPos(0, 0.2f, 1, 0.052f);
+			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.052f);
+			cmdFlashEnable.SetLayoutPos(0, 0.25f, 1, 0.052f);
+			cmdShowTomato.SetLayoutPos(0, 0.3f, 1, 0.052f);
+			cmdPauseTomato.SetLayoutPos(cmdShowTomato.StateIsON ? -1 : 0, 0.35f, 1, 0.052f);
+			cmdAutoCurrentVersion.SetLayoutPos(0, 0.35f+spaceForTomatoPos, 1, 0.052f);
 
 
 			for (int i = 0; i < 4; i++)
 			{
 				if (SelectQueryDay[i] != null)
-					SelectQueryDay[i].SetLayoutPos(0, 0.38f + 0.052f * i, 1, 0.05f);
+					SelectQueryDay[i].SetLayoutPos(0, 0.43f + 0.05f * i + spaceForTomatoPos, 1, 0.052f);
 			}
 			//avatarNowSize = avatarNowSize * 0.8f + (menu.expandMenu ? 0.1f : 0.2f);
 
-			//if (menu.expandMenu )
+			//if (menu.expandMenu )7
 			//{
 			//	for(int i=0;i<3;i++)
 			//		ShowUserInfoOfDay[i].SetLayoutPos(0.51f, 0.05f*i+0.08f, 0.5f, 0.05f);

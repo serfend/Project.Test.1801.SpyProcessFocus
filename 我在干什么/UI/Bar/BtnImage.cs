@@ -23,9 +23,9 @@ namespace Inst.UI.Bar
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			if(Image==null)return;
-			float width = Height*Image.Width / Image.Height;
+			int width = (int)(Height * Image.Width / Image.Height);
 			e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-			e.Graphics.DrawImage(Image,new RectangleF(Center?(Width-width)*0.5f:(Width - width), 0,width,Height));
+			e.Graphics.DrawImage(Image,new Rectangle((int)(Center ? (Width - width) * 0.5 : (Width - width)), 0,width,Height));
 		}
 	}
 }

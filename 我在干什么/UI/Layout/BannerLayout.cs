@@ -39,8 +39,10 @@ namespace Inst.UI.Layout
 		}
 		private Image GetRandomBanner()
 		{
-			var index = new Random().Next(1, 3);
-			switch (index)
+			var bannerIndex = Program.AppSetting.In("Setting").In("Banner");
+			var index = (Convert.ToInt32(bannerIndex.GetInfo("lastIndex", "1")) + 1)%3;
+			bannerIndex.SetInfo("lastIndex", index);
+			switch (index+1)
 			{
 				case 1:return Properties.Resources.banner1;
 				case 2: return Properties.Resources.banner2;

@@ -12,7 +12,8 @@ namespace Inst.Util
 
 		private Reg ProcessSetting;//进程的存储数据
 		private ApplicationInfomations appInfo;
-		public string ProcessName { get;  set; }
+		public string FilePath { get; set; }
+		public string ProcessAliasName { get;  set; }
 		public DateTime StartTime { get;  set; }
 		public string ModuleName { get;  set; }
 		public string MainWindowTitle { get;  set; }
@@ -26,8 +27,20 @@ namespace Inst.Util
 		{
 			this.parent = parent;
 			this.MainWindowTitle = MainWindowTitle;
-			this.ProcessName = ProcessName == "ApplicationFrameHost" ? MainWindowTitle : ProcessName;
-
+			this.ProcessAliasName = (ProcessName == "ApplicationFrameHost" ? MainWindowTitle : ProcessName);
+			//Console.WriteLine(this.ProcessName+":"+ProcessName + ","+ MainWindowTitle);
+			if (parent != null)
+			{
+				try
+				{
+					this.FilePath = parent.MainModule.FileName;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
+			}
+			
 			record = new List<RecordTime>();
 			ProcessSetting = Program.AppSetting.In("Main").In("Data").In(ProcessName);
 		}
@@ -41,7 +54,7 @@ namespace Inst.Util
 		{
 			get
 			{
-				return remarkName ?? (remarkName = ProcessSetting.GetInfo("RemarkName", this.ProcessName));
+				return remarkName ?? (remarkName = ProcessSetting.GetInfo("RemarkName", this.ProcessAliasName));
 			}
 			set
 			{
@@ -56,8 +69,8 @@ namespace Inst.Util
 			nowFocus = new RecordTime() { Begin = System.Environment.TickCount, SwitchFrom = switchFrom };
 			LastFocus = nowFocus.Begin;
 			record.Add(nowFocus);
-			Program.ProcessData.AppRunning(this.ProcessName);
-			Program.ProcessData.AppAttachRelate(this.ProcessName, switchFrom);
+			Program.ProcessData.AppRunning(this.ProcessAliasName);
+			Program.ProcessData.AppAttachRelate(this.ProcessAliasName, switchFrom);
 			AnyDataRefresh = true;
 		}
 		public void End()
@@ -66,7 +79,7 @@ namespace Inst.Util
 			nowFocus.End = System.Environment.TickCount;
 			LastLostFocus = nowFocus.End;
 			sumUsedTime = SumUsedTime(true);
-			Program.ProcessData.AppWasteTimeAttach(this.ProcessName, nowFocus.End - nowFocus.Begin);
+			Program.ProcessData.AppWasteTimeAttach(this.ProcessAliasName, nowFocus.End - nowFocus.Begin);
 			AnyDataRefresh = true;
 		}
 
@@ -84,7 +97,7 @@ namespace Inst.Util
 
 		public string[] GetItem()
 		{
-			return new string[] { this.ProcessName + ":" + this.MainWindowTitle, this.RemarkName, SpyerProcess.GetMillToString(LastFocus), SpyerProcess.GetMillToString(LastLostFocus), SpyerProcess.GetMillToString(SumUsedTime()) };
+			return new string[] { this.ProcessAliasName + ":" + this.MainWindowTitle, this.RemarkName, SpyerProcess.GetMillToString(LastFocus), SpyerProcess.GetMillToString(LastLostFocus), SpyerProcess.GetMillToString(SumUsedTime()) };
 		}
 		public IEnumerator<RecordTime> GetEnumerator()
 		{
