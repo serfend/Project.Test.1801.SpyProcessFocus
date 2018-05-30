@@ -64,7 +64,7 @@ namespace Inst.UI.Layout
 					
 				RestTime = Convert.ToInt32(InputBox.ShowInputBox("重置","休息时间",RestTime.ToString()));
 				WorkTime = Convert.ToInt32(InputBox.ShowInputBox("重置", "工作时间", WorkTime.ToString()));
-				pauseTimeLeft= targetNowTime = Convert.ToInt32(InputBox.ShowInputBox("重置", "当前时间", targetNowTime.ToString()));
+				pauseTimeLeft= targetNowTime = (float)Convert.ToDouble(InputBox.ShowInputBox("重置", "当前时间", targetNowTime.ToString()));
 					nowRoundIndex = 1;
 				Pause = true;
 			}

@@ -78,6 +78,7 @@ namespace Inst.UI
 			TargetY += e.Delta;
 			base.OnMouseWheel(e);
 		}
+
 		private bool mouseIsDown = false;
 		private float nowY=0,targetY=0;
 
