@@ -11,7 +11,7 @@ namespace Inst.UI.Bar
 	{
 		public BtnExit(Action<Control> CallBack):base(CallBack)
 		{
-			MovingSpeed = 0.05f;
+			MovingSpeed = 0.1f;
 			ForeColor = Color.PaleVioletRed;
 		}
 		public override bool RefreshLayout()
@@ -25,7 +25,7 @@ namespace Inst.UI.Bar
 					nowAngle = active ? ActiveAngle : deActiveAngle;
 					nowLen = active ? ActiveLen : deActiveLen;
 				}
-					this.Invalidate();
+				this.Invalidate();
 				return true;
 			}
 			return false;

@@ -143,6 +143,16 @@ namespace Inst.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 图片加载失败 {
+            get {
+                object obj = ResourceManager.GetObject("图片加载失败", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 开机启动 {
             get {
                 object obj = ResourceManager.GetObject("开机启动", resourceCulture);

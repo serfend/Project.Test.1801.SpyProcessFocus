@@ -11,7 +11,7 @@ namespace Inst.UI.Bar
 	{
 		public BtnMenu(Action<Control> CallBack) : base(CallBack)
 		{
-			MovingSpeed = 0.05f;
+			MovingSpeed = 0.3f;
 			ForeColor = Color.White;
 			BackColor = Color.FromArgb(255, 100, 100, 100);
 		} 

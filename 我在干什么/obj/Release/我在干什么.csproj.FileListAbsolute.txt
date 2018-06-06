@@ -8,3 +8,5 @@ D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProces
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.Form1.resources
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.exe
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.pdb
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\bin\Release\Inst.exe.config
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Release\Inst.InfoShower.resources

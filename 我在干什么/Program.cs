@@ -21,15 +21,18 @@ namespace Inst
 		[STAThread]
 		static void Main()
 		{
+
 			if (CheckMutiProcess()) { return; };
 			ProgramName = "Inst";
 			QueryingDay = "SumDay";
 			NowDateIsValid = true;
+
 			Program.UsedFlash = Program.AppSetting.In("Setting").GetInfo("UsedFlash", "1") == "1";
+
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			frmMain = new Form1();
-			Application.Run(frmMain);
+			Application.Run(new InfoShower() { Title="2333",Info="这是一个测试的推送消息\n此消息的第二行在此处显示，并自动进行换行。"});
 		}
 
 		internal static void HideProgram()
@@ -147,15 +150,20 @@ namespace Inst
 		private static int UACnow=0;
 		public static bool CheckAdminUAC()
 		{
-			if (UACnow != 0)
+			if (Environment.OSVersion.Version.Major >= 6)
 			{
-				return UACnow == 1;
+				if (UACnow != 0)
+				{
+					return UACnow == 1;
+				}
+				WindowsIdentity identity = WindowsIdentity.GetCurrent();
+				WindowsPrincipal principal = new WindowsPrincipal(identity);
+				bool UAC = principal.IsInRole(WindowsBuiltInRole.Administrator);
+				UACnow = UAC ? 1 : -1;
+				return UAC;
 			}
-			WindowsIdentity identity = WindowsIdentity.GetCurrent();
-			WindowsPrincipal principal = new WindowsPrincipal(identity);
-			bool UAC= principal.IsInRole(WindowsBuiltInRole.Administrator);
-			UACnow = UAC ? 1 : -1;
-			return UAC;
+			else return true;
+
 		}
 
 		[DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]

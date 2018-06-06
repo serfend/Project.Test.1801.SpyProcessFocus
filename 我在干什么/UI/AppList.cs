@@ -13,10 +13,16 @@ namespace Inst.UI
 		public AppList()
 		{
 			onResize = new OnResizeDelegate(OnResizeRaise);
+			onMouseWheel = new OnMouseWheeling(OnMouseWheelRaise);
 		}
+
+		private void OnMouseWheelRaise(MouseEventArgs e)
+		{
+			OnMouseWheel(e);
+		}
+
 		public void Add(App app)
 		{
-			app.layoutParent = this;
 			app.Parent = this;
 			app.Index=app.RawIndex = list.Count;
 			list.Add( app);
@@ -25,8 +31,11 @@ namespace Inst.UI
 		{
 			if (!mouseIsDown)
 			{
-				if (targetY >10)
-					targetY = 0;
+				if (targetY > 10)
+				{
+					TargetY = 0;
+				}
+				
 				else
 				{
 					if(Controls.Count > 0)
@@ -37,7 +46,10 @@ namespace Inst.UI
 						{
 							var firstAppTop = Controls[0].Top;
 							if(firstAppTop < 0)
-								targetY += (int)(0.01 * Math.Pow((Height - lastAppBottom), 1.2)) + 1;
+							{
+								TargetY += (int)(0.01 * Math.Pow((Height - lastAppBottom), 1.2)) + 1;
+							}
+								
 						}
 					}
 					
@@ -52,10 +64,20 @@ namespace Inst.UI
 		}
 		private delegate void OnResizeDelegate();
 		private OnResizeDelegate onResize;
+		private int scaleMouse = 2;
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			MouseIsDown = true;
-			lastY = e.Location.Y;
+			if (e.X > Width * 0.98)
+			{
+				var y = ScollBarControlPosY;
+				if (e.Y > y && e.Y < y + 0.02 * Width)
+					scaleMouse = -1;
+				else if (e.Y <= y) TargetY += 500;
+				else TargetY -= 500;
+			}
+			else { scaleMouse = 2; }
+			lastY = e.Y;
 			base.OnMouseDown(e);
 		}
 		protected override void OnMouseUp(MouseEventArgs e)
@@ -63,18 +85,31 @@ namespace Inst.UI
 			MouseIsDown = false;
 			base.OnMouseUp(e);
 		}
-		private int lastY;
+		public int lastY;
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			if (MouseIsDown)
 			{
-				TargetY += (e.Location.Y - lastY)*5;
+				if (scaleMouse == -1)
+				{
+					scollBarY = e.Y / (float)Height;
+					TargetY = NowY = -scollBarY*ScollBarMaxHeight();
+				}
+				else
+				{
+					TargetY += (e.Y - lastY) * scaleMouse;
+				}
+				
+				lastY = e.Y;
 				this.OnResize(EventArgs.Empty);
 			}
 			base.OnMouseMove(e);
 		}
+		public delegate void OnMouseWheeling(MouseEventArgs e);
+		public OnMouseWheeling onMouseWheel;
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
+			//MessageBox.Show("滚动检查");
 			TargetY += e.Delta;
 			base.OnMouseWheel(e);
 		}
@@ -84,11 +119,16 @@ namespace Inst.UI
 
 		public bool MouseIsDown { get => mouseIsDown; set => mouseIsDown = value; }
 		public float NowY { get => nowY; set => nowY = value; }
-		public float TargetY { get => targetY; set => targetY = value; }
+		public float TargetY { get => targetY; set {
+				targetY = value;
+				scollBarY = -targetY / ScollBarMaxHeight();
+				if (scollBarY < 0) scollBarY = 0;
+			} }
 
 		public int lastHdlFocusRawIndex;
 		private void OnResizeRaise()
 		{
+			//Console.WriteLine("OnResize()");
 			OnResize(EventArgs.Empty);
 		}
 		protected override void OnResize(EventArgs e)
@@ -100,10 +140,11 @@ namespace Inst.UI
 				if (Controls[i] is App app)
 				{
 					app.DBounds=new System.Drawing.Rectangle(0,
-					lastY+(int)(height*1.05*app.Index) ,Width, height);
+					lastY+(int)(height*1.05*app.Index) ,(int)(Width * 0.98), height);
 					//lastY += (int)(height*1.05);
 				}
 			}
+			this.Invalidate();
 		}
 		public void RefreshData(ProcessGroup process)
 		{
@@ -119,6 +160,7 @@ namespace Inst.UI
 					app.TimeLine.TodayTime = (Program.QueryingDay == "SumDay" ? data.SumWasteTime : data.GetDayWasteTime(Program.QueryingDay))/1000;
 
 					if (app.TimeLine.TodayTime > maxValue) maxValue = app.TimeLine.TodayTime;
+					app.AppIsActive = p.AppIsActive;
 					if (!p.AnyDataRefresh) continue;
 					p.AnyDataRefresh = false;
 					
@@ -138,6 +180,7 @@ namespace Inst.UI
 				{
 					App newApp = new App(p.ProcessAliasName) {
 						Font = this.Font,
+						layoutParent=this
 					};
 					newApp.Logo.Icon = p.AppInfo.Icon;
 					newApp.Logo.appPath = p.FilePath;
@@ -151,7 +194,7 @@ namespace Inst.UI
 					//app.Frequency
 				}
 			}
-			SortControls(maxValue);
+			anyRefresh|=SortControls(maxValue);
 			if (anyRefresh) this.OnResizeRaise();
 		}
 
@@ -161,7 +204,7 @@ namespace Inst.UI
 		}
 
 		private int lastAppIndex;
-		private void SortControls(int maxValue)
+		private bool SortControls(int maxValue)
 		{
 		;
 			int maxIndex = 0;
@@ -190,7 +233,7 @@ namespace Inst.UI
 					lastAppIndex = i;
 				}
 			}
-			if (anyRefresh) this.OnResizeRaise();
+			return anyRefresh;
 		}
 
 		private int AppValue(int index)
@@ -201,6 +244,23 @@ namespace Inst.UI
 		{
 			return ((App)Controls[index]).Index;
 		}
-
+		private float ScollBarMaxHeight()
+		{
+			return Controls.Count * 210;//实际移动距离
+		}
+		private float scollBarY = 0;//当前滑块百分比
+		private float ScollBarControlPosY { get => (Height * 0.95f - 10) * scollBarY; }
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			//Console.WriteLine(NowY);
+			var y = ScollBarControlPosY;
+			var size = (Height * 0.95f - 10);
+			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGray, Width * 0.98f, 0, Width * 0.02f, size);
+			if(y>size-Width*0.02f)
+				e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, Width * 0.98f, y, Width * 0.02f, size-y);
+			else
+			e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, Width * 0.98f, y, Width*0.02f, Width * 0.02f);
+			//base.OnPaint(e);
+		}
 	}
 }

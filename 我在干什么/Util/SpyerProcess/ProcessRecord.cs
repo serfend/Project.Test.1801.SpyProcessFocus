@@ -63,8 +63,10 @@ namespace Inst.Util
 			}
 		}
 		public bool AnyDataRefresh;
+		public bool AppIsActive = false;
 		public void Begin(string switchFrom)
 		{
+			AppIsActive = true;
 			switchFrom = switchFrom ?? "#null#";
 			nowFocus = new RecordTime() { Begin = System.Environment.TickCount, SwitchFrom = switchFrom };
 			LastFocus = nowFocus.Begin;
@@ -76,6 +78,7 @@ namespace Inst.Util
 		public void End()
 		{
 			if (nowFocus == null) return;
+			AppIsActive = false;
 			nowFocus.End = System.Environment.TickCount;
 			LastLostFocus = nowFocus.End;
 			sumUsedTime = SumUsedTime(true);

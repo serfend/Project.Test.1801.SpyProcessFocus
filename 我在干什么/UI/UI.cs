@@ -85,7 +85,7 @@ namespace Inst.UI
 						center.RefreshLayout();
 						banner.RefreshLayout();
 						clock.RefreshLayout();
-						Thread.Sleep(10);
+						Thread.Sleep(30);
 					}
 					else
 					{
@@ -107,7 +107,7 @@ namespace Inst.UI
 			//top.SetLayoutPos(0.46f, 0.03f, 0.54f, 0.02f);
 			banner.SetLayoutPos(0.05f, 0.05f, 0.93f, 0.2f);
 			up.SetLayoutPos(0.05f, 0.3f, 0.93f, 0.26f);
-			center.SetLayoutPos(0.05f, 0.56f, 0.93f, 0.44f);
+			center.SetLayoutPos(0.05f, 0.56f, 0.95f, 0.44f);
 			menuPanel.SetLayoutPos(0, 0, 0.03f, 1);
 			//title.SetLayoutPos(0.05f, 0, 0.4f, 0.05f);
 			clock.SetLayoutPos(0.2f, 0.1f, 0.5f, 0);

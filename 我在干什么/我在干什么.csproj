@@ -25,6 +25,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,6 +79,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InfoShower.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InfoShower.Designer.cs">
+      <DependentUpon>InfoShower.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\App.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -184,6 +191,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InfoShower.resx">
+      <DependentUpon>InfoShower.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -195,6 +205,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Util\Input\InputBox.resx" />
+    <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -215,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2.ico" />
+    <None Include="Resources\图片加载失败.png" />
+    <None Include="Resources\图片无法显示.jpg" />
     <None Include="Resources\番茄暂停.png" />
     <None Include="Resources\番茄.png" />
     <None Include="Resources\defaultAvatar.png" />

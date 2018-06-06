@@ -17,7 +17,7 @@ namespace Inst.UI.Layout
 		public UpLayout()
 		{
 
-			BackColor = 饼图.BackColor = System.Drawing.Color.FromArgb(255, 195, 195, 195);
+			BackColor = 饼图.BackColor = System.Drawing.Color.FromArgb(255, 235, 235, 245);
 			饼图.Parent = this;
 			
 			饼图.Font = new System.Drawing.Font("微软雅黑", 10);

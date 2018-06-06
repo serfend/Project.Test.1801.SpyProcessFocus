@@ -25,13 +25,12 @@ namespace Inst
 			InitializeComponent();
 			_process = new ProcessGroup();
 			ui = new UI.UI(this);
-
 			InfoShow.DoubleClick += InfoShow_DoubleClick;
 			InfoShow.Icon = this.Icon;
 			InfoShow.BalloonTipClicked += Program.ResponseNoticeClick;
 			Program.Running = true;
 
-			var bound=RegUtil.GetFormPos(this);
+			var bound = RegUtil.GetFormPos(this);
 			this.Load += (x, xx) => { SetBounds(bound[0], bound[1], bound[2], bound[3]); };
 		}
 
@@ -90,7 +89,9 @@ namespace Inst
 				if (process.ProcessName == "Idle") continue;
 				var now =new ProcessRecord( process.ProcessName, process.MainWindowTitle, process);
 				var nowTime = (int)(DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
+				
 				if (lastRunAppName == now.ProcessAliasName) {
+					lastRunAppTimeRecord = Environment.TickCount;
 					if (thisAppRuntime>0&&nowTime - thisAppRuntime > nextTipTime)
 					{
 						int h = nextTipTime / 3600;
@@ -120,6 +121,7 @@ namespace Inst
 					lastRunAppTimeRecord = Environment.TickCount;
 					nextTipTime = 60;
 					thisAppRuntime = nowTime;
+					Console.WriteLine("目标" + lastRunAppName);
 				}
 
 				//Console.WriteLine(now.ProcessName);
@@ -127,6 +129,11 @@ namespace Inst
 				_bckProcessRecord.ReportProgress(0);
 			} while (!_bckProcessRecord.CancellationPending);
 
+		}
+		protected override void OnMouseWheel(MouseEventArgs e)
+		{
+			ui.center.apps.onMouseWheel(e);
+			//base.OnMouseWheel(e);
 		}
 		public void BtnOutPutToExcel_Click()
 		{

@@ -19,23 +19,42 @@ namespace Inst.UI.Layout
 			var userBannerImageFilePath = userAvatarFile.GetInfo("Banner", null);
 			avatar = new Bar.BtnAvatar((x) =>
 			{
+				bool success = false;
 				var path = SetImageNew(userAvatarFile, "Default", "更换头像");
-				avatar.Avatar = path == null ? Properties.Resources.defaultAvatar : new Bitmap(path);
+				avatar.Avatar = path == null|| path.Length==0?Properties.Resources.defaultAvatar :  LoadPathImage(path,out success);
+				if (!success) userAvatarFile.SetInfo("Default", "");
+				avatar.Invalidate();
 				//TODO 可能可以显示下用户信息
 			})
 			{
-				Avatar = userAvatarFilePath == null ? Properties.Resources.defaultAvatar : new Bitmap(userAvatarFilePath),
+				Avatar = userAvatarFilePath == null || userAvatarFilePath.Length == 0 ? Properties.Resources.defaultAvatar : LoadPathImage(userAvatarFilePath,out bool s),
 				Parent = this,
 				BackColor = this.BackColor
 			};
 			banner = new Bar.BtnImage((x) => {
-				var path= SetImageNew(userAvatarFile, "Banner");
-				banner.Image = path == null ? GetRandomBanner (): new Bitmap(path);
+				var path = SetImageNew(userAvatarFile, "Banner");
+				bool succress = false;
+				banner.Image = path == null || path.Length == 0 ? GetRandomBanner() : LoadPathImage(path, out succress);
+				if (!succress) userAvatarFile.SetInfo("Banner", "");
+				banner.Invalidate();
 			}) {
-				Image = userBannerImageFilePath == null ? GetRandomBanner (): new Bitmap(userBannerImageFilePath),
+				Image = userBannerImageFilePath == null|| userBannerImageFilePath.Length==0 ? GetRandomBanner (): LoadPathImage(userBannerImageFilePath,out bool ss),
 				Parent = this,
 				BackColor = this.BackColor
 			};
+		}
+		private Image LoadPathImage(string path,out bool success)
+		{
+			try
+			{
+				success = true;
+				return new Bitmap(path);
+			}
+			catch (Exception ex)
+			{
+				success = false;
+				return Properties.Resources.图片加载失败;//TODO 图片无法显示.png	
+			}
 		}
 		private Image GetRandomBanner()
 		{
@@ -67,9 +86,10 @@ namespace Inst.UI.Layout
 				ofd.CheckFileExists = true;
 				ofd.CheckPathExists = true;
 				ofd.Multiselect = false;
-				reg.SetInfo(name, ofd.FileName);
+				
 				if (ofd.ShowDialog() == DialogResult.OK)
 				{
+					reg.SetInfo(name, ofd.FileName);
 					return ofd.FileName;
 				}
 				else return null;

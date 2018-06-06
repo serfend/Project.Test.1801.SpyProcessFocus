@@ -26,10 +26,11 @@ namespace Inst.UI
 		private Bar.BtnNormal sumUsedCountLine;
 
 		private Bar.BtnNormal relateAppLabel;
+
+		public bool AppIsActive = false;
 		public AppComponent.AppRelate RelateApp;
 
 		public AppComponent.UseFrequency frequency;
-		public AppList layoutParent;
 		public int RawIndex;
 		public int Index;
 		public App(string name)
@@ -98,28 +99,32 @@ namespace Inst.UI
 			frequency.DBounds = new Rectangle(Width - 500, 42, 490, 150);
 			base.OnResize(e);
 		}
-		protected override void OnMouseDown(MouseEventArgs e)
+		private int lastY;
+		public AppList layoutParent;
+		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			layoutParent.MouseIsDown = true;
-			lastY = e.Location.Y;
-			base.OnMouseDown(e);
+			layoutParent.TargetY += e.Delta;
+			base.OnMouseWheel(e);
 		}
-
+		protected override void OnMouseMove(MouseEventArgs e)
+		{
+			if (layoutParent.MouseIsDown)
+			{
+				layoutParent.TargetY +=(e.Y  - layoutParent.lastY)*2;
+				layoutParent.lastY = e.Y;
+			}
+			base.OnMouseMove(e);
+		}
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			layoutParent.MouseIsDown = false;
 			base.OnMouseUp(e);
 		}
-		private int lastY;
-		protected override void OnMouseMove(MouseEventArgs e)
+		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			if (layoutParent.MouseIsDown)
-			{
-				layoutParent.TargetY += (e.Location.Y - lastY) * 5;
-				lastY = e.Location.Y;
-				this.OnResize(EventArgs.Empty);
-			}
-			base.OnMouseMove(e);
+			lastY = e.Y;
+			layoutParent.MouseIsDown = true;
+			base.OnMouseDown(e);
 		}
 
 		public string ProcessName { get => name; set {
@@ -134,6 +139,7 @@ namespace Inst.UI
 		public BtnNormal SumUsedCountLine { get => sumUsedCountLine; set => sumUsedCountLine = value; }
 		
 		private Color boardColor = Color.FromArgb(0, 0, 0, 0);
+		private Color boardActiveColor = Color.FromArgb(0, 0, 0, 255);
 		private Pen pen;
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -142,10 +148,10 @@ namespace Inst.UI
 			//程序名称                                                  
 			//展开后展示最近使用（略）        频率图表                展开/收回 按钮
 			//base.OnPaint(e);
-			int shadowWidth = 5;
+			int shadowWidth = 10;
 			for (int i = 0; i < shadowWidth; i++)
 			{
-				pen.Color = Color.FromArgb((255 / 10 / shadowWidth) * i, boardColor);
+				pen.Color = Color.FromArgb((255 / shadowWidth / shadowWidth) * i, AppIsActive?boardActiveColor :boardColor);
 				GDIShadow.DrawRoundRectangle(e.Graphics, pen, new Rectangle(i, i, Width - (2 * i) - 1, Height - (2 * i) - 1), 8);
 			}
 			//e.Graphics.FillRectangle(Brushes.Aquamarine,0, 0, Bounds.Width,Bounds.Height);

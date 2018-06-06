@@ -1,4 +1,7 @@
-﻿namespace Inst
+﻿using Inst.Properties;
+using System.Windows.Forms;
+
+namespace Inst
 {
 	partial class Form1
 	{
@@ -49,7 +52,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Form1";
-			this.Text = "时间掌控大师";
+			this.Text = "Inst";
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);

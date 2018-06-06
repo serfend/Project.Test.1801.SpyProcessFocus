@@ -61,11 +61,18 @@ namespace Inst.UI.Layout
 			Pause = !Pause;
 			if(Pause)
 			if (MessageBox.Show(Program.frmMain, "重新设置番茄","重置确认",MessageBoxButtons.OKCancel,MessageBoxIcon.Question,MessageBoxDefaultButton.Button2) ==DialogResult.OK) {
-					
-				RestTime = Convert.ToInt32(InputBox.ShowInputBox("重置","休息时间",RestTime.ToString()));
-				WorkTime = Convert.ToInt32(InputBox.ShowInputBox("重置", "工作时间", WorkTime.ToString()));
-				pauseTimeLeft= targetNowTime = (float)Convert.ToDouble(InputBox.ShowInputBox("重置", "当前时间", targetNowTime.ToString()));
-					nowRoundIndex = 1;
+
+					try
+					{
+						RestTime = Convert.ToInt32(InputBox.ShowInputBox("重置", "休息时间", RestTime.ToString()));
+						WorkTime = Convert.ToInt32(InputBox.ShowInputBox("重置", "工作时间", WorkTime.ToString()));
+						pauseTimeLeft = targetNowTime = (float)Convert.ToDouble(InputBox.ShowInputBox("重置", "当前时间", targetNowTime.ToString()));
+						nowRoundIndex = 1;
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message);
+					}
 				Pause = true;
 			}
 			
