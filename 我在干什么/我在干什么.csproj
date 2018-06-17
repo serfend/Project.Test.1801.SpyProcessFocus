@@ -79,6 +79,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionBase.cs" />
+    <Compile Include="DateSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DateSelector.Designer.cs">
+      <DependentUpon>DateSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="InfoShower.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,11 +190,16 @@
     <Compile Include="Util\Input\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Util\Output\OptShow.cs" />
     <Compile Include="Util\reg.cs" />
     <Compile Include="Util\SpyerProcess\RecordTime.cs" />
     <Compile Include="Util\SpyerProcess\ProcessRecord.cs" />
     <Compile Include="Util\SpyerProcess\ProcessGroup.cs" />
+    <Compile Include="Util\SpyerProcess\ShellExcute.cs" />
     <Compile Include="Util\SpyerProcess\SpyerProcess.cs" />
+    <EmbeddedResource Include="DateSelector.resx">
+      <DependentUpon>DateSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2.ico" />
+    <None Include="Resources\DND.png" />
     <None Include="Resources\图片加载失败.png" />
     <None Include="Resources\图片无法显示.jpg" />
     <None Include="Resources\番茄暂停.png" />

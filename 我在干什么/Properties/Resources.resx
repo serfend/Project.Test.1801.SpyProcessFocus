@@ -169,4 +169,7 @@
   <data name="图片加载失败" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\图片加载失败.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DND" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DND.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
