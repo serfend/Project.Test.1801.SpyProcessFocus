@@ -8,3 +8,5 @@
 *.exe
 *.pdb
 *.zip
+*.cache
+*.cache
