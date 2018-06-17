@@ -17,7 +17,7 @@ namespace Inst.UI
 		public Control(Action<Control> CallBack=null):this()
 		{
 			this.CallBack = CallBack;
-			
+
 		}
 		public Control()
 		{
@@ -55,6 +55,8 @@ namespace Inst.UI
 		protected virtual void OnCallBacking()
 		{
 			CallBack?.Invoke(this);
+
+			
 		}
 		private Rectangle dBounds;
 		public Rectangle DBounds

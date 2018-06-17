@@ -19,7 +19,7 @@ namespace Inst.UI.Bar
 			ForeColor = Color.FromArgb(255,240, 255, 240);
 			BackColor = DeactiveColor;
 		}
-		public Image Image;
+		public Image ImageActive,ImageDeactive;
 		private bool expand = false;
 		private string[] StateText;
 		private string showText="";
@@ -89,7 +89,10 @@ namespace Inst.UI.Bar
 			var size = Parent.Controls[Parent.Controls.Count - 1].Width;
 
 			var top = (int)((Height - size) * 0.5);
-			if (Image != null && (AliasTextPos || !expand)) e.Graphics.DrawImage(Image, new RectangleF(0, top, size, size));//以menu为界限
+			var img = StateIsON ? ImageActive : ImageDeactive;
+			if (img == null) img = StateIsON ? ImageDeactive : ImageActive;
+			//TODO 启用默认图标
+			if (img != null && (AliasTextPos || !expand)) e.Graphics.DrawImage(img, new RectangleF(0, top, size, size));//以menu为界限
 			if (expand) {
 				//TODO 不应用固定数值 ，此处需要优化
 				

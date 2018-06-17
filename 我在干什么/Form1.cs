@@ -12,6 +12,7 @@ using Inst.Util;
 using System.Threading;
 using System.Runtime.InteropServices;
 using DotNet4.Utilities.UtilReg;
+using Inst.Util.Output;
 
 namespace Inst
 {
@@ -32,6 +33,9 @@ namespace Inst
 
 			var bound = RegUtil.GetFormPos(this);
 			this.Load += (x, xx) => { SetBounds(bound[0], bound[1], bound[2], bound[3]); };
+
+			OptShow.CallBack["ShowTomato"] = ActionBase.ShowTomato;
+			OptShow.CallBack["ExitInst"] = () => { Program.ExitProgram(); };
 		}
 
 		public void InfoShow_DoubleClick(object sender, EventArgs e)
@@ -101,10 +105,10 @@ namespace Inst
 						if (h > 1) timeStr = string.Format("{0}小时{1}分钟", h, m);
 						else if (h == 1 || m > 9) timeStr = string.Format("{0}分钟{1}秒", h * 60 + m, s);
 						else timeStr = nextTipTime+"秒";
-						Program.ShowNotice(100000, "疲劳提醒", "您已经在"+now.ProcessAliasName+"上耗费了"+timeStr+"了哦",ToolTipIcon.Info,()=> {
-							if (!Program.Running) Program.frmMain.InfoShow_DoubleClick(this,EventArgs.Empty);
-							Program.frmMain.ui.center.apps.SetFocus(now.ProcessAliasName);//用户点击时聚焦到当前
-						});
+							Program.ShowNotice(10000, "疲劳提醒", "您已经在" + now.ProcessAliasName + "上耗费了" + timeStr + "了哦", ToolTipIcon.Info, () => {
+								if (!Program.Running) Program.frmMain.InfoShow_DoubleClick(this, EventArgs.Empty);
+								Program.frmMain.ui.center.apps.SetFocus(now.ProcessAliasName);//用户点击时聚焦到当前
+							});
 						if (nextTipTime < 7200) nextTipTime = nextTipTime * 2 + rnd.Next(250, 350);
 						else {
 							nextTipTime /= 3600;
@@ -310,7 +314,27 @@ namespace Inst
 			}
 			return false;
 		}
-		
+		private bool onClosing = false;
+		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (!onClosing)
+			{
+				e.Cancel = true;
+				onClosing = true;
+				Program.Running = false;
+				var t = new Thread(()=> {
+					this.Invoke((EventHandler)delegate {
+						while (this.Opacity > 0.04)
+						{
+							this.Opacity = this.Opacity * 0.8;
+							Thread.Sleep(50);
+						}
+						this.Close();
+					});
+				});
+				t.Start();
+			}
 
+		}
 	}
 }

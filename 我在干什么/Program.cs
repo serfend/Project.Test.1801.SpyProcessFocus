@@ -8,6 +8,7 @@ using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Threading;
+using Inst.Util.Output;
 
 namespace Inst
 {
@@ -21,18 +22,19 @@ namespace Inst
 		[STAThread]
 		static void Main()
 		{
-
+			//MessageBox.Show("version:"+Environment.OSVersion.Version.Major);
 			if (CheckMutiProcess()) { return; };
 			ProgramName = "Inst";
 			QueryingDay = "SumDay";
 			NowDateIsValid = true;
 
 			Program.UsedFlash = Program.AppSetting.In("Setting").GetInfo("UsedFlash", "1") == "1";
+			
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			frmMain = new Form1();
-			Application.Run(new InfoShower() { Title="2333",Info="这是一个测试的推送消息\n此消息的第二行在此处显示，并自动进行换行。"});
+			Application.Run(frmMain);
 		}
 
 		internal static void HideProgram()
@@ -46,8 +48,11 @@ namespace Inst
 			{
 				
 				Program.AppSetting.In("Setting").SetInfo("UsedFlash", UsedFlash?"1":"0");
-				frmMain.InfoShow.Visible = false;
-				frmMain.Close();
+				frmMain.Invoke((EventHandler)delegate {
+					frmMain.InfoShow.Visible = false;
+					frmMain.Close();
+				});
+				
 				newMutex.ReleaseMutex();
 				Application.Exit();
 			}
@@ -57,10 +62,32 @@ namespace Inst
 				
 			}
 		}
-		public static void ShowNotice(int time,string title,string info,ToolTipIcon icon = ToolTipIcon.Info,Action CallBack=null)
+		public static void ShowNotice(int time,string title,string info,ToolTipIcon icon = ToolTipIcon.Info,Action CallBack=null,bool showNoticeInSystem=true)
 		{
-			frmMain.InfoShow.ShowBalloonTip(time,title,info,icon);
-			nowCallBack = CallBack;	
+			if (OnDND) return;
+			if (Environment.OSVersion.Version.Major >= 10)
+			{
+				if (showNoticeInSystem)
+				{
+					frmMain.InfoShow.ShowBalloonTip(time, title, info, icon);
+					nowCallBack = CallBack;
+				}
+				
+			}
+			try
+			{
+				Program.frmMain.Invoke((EventHandler)delegate
+				{//务必给主线程去调用
+					var f = new InfoShower() { Title = title, Info = info, ExistTime = time,ToolTip=icon };
+					f.CallBack = CallBack;
+					InfoShower.ShowOnce(f);
+				});
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+
 		}
 		private static Action nowCallBack = null;
 		public static void ResponseNoticeClick(object sender, EventArgs e)
@@ -71,6 +98,12 @@ namespace Inst
 		public static string Title = "Inst";
 		public static bool Running { set; get; }
 		public static bool UsedFlash { set; get; }
+		public static bool OnDND { set {
+				AppSetting.In("Setting").SetInfo("DND", value?"1":"0");
+			} get {
+				return AppSetting.In("Setting").GetInfo("DND", "0")=="1";
+			}
+		}
 		private static string queryingDay;
 		public static string QueryingDay { get=>queryingDay;  set {
 				if (value == queryingDay) return;

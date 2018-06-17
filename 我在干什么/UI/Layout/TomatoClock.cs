@@ -1,5 +1,6 @@
 ﻿using DotNet4.Utilities.UtilInput;
 using DotNet4.Utilities.UtilReg;
+using Inst.Util.Output;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -157,17 +158,19 @@ namespace Inst.UI.Layout
 			{
 				IsStageOne = !IsStageOne;
 				if (IsStageOne) nowRoundIndex++;
-				Program.ShowNotice(10000,"时间到啦", GetDisplayInfo(),ToolTipIcon.Warning,()=> {
-					if (!Program.Running)
-					{
-						Program.frmMain.InfoShow_DoubleClick(this,EventArgs.Empty);
-					}
-					if (!Program.frmMain.ui.clock.Visible)
-					{
-						Program.frmMain.ui.HideAll(true);
-						Program.frmMain.ui.menuPanel.Height++;
-					}
-				});
+				if (!Program.OnDND)
+				{
+					var opts = new Opt[2];
+					opts[1].infos = "确定";
+					opts[0].infos = "显示详情";
+					opts[0].CmdInfo = "ShowTomato";
+					opts[1].UColor = Color.Gray;
+					opts[0].UColor = Color.LawnGreen;
+					opts[0].DColor = Color.ForestGreen;
+					new OptShow().ShowOpt(opts,"时间到啦", GetDisplayInfo() + "#255#已结束");
+					Program.ShowNotice(10000, "时间到啦", GetDisplayInfo(), ToolTipIcon.Warning, ActionBase.ShowTomato);
+				}
+				
 				lastBeginTime =Environment.TickCount;
 				targetNowTime = 0;
 			}

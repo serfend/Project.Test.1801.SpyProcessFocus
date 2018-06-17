@@ -22,7 +22,7 @@ namespace Inst.Util
 				if (icon != null)
 				{
 					var colors = Inst.Util.Image.ImageDomainColor.PrincipalColorAnalysis(icon.ToBitmap(), 1);
-					iconMainColor = Color.FromArgb(255, Color.FromArgb(colors[0].Color));
+					iconMainColor = Color.FromArgb(255, colors[0].Color%256, (colors[0].Color/256)%256, colors[0].Color/65536);
 				}
 				else IconMainColor = Color.Gray;
 			}
@@ -41,11 +41,13 @@ namespace Inst.Util
 			this.handleApp = handleApp;
 			try
 			{
-				this.Icon = ApplicationInfomations.GetMaxIcon(handleApp.MainModule.FileName);
+				var icon = ApplicationInfomations.GetMaxIcon(handleApp.MainModule.FileName);
+				this.Icon = icon;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				this.Icon = null;
+				Console.WriteLine(ex.Message);
 			}
 			finally
 			{

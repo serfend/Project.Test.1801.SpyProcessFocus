@@ -58,7 +58,7 @@ namespace Inst.Util.Image
 					Pointer = Scan0 + Stride * Y;
 					for (X = 0; X < Width; X++)
 					{
-						Index = (Map[*Pointer] << 16) + (Map[*(Pointer + 1)] << 8) + Map[*(Pointer + 2)];
+						Index = ((Map[*Pointer]) << 16 )+ ((Map[*(Pointer + 1)])<<8) +( Map[*(Pointer + 2)] ) ;
 						if (Table[Index] == 0&&Index>10)                  //      还没有出现过该颜色
 						{
 							

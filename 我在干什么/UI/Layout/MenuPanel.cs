@@ -15,6 +15,7 @@ namespace Inst.UI.Layout
 	{
 		public LeftLayout menu = new LeftLayout();
 
+		public Bar.BtnCmd cmdDND;
 		public Bar.BtnCmd cmdHider;
 		public Bar.BtnCmd cmdPauser;
 		//private Bar.BtnCmd cmdGraphic;
@@ -64,7 +65,7 @@ namespace Inst.UI.Layout
 			}
 			this.BackColor = System.Drawing.Color.FromArgb(255, 50, 50, 50);
 			Font = new System.Drawing.Font("微软雅黑", 12);
-			
+
 			//ShowUserInfoOfDay = new Bar.BtnNormal[3];
 			//for (int i = 0; i < 3; i++)
 			//{
@@ -76,6 +77,13 @@ namespace Inst.UI.Layout
 			//		deactiveColor = System.Drawing.Color.FromArgb(255, 91, 155, 213)
 			//	};
 			//}
+			cmdDND = new Bar.BtnCmd((x) => { Program.OnDND = !cmdDND.StateIsON; }) {
+				Text="开启免打扰|关闭免打扰",
+				ImageActive = Resources.DND,
+				Font=this.Font,
+				Parent=this,
+				StateIsON=!Program.OnDND
+			};
 			cmdHider = new Bar.BtnCmd((x) => {
 				Program.frmMain.ui.ExpandMenu(false);
 				Program.frmMain.ui.clock.Visible = false;
@@ -86,7 +94,7 @@ namespace Inst.UI.Layout
 		})
 			{
 				Text = "显示图表|隐藏图表",
-				Image = Resources.隐藏,
+				ImageDeactive = Resources.隐藏,
 				Font = this.Font,
 				//ForeColor=Color.White,
 				Parent = this
@@ -96,7 +104,7 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "继续统计|暂停统计",
-				Image = Resources.暂停,
+				ImageActive = Resources.暂停,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this
@@ -115,7 +123,7 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "启用动画|关闭动画",
-				Image = Resources.动画,
+				ImageActive = Resources.动画,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,
@@ -127,7 +135,7 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "打开番茄|关闭番茄",
-				Image = Resources.番茄,
+				ImageActive = Resources.番茄,
 				Font = this.Font,
 				Parent = this,
 				StateIsON = true
@@ -138,7 +146,7 @@ namespace Inst.UI.Layout
 			{
 				Parent = this,
 				Text = "暂停番茄|继续番茄",
-				Image = Resources.番茄暂停,
+				ImageActive = Resources.番茄暂停,
 				StateIsON=true,
 				Font=this.Font
 			};
@@ -148,7 +156,7 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "开机启动|取消启动",
-				Image = Resources.开机启动,
+				ImageActive = Resources.开机启动,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,
@@ -159,11 +167,11 @@ namespace Inst.UI.Layout
 			SelectQueryDay[0] = new Bar.BtnCmd((x) => {
 				Program.QueryingDay = DataCore.DayStamp(DateTime.Now).ToString();
 				SwitchButton(0);
-			}) {Parent=this,Font=this.Font,Text="今天",Image=Resources.单天 };
+			}) {Parent=this,Font=this.Font,Text="今天", ImageActive = Resources.单天 };
 			SelectQueryDay[1] = new Bar.BtnCmd((x) => {
 				Program.QueryingDay = (DataCore.DayStamp(DateTime.Now)-1).ToString();
 				SwitchButton(1);
-			}) { Parent = this, Font = this.Font, Text = "昨天", Image = Resources.昨天 };
+			}) { Parent = this, Font = this.Font, Text = "昨天", ImageActive = Resources.昨天 };
 			SelectQueryDay[2] = new Bar.BtnCmd((x) => {
 				var date = InputBox.ShowInputBox("", "请按照格式输入日期", DateTime.Now.Date.ToShortDateString());
 				try
@@ -176,11 +184,11 @@ namespace Inst.UI.Layout
 					
 				}
 				
-			}) { Parent = this, Font = this.Font, Text = "其他..", Image = Resources.日期 };
+			}) { Parent = this, Font = this.Font, Text = "其他..", ImageActive = Resources.日期 };
 			SelectQueryDay[3] = new Bar.BtnCmd((x) => {
 				Program.QueryingDay = "SumDay";
 				SwitchButton(3);
-			}) { Parent = this, Font = this.Font, Text = "总计", Image = Resources.总计 };
+			}) { Parent = this, Font = this.Font, Text = "总计", ImageActive = Resources.总计 };
 
 			logo = new Bar.BtnImage((x) => { }) {
 				Parent = this,
@@ -225,7 +233,7 @@ namespace Inst.UI.Layout
 				}
 				logo.SetLayoutPos(1f, 0.05f, 1, 0.2f);
 			}
-
+			cmdDND.SetLayoutPos(0, 0.1f, 1, 0.052f);
 			cmdHider.SetLayoutPos(0, 0.15f, 1, 0.052f);
 			cmdPauser.SetLayoutPos(0, 0.2f, 1, 0.052f);
 			//cmdGraphic.SetLayoutPos(0, 0.302f, 1, 0.052f);

@@ -66,7 +66,7 @@ namespace Inst.UI
 				Font = this.Font
 			};
 			sumUsedTime = new Bar.BtnNormal((x) => { }) {Parent=this,Text="总耗时",Font=this.Font};
-			sumUsedCount = new Bar.BtnNormal((x) => { }) { Parent = this,Text="总激活", Font = this.Font };
+			sumUsedCount = new Bar.BtnNormal((x) => { }) { Parent = this,Text= "活跃度", Font = this.Font };
 			SumUsedTimeLine = new TimeLine() { Parent=this, Font = this.Font };
 			SumUsedCountLine = new Bar.BtnNormal((x)=> { }) { Parent=this, Font = this.Font };
 			frequency = new UseFrequency() {  Parent=this, Font = this.Font };

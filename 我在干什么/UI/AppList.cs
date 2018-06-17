@@ -184,7 +184,8 @@ namespace Inst.UI
 					};
 					newApp.Logo.Icon = p.AppInfo.Icon;
 					newApp.Logo.appPath = p.FilePath;
-					newApp.Logo.BackColor = p.AppInfo.IconMainColor;
+					var c = p.AppInfo.IconMainColor;
+					newApp.Logo.BackColor =System.Drawing.Color.FromArgb(c.A,(int)(c.R * 0.8),(int)( c.G*0.8),(int)(c.B*0.8));
 					newApp.TimeLine.TodayTime = 0;
 					newApp.TimeLine.AvgTime = 50;
 					newApp.TimeLine.SoftAvgTime = 100;

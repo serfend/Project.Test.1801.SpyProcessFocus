@@ -38,13 +38,18 @@ namespace Inst.Util
 				catch (Exception ex)
 				{
 					Console.WriteLine(ex.Message);
+					if (exceptionTimes++ > 0)
+					{
+						Program.ShowNotice(8000, "权限未开启", "因无管理员权限,无法获取当前运行中的软件信息\n可在菜单中开启权限",System.Windows.Forms.ToolTipIcon.Warning,()=> { Program.RunAsAdministrator(); },false);
+						exceptionTimes = -100;
+					}
 				}
 			}
 			
 			record = new List<RecordTime>();
 			ProcessSetting = Program.AppSetting.In("Main").In("Data").In(ProcessName);
 		}
-
+		private static int exceptionTimes = 0;
 
 		public int LastLostFocus { get => lastLostFocus; set => lastLostFocus = value; }
 		public int LastFocus { get => lastFocus; set => lastFocus = value; }

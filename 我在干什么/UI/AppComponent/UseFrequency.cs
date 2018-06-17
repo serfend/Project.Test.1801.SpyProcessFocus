@@ -61,12 +61,16 @@ namespace Inst.UI.AppComponent
 			for (int i = 0; i < 24; i++)
 			{
 				points[i] = new Point(15 + (int)(w * i), ConvertValueToTop(Count[i], l, h));
-				e.Graphics.FillEllipse(PointBrush,points[i].X-2,points[i].Y-2,5,5);
-				if (Count[i] > (int)(maxCount * 0.5))e.Graphics.DrawString(Count[i].ToString(),Font,Brushes.Black, points[i].X-15, points[i].Y-10) ;
-				if (i % 4 == 0) e.Graphics.DrawString(i.ToString(), Font, Brushes.Gray, (float)points[i].X, (float)(Height-15));
+
 			}
 
 			e.Graphics.DrawCurve(LineBrush, points);
+			for(int i = 0; i < 24; i++)
+			{
+				e.Graphics.FillEllipse(PointBrush, points[i].X - 2, points[i].Y - 2, 5, 5);
+				if (Count[i] > (int)(maxCount * 0.5)) e.Graphics.DrawString(Count[i].ToString(), Font, Brushes.Black, points[i].X - 15, points[i].Y );
+				if (i % 4 == 0) e.Graphics.DrawString(i.ToString(), Font, Brushes.Gray, (float)points[i].X, (float)(Height - 15));
+			}
 			base.OnPaint(e);
 		}
 		private int ConvertValueToTop(int value,int minCount,int maxCount)

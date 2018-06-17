@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Inst.Util.Output;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -10,8 +12,7 @@ namespace Inst.UI.Layout
 	public class BarLayout : Layout
 	{
 		public Bar.BtnExit Exit = new Bar.BtnExit((x) => {
-			Program.ExitProgram();
-
+			ActionBase.ExitInst.BeginInvoke((xx)=> { },null);
 		});
 
 		public Bar.BtnHide Hider = new Bar.BtnHide((x) =>
