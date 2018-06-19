@@ -78,8 +78,9 @@ namespace Inst.UI.Layout
 			//	};
 			//}
 			cmdDND = new Bar.BtnCmd((x) => { Program.OnDND = !cmdDND.StateIsON; }) {
-				Text="开启免打扰|关闭免打扰",
-				ImageActive = Resources.DND,
+				Text = "开启免打扰|关闭免打扰",
+				ImageActive = Resources.DNDon,
+				ImageDeactive = Resources.DNDoff,
 				Font=this.Font,
 				Parent=this,
 				StateIsON=!Program.OnDND
@@ -94,7 +95,8 @@ namespace Inst.UI.Layout
 		})
 			{
 				Text = "显示图表|隐藏图表",
-				ImageDeactive = Resources.隐藏,
+				ImageDeactive = Resources.隐藏饼图,
+				ImageActive=Resources.显示饼图,
 				Font = this.Font,
 				//ForeColor=Color.White,
 				Parent = this
@@ -104,7 +106,8 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "继续统计|暂停统计",
-				ImageActive = Resources.暂停,
+				ImageActive = Resources.开始统计,
+				ImageDeactive=Resources.停止统计,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this
@@ -123,7 +126,8 @@ namespace Inst.UI.Layout
 			})
 			{
 				Text = "启用动画|关闭动画",
-				ImageActive = Resources.动画,
+				ImageActive = Resources.打开动画,
+				ImageDeactive=Resources.关闭动画,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,
@@ -136,6 +140,7 @@ namespace Inst.UI.Layout
 			{
 				Text = "打开番茄|关闭番茄",
 				ImageActive = Resources.番茄,
+				ImageDeactive=null,
 				Font = this.Font,
 				Parent = this,
 				StateIsON = true
@@ -147,6 +152,7 @@ namespace Inst.UI.Layout
 				Parent = this,
 				Text = "暂停番茄|继续番茄",
 				ImageActive = Resources.番茄暂停,
+				ImageDeactive=null,
 				StateIsON=true,
 				Font=this.Font
 			};
@@ -157,6 +163,7 @@ namespace Inst.UI.Layout
 			{
 				Text = "开机启动|取消启动",
 				ImageActive = Resources.开机启动,
+				ImageDeactive = Resources.停止开机启动,
 				Font = this.Font,
 				//ForeColor = Color.White,
 				Parent = this,

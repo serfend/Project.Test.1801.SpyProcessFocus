@@ -172,4 +172,31 @@
   <data name="DND" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DND.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DNDoff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DNDoff.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DNDon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DNDon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="停止开机启动" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\停止开机启动.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="停止统计" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\停止统计.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="关闭动画" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\关闭动画.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="开始统计" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\开始统计.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="打开动画" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\打开动画.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="显示饼图" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\显示饼图.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="隐藏饼图" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\隐藏饼图.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

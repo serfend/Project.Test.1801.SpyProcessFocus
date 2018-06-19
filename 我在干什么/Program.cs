@@ -22,6 +22,7 @@ namespace Inst
 		[STAThread]
 		static void Main()
 		{
+			
 			//MessageBox.Show("version:"+Environment.OSVersion.Version.Major);
 			if (CheckMutiProcess()) { return; };
 			ProgramName = "Inst";
@@ -127,8 +128,11 @@ namespace Inst
 					return RegUtil.SetRunCurrentVersion(false, true);
 				else return false;
 			}  set {
-				if(CheckAdminUAC())
-				RegUtil.SetRunCurrentVersion(value);
+				if (CheckAdminUAC())
+				{
+					ShowNotice(30000, "开机启动", "已"+(value ? "开启" : "关闭" )+ "开机自动启动\n点击此处取消设置", ToolTipIcon.Warning, () => { AutoCurrentVersion = !value; });
+					RegUtil.SetRunCurrentVersion(value);
+				}
 			} }
 
 		public static string ProgramName { get;  set; }

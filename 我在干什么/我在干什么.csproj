@@ -191,6 +191,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Util\Output\OptShow.cs" />
+    <Compile Include="Util\Output\OptShowInner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Util\Output\OptShowInner.Designer.cs">
+      <DependentUpon>OptShowInner.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util\reg.cs" />
     <Compile Include="Util\SpyerProcess\RecordTime.cs" />
     <Compile Include="Util\SpyerProcess\ProcessRecord.cs" />
@@ -217,6 +223,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Util\Input\InputBox.resx" />
+    <EmbeddedResource Include="Util\Output\OptShowInner.resx">
+      <DependentUpon>OptShowInner.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -238,6 +247,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2.ico" />
+    <None Include="Resources\隐藏饼图.png" />
+    <None Include="Resources\显示饼图.png" />
+    <None Include="Resources\停止统计.png" />
+    <None Include="Resources\停止开机启动.png" />
+    <None Include="Resources\开始统计.png" />
+    <None Include="Resources\开机启动.png" />
+    <None Include="Resources\关闭动画.png" />
+    <None Include="Resources\打开动画.png" />
+    <None Include="Resources\DNDon.png" />
+    <None Include="Resources\DNDoff.png" />
     <None Include="Resources\DND.png" />
     <None Include="Resources\图片加载失败.png" />
     <None Include="Resources\图片无法显示.jpg" />
@@ -252,7 +271,6 @@
     <None Include="Resources\logo.png" />
     <None Include="Resources\隐藏.png" />
     <None Include="Resources\动画.png" />
-    <None Include="Resources\开机启动.png" />
     <None Include="Resources\暂停.png" />
     <None Include="Resources\日期.png" />
     <None Include="Resources\单天.png" />

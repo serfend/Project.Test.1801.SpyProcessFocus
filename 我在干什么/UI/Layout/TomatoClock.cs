@@ -160,14 +160,14 @@ namespace Inst.UI.Layout
 				if (IsStageOne) nowRoundIndex++;
 				if (!Program.OnDND)
 				{
-					var opts = new Opt[2];
-					opts[1].infos = "确定";
-					opts[0].infos = "显示详情";
-					opts[0].CmdInfo = "ShowTomato";
-					opts[1].UColor = Color.Gray;
-					opts[0].UColor = Color.LawnGreen;
-					opts[0].DColor = Color.ForestGreen;
-					new OptShow().ShowOpt(opts,"时间到啦", GetDisplayInfo() + "#255#已结束");
+					//var opts = new Opt[2];
+					//opts[1].infos = "确定";
+					//opts[0].infos = "显示详情";
+					//opts[0].CmdInfo = "ShowTomato";
+					//opts[1].UColor = Color.Gray;
+					//opts[0].UColor = Color.LawnGreen;
+					//opts[0].DColor = Color.ForestGreen;
+					//new OptShow().ShowOpt(opts,"时间到啦", GetDisplayInfo() + "#255#开始");
 					Program.ShowNotice(10000, "时间到啦", GetDisplayInfo(), ToolTipIcon.Warning, ActionBase.ShowTomato);
 				}
 				

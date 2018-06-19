@@ -28,3 +28,4 @@ D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProces
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\bin\Debug\Inst.exe.config
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Debug\Inst.InfoShower.resources
 D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Debug\Inst.DateSelector.resources
+D:\aserfend\workSpace\repos\projects\我在干什么\Project.Test.1801.SpyProcessFocus\我在干什么\obj\Debug\Inst.Util.Output.OptShowInner.resources

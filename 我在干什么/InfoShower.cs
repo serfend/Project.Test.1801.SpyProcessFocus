@@ -124,6 +124,7 @@ namespace Inst
 				for(int i = 0; i < list.Count - infoCapacity;i++)
 				{
 					list[i].ExistTime = 0;
+					list.Remove(list[i]);
 				}
 				for(int i = list.Count - infoCapacity; i < list.Count; i++)
 				{

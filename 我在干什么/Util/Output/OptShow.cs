@@ -16,10 +16,13 @@ namespace Inst.Util.Output
 		public Color DColor;
 		public Color UColor;
 	}
-	public class OptShow
+	/// <summary>
+	/// 用于调用外部的OptShow
+	/// </summary>
+	public class OptShows
 	{
 		public static Dictionary<string, Action> CallBack=new Dictionary<string, Action>();
-		static OptShow()
+		static OptShows()
 		{
 			var t = new Thread(() =>
 			{

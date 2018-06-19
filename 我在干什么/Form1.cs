@@ -34,8 +34,8 @@ namespace Inst
 			var bound = RegUtil.GetFormPos(this);
 			this.Load += (x, xx) => { SetBounds(bound[0], bound[1], bound[2], bound[3]); };
 
-			OptShow.CallBack["ShowTomato"] = ActionBase.ShowTomato;
-			OptShow.CallBack["ExitInst"] = () => { Program.ExitProgram(); };
+			//OptShow.CallBack["ShowTomato"] = ActionBase.ShowTomato;
+			//OptShow.CallBack["ExitInst"] = () => { Program.ExitProgram(); };
 		}
 
 		public void InfoShow_DoubleClick(object sender, EventArgs e)
