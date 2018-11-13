@@ -26,7 +26,7 @@ namespace Inst
 			//MessageBox.Show("version:"+Environment.OSVersion.Version.Major);
 			if (CheckMutiProcess()) { return; };
 			ProgramName = "Inst";
-			QueryingDay = "SumDay";
+			QueryingDay = DateTime.Now.ToString();
 			NowDateIsValid = true;
 
 			Program.UsedFlash = Program.AppSetting.In("Setting").GetInfo("UsedFlash", "1") == "1";

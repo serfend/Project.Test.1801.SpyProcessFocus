@@ -55,6 +55,7 @@ namespace Inst.UI
 					
 				}
 			}
+			
 				if (Math.Abs(nowY - targetY) > 0.01)
 			{
 				nowY = nowY * 0.9f + targetY * 0.1f;
@@ -68,7 +69,7 @@ namespace Inst.UI
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			MouseIsDown = true;
-			if (e.X > Width * 0.98)
+			if (e.X > scollBarX)
 			{
 				var y = ScollBarControlPosY;
 				if (e.Y > y && e.Y < y + 0.02 * Width)
@@ -103,6 +104,7 @@ namespace Inst.UI
 				lastY = e.Y;
 				this.OnResize(EventArgs.Empty);
 			}
+			
 			base.OnMouseMove(e);
 		}
 		public delegate void OnMouseWheeling(MouseEventArgs e);
@@ -124,7 +126,6 @@ namespace Inst.UI
 				scollBarY = -targetY / ScollBarMaxHeight();
 				if (scollBarY < 0) scollBarY = 0;
 			} }
-
 		public int lastHdlFocusRawIndex;
 		private void OnResizeRaise()
 		{
@@ -144,6 +145,8 @@ namespace Inst.UI
 					//lastY += (int)(height*1.05);
 				}
 			}
+			scollBarX = Width * 0.99f;
+			scollBarW = Width * 0.01f;
 			this.Invalidate();
 		}
 		public void RefreshData(ProcessGroup process)
@@ -249,18 +252,21 @@ namespace Inst.UI
 		{
 			return Controls.Count * 210;//实际移动距离
 		}
+		private float scollBarX = 0;
 		private float scollBarY = 0;//当前滑块百分比
+		private float scollBarW =0;//滑块的宽度
 		private float ScollBarControlPosY { get => (Height * 0.95f - 10) * scollBarY; }
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			//Console.WriteLine(NowY);
 			var y = ScollBarControlPosY;
 			var size = (Height * 0.95f - 10);
-			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGray, Width * 0.98f, 0, Width * 0.02f, size);
-			if(y>size-Width*0.02f)
-				e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, Width * 0.98f, y, Width * 0.02f, size-y);
+			
+			e.Graphics.FillRectangle(System.Drawing.Brushes.LightGray, scollBarX, 0, Width * 0.02f, size);
+			if(y>size- scollBarW)
+				e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, scollBarX, y, scollBarW, size-y);
 			else
-			e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, Width * 0.98f, y, Width*0.02f, Width * 0.02f);
+				e.Graphics.FillRectangle(System.Drawing.Brushes.Gray, scollBarX, y, scollBarW, Width * 0.02f);
 			//base.OnPaint(e);
 		}
 	}

@@ -14,12 +14,14 @@ namespace Inst
 	{
 		public InfoShower()
 		{
+
 			InitializeComponent();
 			existTime = 5000;
 			this.Visible = false;
 			this.Click += OnClickToHide;
 			this.DoubleBuffered = true;
 			this.TopMost = true;
+			TopMost = false;//取消
 		}
 
 		private void OnClickToHide(object sender, EventArgs e)

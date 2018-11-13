@@ -204,7 +204,7 @@ namespace Inst.UI.Layout
 			};
 			//菜单下方的控件将不显示左侧栏目
 			menu.Parent = this;
-			SwitchButton(3);
+			SwitchButton(0);
 		}
 		private int nowFocusIndex = 0;
 		public void SwitchButton(int newIndex)
